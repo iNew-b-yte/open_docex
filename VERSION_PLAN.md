@@ -1,14 +1,14 @@
 # open_docex — Version Plan
 
-**Status: PROPOSED.** Claude wrote this plan. It is not final until the project owner approves it.
+**Status: APPROVED** by the project owner on 2026-11-14 (BRD Add-on 4). Claude drafted it.
 
-**Scope source:** the BRD (`draft_description_of_the_product_package.docx`). That means the original draft, Addendum §1–§6, Add-on (A/B), Add-on 2 and Add-on 3. This plan includes nothing outside the BRD. Section references in brackets point to the BRD.
+**Scope source:** the BRD (`draft_description_of_the_product_package.docx`). That means the original draft, Addendum §1–§6, Add-on (A/B), Add-on 2, Add-on 3 and Add-on 4. This plan includes nothing outside the BRD. Section references in brackets point to the BRD.
 
 **Not covered here:**
 - **Version numbers:** V1–V7 are plan labels. npm version numbers are chosen at publish time.
 - **Editor choice and file-format support:** the BRD leaves these to design (Addendum intro), so this plan doesn't assign them to a version.
 
-## How the versions are cut (proposal)
+## How the versions are cut
 
 - Each version works on its own and builds on the previous one.
 - V1 includes data safety and failure handling, because the BRD's "MAIN" question and §4–§5 are core.
@@ -16,7 +16,7 @@
 
 ## Before V1 is published
 
-- Choose the licence: MIT or Apache-2.0. [Add-on 3 §4]
+- Licence: MIT. [Add-on 3 §4; Add-on 4]
 
 ## V1 — Collaborative text documents
 
@@ -77,7 +77,7 @@
 
 - B1–B6 and B8–B10. [Add-on 2 §2]
 - B7 (licence) is not here; it is chosen before V1. [Add-on 3 §4]
-- Proposed: V6 builds on the main own-OT version.
+- V6 builds on the main own-OT version. [Add-on 4]
 
 **Known gaps until V6** [Add-on B]:
 - no automated convergence testing (B10)
@@ -90,14 +90,15 @@
 - A ShareDB-based engine with its own database adapter, which saves to the local journal and the adopter's storage interface. [Add-on 2 §1]
 - The per-document FIFO queue feeds ShareDB's submit step. ShareDB's pub/sub (memory or Redis) does the broadcast, and Kafka needs a custom pub/sub adapter. [Add-on 3 §3]
 - Verify whether ShareDB sends the whole document on first load. If it does, add a separate chunked loading path. [Add-on 3 §3]
-- Proposed:
+- Decided [Add-on 4]:
   - V7 covers the V1–V5 scope, with ShareDB in place of the own-OT engine.
   - It is published alongside the own-OT version, not as a replacement.
   - Section B features are not included unless the project owner decides otherwise.
 
-## Points that need the project owner's approval
+## Approval
 
-1. The V1–V7 order and contents above.
-2. The licence: MIT or Apache-2.0.
-3. That V6 builds on the own-OT version.
-4. That V7 covers the V1–V5 scope, ships alongside the own-OT version, and leaves out Section B unless decided otherwise.
+The project owner approved this plan on 2026-11-14, as recorded in BRD Add-on 4. The approval covers:
+- the V1–V7 order and contents
+- the MIT licence
+- V6 building on the own-OT version
+- V7 covering the V1–V5 scope, shipping alongside the own-OT version, and leaving out Section B unless the project owner decides otherwise
