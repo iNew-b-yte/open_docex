@@ -69,7 +69,7 @@ open_docex is an open-source (MIT) set of npm packages for real-time collaborati
 | N2 | **Availability:** a worker crash triggers automatic restart. One faulty document does not stop the others. | A2 |
 | N3 | **Scale:** thousands of connections per server. All limits are configurable with conservative defaults, and real numbers come from a benchmark task. | Draft; PO 2026-11-18 |
 | N4 | **Main-process load:** collaboration work runs outside the adopter's main process by default. | Draft; §2 |
-| N5 | **Licensing:** MIT. Dependencies must be MIT, BSD or Apache-2.0. LibreOffice (MPL-2.0) is an external program, not bundled. | Add-on 4; PO |
+| N5 | **Licensing:** MIT. Dependencies must be MIT, BSD, ISC (MIT-equivalent; LLD L-1) or Apache-2.0. LibreOffice (MPL-2.0) is an external program, not bundled. | Add-on 4; PO |
 | N6 | **Engineering baseline:** SOLID, design patterns used where they solve a real problem, clean architecture, YAGNI, KISS. | Draft "Design decisions" |
 | N7 | **Errors:** structured, actionable errors so the adopter can resolve them. | MAIN; A2 |
 
@@ -116,7 +116,30 @@ open_docex is an open-source (MIT) set of npm packages for real-time collaborati
 | CL-13 | One WebSocket per open document per browser tab. The document ID goes in the connect URL. | Session routing without parsing every frame in the Gateway. |
 | CL-14 | The data directory defaults to `<process.cwd()>/open-docex-data` and is configurable. | Draft: "a folder specifically for this, created by us" in the root directory. |
 | CL-15 | Tooling: npm workspaces; ESM-only packages with `.d.ts`; `tsc` for shared and server; Vite library mode for client; Vitest for unit and integration tests; Playwright for end-to-end tests. | Mainstream, MIT-licensed. |
-| CL-16 | Univer's formula engine is **not registered** until V6. Cells show their last saved value. | Add-on 3 §5: no live recalculation before B3. |
+| CL-16 | *(Revised by PO-19 on 2026-11-19.)* Univer's formula engine plugin is registered with `notExecuteFormula: true`, because Univer's sheets plugin depends on it (verified in the Univer 1.5.2 source). The sheets-formula plugins are not registered. Cells show their last saved value until V6. | Add-on 3 §5: no live recalculation before B3. |
+
+### 3.3 Project-owner decisions (2026-11-19)
+
+These came from the LLD's open questions. Full wording is in LLD §0.1, and LLD §0.2 lists the technical choices open to review.
+
+| ID | Decision |
+|---|---|
+| PO-16 | `rev` persists across reloads. A client resuming from an old epoch gets the retained journal entries replayed. If they were trimmed, its unconfirmed changes are dropped with a notice. |
+| PO-17 | Audit events are delivered at least once, with a `replayed` flag after a crash. |
+| PO-18 | No undo or redo in V1–V5, in either editor. |
+| PO-19 | CL-16 revised, as shown above. |
+| PO-20 | Paragraph spacing, line height and indents are supported content. |
+| PO-21 | Page number and page count fields in the header and footer are supported. |
+| PO-22 | EMF, WMF, TIFF and SVG images are converted to PNG on import, and the user is told. |
+| PO-23 | A block taller than a page overflows its page frame on screen. |
+| PO-24 | Images: PNG, JPEG and GIF, inserted by toolbar, paste or drag-and-drop, with resize handles. |
+| PO-25 | Table column resizing in V1. |
+| PO-26 | Blank documents default to A4 portrait with 2.54 cm margins, configurable. |
+| PO-27 | Annotations (V5) are for text documents only. |
+| PO-28 | Unshiftable formula references (3-D, structured, external) are unsupported content. |
+| PO-29 | Renaming or removing a sheet rewrites the formulas that refer to it. |
+| PO-30 | A formula typed before V6 shows its formula text. |
+| PO-31 | View-only sessions can only read annotations. |
 
 ---
 
@@ -248,15 +271,17 @@ flowchart TB
 
 - **`doc`** has page attributes `{ size, orientation, margins }` and contains `header?`, `body`, `footer?` (CL-9).
 - **Block nodes:**
-  - `paragraph` (alignment)
-  - `heading` (levels 1–6)
+  - `paragraph` (alignment, spacing before/after, line height, left/right/first-line indent; PO-20)
+  - `heading` (levels 1–6, with the same attributes as `paragraph`; PO-20, LLD L-2)
   - `bullet_list`, `ordered_list`, `list_item`
   - `table`, `table_row`, `table_cell`, `table_header` (prosemirror-tables; merged cells via colspan/rowspan)
-  - `image` (`assetId`, alt text, width, height)
+  - `image` (`assetId`, alt text, width, height; PNG, JPEG or GIF; resizable; PO-24). Imported EMF, WMF, TIFF and SVG images are converted to PNG, and the user is told (PO-22).
   - `page_break`
-- **Inline nodes:** `text`, `hard_break`.
+- **Inline nodes:** `text`, `hard_break`, and `page_field` (page number or page count, only in the header and footer; PO-21).
 - **Marks:** `bold`, `italic`, `underline`, `strike`, `link(href)`, `text_style(fontFamily, fontSize, color)`.
-- **Anything else in an imported file is unsupported** (PO-13, PO-14). Examples: tracked changes, comments, footnotes, fields/TOC, text boxes, equations, charts, multiple sections or page styles, first-page or odd/even headers.
+- **Document attributes:** `textDefaults`, the default font family, size and colour, so export keeps the document's default font (LLD R-14).
+- **Table cells** keep column widths, which users can resize (PO-25).
+- **Anything else in an imported file is unsupported** (PO-13, PO-14). Examples: tracked changes, comments, footnotes, fields other than page number and count, a table of contents, text boxes, equations, charts, paragraph borders and shading, multiple sections or page styles, first-page or odd/even headers.
 
 ### 8.2 Spreadsheet model (shared; our own model, not Univer's)
 
@@ -266,7 +291,9 @@ flowchart TB
   - `v` is the cached value
   - `f` is the formula in Excel A1 syntax
   - `s` is the style ID
-- **Advanced content is unsupported** (PO-15): charts, conditional formatting, data validation, pivots, images in sheets, comments.
+- **Advanced content is unsupported** (PO-15): charts, conditional formatting, data validation, pivots, images in sheets, comments. So are formula references the shifter can't adjust: 3-D, structured table and external references (PO-28).
+- **Renaming a sheet rewrites the formulas that refer to it. Removing a sheet turns those references into `#REF!`** (PO-29).
+- **A formula typed before V6 shows its formula text** (PO-30).
 
 ### 8.3 Operations and revisions
 
@@ -399,6 +426,7 @@ interface OpenDocexErrorShape {
 | `SESSION_*` | `SESSION_SLOW_CONSUMER`, `SESSION_CLOSED`, `SESSION_RESYNC_REQUIRED` |
 | Access | `ACCESS_DENIED` |
 | `PROTOCOL_*` | `PROTOCOL_INVALID_MESSAGE`, `PROTOCOL_VERSION_UNSUPPORTED`, `PROTOCOL_OP_REJECTED` |
+| `CLIENT_*` (raised in the browser only; LLD L-16) | `CLIENT_CONNECT_FAILED`, `CLIENT_ASSET_TOO_LARGE`, `CLIENT_IMAGE_TYPE_UNSUPPORTED` |
 
 ### 11.3 State machines
 
@@ -471,6 +499,8 @@ The engine validates all configuration at start-up. Invalid configuration fails 
 | `SheetEditorView` | A Univer instance (pinned version, no formula engine, CL-16) plus `UniverBridge`: local mutations become `SheetOps`; remote `SheetOps` become Univer mutations applied with `fromCollab`; the selection is mapped through remote ops |
 | React shell | Toolbar, status bar (connection, sync, storage notices), unsupported-content banner with optional "Edit anyway", view-only badge, share button; upload (V4) and annotations panel (V5) |
 
+- **No undo or redo before V6** (PO-18). Ctrl+Z and Ctrl+Y are disabled in both editors.
+- **A block taller than a page** overflows its page frame on screen (PO-23).
 - **View-only:** the editor is not editable and no `submit` is ever sent. The server rejects edits from view sessions anyway [Add-on 3 §5].
 - **The UI never decides conflicts.** It only reconciles locally, and the server is the authority [§3].
 
