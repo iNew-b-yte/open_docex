@@ -6,7 +6,8 @@
 
 **Not covered here:**
 - **Version numbers:** V1–V7 are plan labels. npm version numbers are chosen at publish time.
-- **Editor choice and file-format support:** the BRD leaves these to design (Addendum intro), so this plan doesn't assign them to a version.
+
+**Updated 2026-11-19 after the HLD and LLD.** Editor choice and file-format support, which the BRD left to design, are now decided in `HLD.md` §3 and `LLD.md` §0 and assigned to versions below. The V1–V7 order and contents approved on 2026-11-14 are unchanged. The task breakdown is in `EXECUTION_PLAN.md`.
 
 ## How the versions are cut
 
@@ -42,10 +43,19 @@
 - The connection stays open for the whole session; data is sent only when there are changes. [Add-on 3 §5]
 - View-only sessions are supported. [Draft; Add-on 3 §5]
 - The engine exposes a document ID and a share hook. [Draft; Add-on 3 §5]
-- Change events stream out as audit data. [§3]
+- Change events stream out as audit data, delivered at least once. [§3; HLD PO-17]
+- Formats .docx and .odt, converted through LibreOffice installed on the server. [HLD PO-5, PO-6]
+- Supported document content:
+  - core text, including paragraph spacing, line height and indents
+  - tables, with column resizing
+  - images (PNG, JPEG, GIF; EMF, WMF, TIFF and SVG converted to PNG)
+  - page layout: page size, margins, page breaks, one header and one footer, page number and page count fields
+
+  Anything else opens read-only with a warning, until the adopter allows "edit anyway". [HLD PO-13, PO-14, PO-20–PO-25]
 
 **Frontend**
-- A customizable text-document editor UI. [Draft; §1]
+- A customizable text-document editor UI, built on ProseMirror, with React inside and a `mount()` API. [Draft; §1; HLD PO-10, PO-12]
+- No undo or redo before V6 (B2). [HLD PO-18]
 - The user's own typing appears immediately. Incoming patches are applied without disturbing unconfirmed typing, the cursor or the selection. [§3]
 - After a reconnect, the UI resends changes the server hasn't confirmed. On `QUEUE_FULL` it retries with backoff. [A2; A3]
 - Chunked first load, view-only mode and the share hook in the UI. [A7; Add-on 3 §5]
@@ -56,7 +66,10 @@
 - When two changes hit the same cell, the later one in FIFO order wins. The superseded value still streams as an audit event. [§6]
 - Formulas keep their last saved value, with no live recalculation. Recalculation comes in V6 (B3). [Add-on 3 §5]
 - Spreadsheets load in chunks by row range. [A7]
-- A spreadsheet editor UI with the same responsiveness rules as V1. [§3]
+- A spreadsheet editor UI with the same responsiveness rules as V1, built on Univer's open-source core. [§3; HLD PO-11]
+- Formats .xlsx and .ods, converted through LibreOffice. [HLD PO-5, PO-6]
+- Supported content: sheets, values, formulas and cell formatting (including number formats), merged cells, column widths, row heights and frozen panes. Advanced features open read-only. [HLD PO-15]
+- Formula references are shifted on row/column insert and delete, rewritten on sheet rename, and become `#REF!` on sheet removal. References that can't be shifted open read-only. A newly typed formula shows its formula text. [HLD PO-9, PO-28–PO-30]
 
 ## V3 — External queues
 
@@ -70,6 +83,7 @@
 ## V5 — Bookmarks and side notes/reviews
 
 - Bookmarks and side notes/reviews, stored through an adopter-supplied storage interface. [Draft; A8; Add-on 3 §2]
+- For text documents only. View-only users can read notes but not add them. [HLD PO-27, PO-31]
 
 **After V5, the main (own-OT) BRD scope is complete.**
 
@@ -90,6 +104,7 @@
 - A ShareDB-based engine with its own database adapter, which saves to the local journal and the adopter's storage interface. [Add-on 2 §1]
 - The per-document FIFO queue feeds ShareDB's submit step. ShareDB's pub/sub (memory or Redis) does the broadcast, and Kafka needs a custom pub/sub adapter. [Add-on 3 §3]
 - Verify whether ShareDB sends the whole document on first load. If it does, add a separate chunked loading path. [Add-on 3 §3]
+  - **Verified 2026-11-18:** ShareDB 8.0.0 sends the whole snapshot in one message, so V7 includes its own chunked loading path.
 - Decided [Add-on 4]:
   - V7 covers the V1–V5 scope, with ShareDB in place of the own-OT engine.
   - It is published alongside the own-OT version, not as a replacement.

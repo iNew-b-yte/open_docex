@@ -572,7 +572,7 @@ Randomized convergence fuzzing is B10 (V6).
 - **LibreOffice installed on the server** (PO-6). Its path is auto-detected or configured. A missing installation fails at start-up with `CONFIG_LIBREOFFICE_NOT_FOUND`.
 - A writable `dataDir`.
 - **V3 only:** Redis or Valkey (Streams), or Kafka. The documentation notes Redis 7.4+ licensing (RSAL/SSPL, with AGPL also available from Redis 8) and that Valkey (BSD) is compatible.
-- **Multiple servers are the adopter's concern [§6].** The documentation states the risk: two servers with in-memory queues on the same document produce diverging copies (B5).
+- **Multiple servers are the adopter's concern [§6].** Documenting the risk is B5 (V6): two servers with in-memory queues on the same document produce diverging copies.
 
 ---
 
