@@ -1,4 +1,4 @@
-﻿// Spike S3 measurements in a real browser. Writes results/<browser>.json.
+// Spike S3 measurements in a real browser. Writes results/<browser>.json.
 import { test, expect } from '@playwright/test';
 import { mkdirSync, writeFileSync } from 'node:fs';
 import { pathToFileURL } from 'node:url';
@@ -8,6 +8,7 @@ import os from 'node:os';
 const ROOT = join(import.meta.dirname, '..');
 const BLOCKS = Number(process.env.S3_BLOCKS ?? 1420);
 const N = Number(process.env.S3_SAMPLES ?? 30);
+const MEASURE = process.env.S3_MEASURE ?? 'style';
 
 function summary(samples) {
   const keys = Object.keys(samples[0]).filter((k) => k.endsWith('Ms'));
@@ -17,6 +18,7 @@ function summary(samples) {
     const q = (p) => v[Math.min(v.length - 1, Math.floor(p * v.length))];
     out[k] = { median: +q(0.5).toFixed(2), p95: +q(0.95).toFixed(2), max: +v[v.length - 1].toFixed(2) };
   }
+  out.fullReasons = [...new Set(samples.map((s) => s.fullReason).filter(Boolean))];
   out.measuredBlocks = [...new Set(samples.map((s) => s.measured))];
   out.resumeIndex = [Math.min(...samples.map((s) => s.resumeIndex)), Math.max(...samples.map((s) => s.resumeIndex))];
   if ('changedBreaks' in samples[0]) out.changedBreaks = [Math.min(...samples.map((s) => s.changedBreaks)), Math.max(...samples.map((s) => s.changedBreaks))];
@@ -47,8 +49,11 @@ test('S3 pagination measurements', async ({ page, browser, browserName }) => {
   // Measurement mode check: offsetHeight (LLD) vs getBoundingClientRect (fractional).
   res.offsetMode = { init: await page.evaluate((b) => S3.init({ blocks: b, measure: 'offset' }), BLOCKS) };
   res.offsetMode.verify = await page.evaluate(() => S3.verify());
+  res.rectMode = { init: await page.evaluate((b) => S3.init({ blocks: b, measure: 'rect' }), BLOCKS) };
+  res.rectMode.verify = await page.evaluate(() => S3.verify());
+  res.measure = MEASURE;
 
-  res.init = await page.evaluate((b) => S3.init({ blocks: b, measure: 'rect' }), BLOCKS);
+  res.init = await page.evaluate(([b, m]) => S3.init({ blocks: b, measure: m }), [BLOCKS, MEASURE]);
   res.verifyInitial = await page.evaluate(() => S3.verify());
   console.log(JSON.stringify({ offsetMode: res.offsetMode, init: res.init, verifyInitial: res.verifyInitial }, null, 1));
   const pages = res.init.pageCount;
@@ -68,16 +73,19 @@ test('S3 pagination measurements', async ({ page, browser, browserName }) => {
   res.verifyAfterEdits = await page.evaluate(() => S3.verify());
   expect(res.verifyAfterEdits.blocksOutsideBodyBox).toBe(0);
 
-  // Real keyboard input (Playwright â†’ CDP key events), caret on page 1 and on the last page.
+  // Real keyboard input (Playwright -> CDP key events), caret on page 1 and on the last page.
   for (const [label, which] of [['keyboardPage1', 0], ['keyboardLastPage', -1]]) {
     await page.evaluate((w) => S3.caretOnPage(w < 0 ? S3.pageCount() - 1 : w), which);
     await page.evaluate(() => S3.idle());
+    await page.evaluate(() => S3.eventDurations());
     const samples = [];
     for (let i = 0; i < N; i++) {
       await page.keyboard.press('KeyA');
       samples.push(await page.evaluate(() => S3.keyTiming()));
     }
     res[label] = summary(samples);
+    // Event Timing keydown durations >= 16 ms (shorter ones are not reported by the browser).
+    res[label].eventTimingKeydownMs = (await page.evaluate(() => S3.eventDurations())).sort((a, b) => a - b);
   }
   // Copies are lazy: count after scrolling to the end.
   res.copiesBuiltTotal = await page.evaluate(() => S3.copiesBuilt());
@@ -85,6 +93,6 @@ test('S3 pagination measurements', async ({ page, browser, browserName }) => {
   expect(res.verifyFinal.blocksOutsideBodyBox).toBe(0);
 
   mkdirSync(join(ROOT, 'results'), { recursive: true });
-  writeFileSync(join(ROOT, 'results', `${browserName}.json`), JSON.stringify(res, null, 2));
-  await page.screenshot({ path: join(ROOT, 'results', `${browserName}-viewport.png`) });
+  writeFileSync(join(ROOT, 'results', `${browserName}-${BLOCKS}-${MEASURE}.json`), JSON.stringify(res, null, 2));
+  await page.screenshot({ path: join(ROOT, 'results', `${browserName}-${BLOCKS}-${MEASURE}-viewport.png`) });
 });

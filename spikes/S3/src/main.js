@@ -161,6 +161,7 @@ const S3 = {
       workMs: tDispatch - t0 + e.totalMs + (tLayout - tPassEnd),
       toNextFrameMs: tFrame - t0, // includes waiting for vsync
       resumeIndex: e.resumeIndex,
+      fullReason: e.fullReason,
       measured: e.measured,
       changedBreaks: e.changedBreaks,
       pageCount: e.pageCount,
@@ -285,6 +286,15 @@ document.addEventListener(
   },
   true,
 );
+// Event Timing API (Chromium): input → next paint, as used for INP. Duration granularity is 8 ms.
+const eventDurations = [];
+if (PerformanceObserver.supportedEntryTypes.includes('event')) {
+  new PerformanceObserver((list) => {
+    for (const e of list.getEntries()) if (e.name === 'keydown') eventDurations.push(e.duration);
+  }).observe({ type: 'event', durationThreshold: 16 });
+}
+S3.eventDurations = () => eventDurations.splice(0);
+
 S3.keyTiming = async () => {
   const e = await keyPass;
   const passEnd = performance.now();
@@ -297,6 +307,7 @@ S3.keyTiming = async () => {
     layoutAfterPassMs: tLayout - passEnd,
     keyToNextFrameMs: performance.now() - keyStart,
     resumeIndex: e.resumeIndex,
+    fullReason: e.fullReason,
     measured: e.measured,
   };
   await S3.idle();

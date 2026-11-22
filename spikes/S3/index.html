@@ -14,7 +14,7 @@
         white-space: pre-wrap; word-wrap: break-word;
       }
       /* LLD P3 §10: direct children of body get margin 0, spacing comes from padding. */
-      .odx-body > * { margin: 0; }
+      .odx-body > * { margin: 0; box-sizing: border-box; }
       .ProseMirror p { margin: 0; padding-bottom: 8px; }
       .ProseMirror h2 { margin: 0; font-size: 20px; padding: 12px 0 6px; }
       .odx-header, .odx-footer { display: flex; flex-direction: column; box-sizing: border-box; }

@@ -53,7 +53,9 @@ export class HeaderFooterRegions {
 
   measuredHeight(kind) {
     const c = this.contents[kind];
-    return c && c.isConnected ? c.getBoundingClientRect().height : 0;
+    // Used height, exact in layout units. getBoundingClientRect() is float geometry relative to
+    // the viewport and drifts once the header is far above it (it caused full re-layouts).
+    return c && c.isConnected ? Math.round(parseFloat(getComputedStyle(c).height) * 64) / 64 : 0;
   }
 
   /** Read-only copy of `node` (header or footer) for page `page` of `count`. */

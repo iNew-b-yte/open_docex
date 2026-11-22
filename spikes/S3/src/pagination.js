@@ -59,7 +59,7 @@ class PaginationView {
     this.stats = stats;
     this.cache = new WeakMap(); // block node → px height
     this.last = null; // resume data of the last pass
-    this.invalid = true;
+    this.invalid = 'init';
     this.raf = 0;
     this.passesThisFrame = 0;
     this.frames = document.createElement('div');
@@ -72,12 +72,12 @@ class PaginationView {
       rootMargin: '200% 0px', // ±2 viewports
     });
     regions.onResize = () => {
-      this.invalid = true;
+      this.invalid = 'header/footer resize';
       this.schedule();
     };
     this.onFonts = () => {
       this.cache = new WeakMap();
-      this.invalid = true;
+      this.invalid = 'fonts';
       this.schedule();
     };
     document.fonts.addEventListener('loadingdone', this.onFonts);
@@ -106,7 +106,12 @@ class PaginationView {
   }
 
   heightOf(dom) {
-    return this.measureMode === 'offset' ? dom.offsetHeight : dom.getBoundingClientRect().height;
+    if (this.measureMode === 'offset') return dom.offsetHeight;
+    // 'style': the used border-box height (blocks are box-sizing: border-box). Chromium prints it
+    // rounded (error <= 0.005 px), so snap back to the 1/64 px layout unit it came from.
+    if (this.measureMode === 'style') return snap64(parseFloat(getComputedStyle(dom).height));
+    // 'rect': float geometry; loses precision far from the viewport (see report).
+    return dom.getBoundingClientRect().height;
   }
 
   /** The measure pass. DOM reads only, then at most one meta dispatch. */
@@ -133,12 +138,13 @@ class PaginationView {
 
     let s = 0;
     const full = !last || this.invalid || last.geomKey !== geomKey;
+    const reason = !last ? 'first' : this.invalid || (last.geomKey !== geomKey ? 'geometry/header/footer height' : null);
     if (!full) {
       const m = Math.min(n, last.nodes.length);
       while (s < m && body.child(s) === last.nodes[s]) s++;
       if (s === n && n === last.nodes.length) {
         this.invalid = false;
-        this.record({ t0, s, n, measured: 0, dispatched: false });
+        this.record({ t0, s, n, measured: 0, dispatched: false, reason });
         return;
       }
     }
@@ -234,13 +240,14 @@ class PaginationView {
       view.dispatch(view.state.tr.setMeta(paginationKey, next).setMeta('addToHistory', false));
       this.updateFrames(next);
     }
-    this.record({ t0, tMeasured, s, n, measured, dispatched: !same, changedBreaks, pageCount });
+    this.record({ t0, tMeasured, s, n, measured, dispatched: !same, changedBreaks, pageCount, reason });
   }
 
   record(r) {
     const t1 = performance.now();
     const entry = {
       resumeIndex: r.s,
+      fullReason: r.reason,
       blocks: r.n,
       measured: r.measured,
       dispatched: r.dispatched,
@@ -377,6 +384,8 @@ class PaginationView {
     this.frames.style.height = top - p.geom.gapPx + 'px';
   }
 }
+
+export const snap64 = (px) => Math.round(px * 64) / 64;
 
 const ids = new WeakMap();
 let nextId = 1;
