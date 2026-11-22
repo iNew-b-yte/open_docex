@@ -35,7 +35,7 @@ V1-00 ─┬─ V1-01 ─┬─ V1-02 ──────────────
 
 | ID | Task | Track | Files | LLD | Deps | Acceptance | Status |
 |---|---|---|---|---|---|---|---|
-| V1-00 | **Monorepo bootstrap** | tooling | root `package.json`, `tsconfig.base.json`, `.gitignore`, `.github/workflows/ci.yml`, `scripts/`, `shared/package.json`, `backend/package.json`, `frontend/package.json` and each package's tsconfig, Vitest config and `src/index.ts` stub | P1 §1; §0 L-1 | — | `npm ci`, `build`, `typecheck`, `lint` and `test` pass locally. CI runs on Node 22/24/26 with LibreOffice installed. The licence check passes. The `.gitkeep` files are removed. | todo |
+| V1-00 | **Monorepo bootstrap** | tooling | root `package.json`, `package-lock.json`, `tsconfig.base.json`, `tsconfig.json`, `eslint.config.js`, `vitest.config.ts`, `.gitignore`, `.github/workflows/ci.yml` (jobs `static`, `test`, `test-windows` only), `scripts/`, `shared/package.json`, `backend/package.json`, `frontend/package.json`, `shared/src/env.d.ts`, `frontend/vite.config.ts` (minimal lib-mode settings of P1 §1.5 only) and each package's tsconfig, Vitest config and `src/index.ts` stub | P1 §1; §0 L-1 | — | `npm ci`, `build`, `typecheck`, `lint` and `test` pass locally. CI runs on Node 22/24/26 with LibreOffice installed. The licence check passes. The `.gitkeep` files are removed. | in-progress |
 | V1-S2 | **Spike S2: LibreOffice ↔ flat ODF round trip**, covering every V1 feature (§8.1, PO-20/21/22/24/25) for .docx and .odt, timings, concurrent profiles on Linux and Windows, and EMF/WMF/TIFF/SVG → PNG | spike | `spikes/S2/**`, `docs/spikes/S2.md`, `backend/test/fixtures/text/**` (corpus) | HLD §20 S2; P2 §14 | V1-00 | A written report gives, per feature, whether it imports, exports and round-trips. The fixture corpus is committed. Any blocker goes to the project owner. | todo |
 | V1-S3 | **Spike S3: pagination prototype** in ProseMirror: page frames, whole-block moves, overflow (PO-23), header/footer copies, a 200-page document | spike | `spikes/S3/**`, `docs/spikes/S3.md` | HLD §20 S3; P3 §10–§11 | V1-00 | The report gives measured re-layout times and the chosen approach. | todo |
 | V1-01 | **shared: ids, errors and util,** including the `CLIENT_*` codes and `computeAssetId` | shared | `shared/src/{ids,errors,util}/**` | P1 §3, §4; §0 R-12, L-16 | V1-00 | Every HLD §11.2 code is in `ERROR_CATALOGUE`. `toClientError` strips the cause. Unit tests. | todo |
@@ -54,17 +54,17 @@ V1-00 ─┬─ V1-01 ─┬─ V1-02 ──────────────
 | V1-18 | **server: `EngineChannel` (IPC and in-process) and `Supervisor`** | server | `backend/src/channel/**`, `backend/src/supervisor/**` | P2 §5–§6 | V1-02, V1-10 | Heartbeat timeout, backoff of 1/2/4/8/16 s, FAILED after 5 restarts in 10 min (fake timers). Typed IPC messages. | todo |
 | V1-19 | **server: Gateway and engine facade.** `createEngine`, `defineWorkerConfig`, upgrade with `authorize`, session table, send queue with slow-consumer close, and the admin APIs | server | `backend/src/gateway/**`, `backend/src/api/{create-engine,engine-facade}.ts`, `backend/src/index.ts` | P2 §2, §4; §0 L-3 (V1 part: `purpose: 'document'`), L-7 | V1-14b, V1-16, V1-17, V1-18 | Frames are forwarded without parsing. 401/403 handling. Close code 4001 on restart. `canSubmit` works. | todo |
 | V1-20 | **server: integration suite** in main mode and worker mode, with real LibreOffice: crash and restart, storage failure through recovery, conflict, dedupe after resend, at-least-once audit | server | `backend/test/integration/**` | P2 §21; HLD §17 | V1-19 | All HLD §10 flows pass in both modes. | todo |
-| V1-30 | **client: scaffold.** Options, events, labels, theme, `mount` skeleton, error policy (including L-12), href security | client | `frontend/src/{index,mount,options,events,labels,theme}.ts`, `frontend/src/errors/**`, `frontend/src/security/**`, `frontend/vite.config.ts` | P3 §1–§2, §15–§16; §0 L-12, L-13, L-14, L-16 | V1-02 | `mount` and `destroy` leave no leaks (jsdom). Every error code has a policy. | todo |
+| V1-30 | **client: scaffold.** Options, events, labels, theme, `mount` skeleton, error policy (including L-12), href security | client | `frontend/src/{index,mount,options,events,labels,theme}.ts`, `frontend/src/errors/**`, `frontend/src/security/**`, `frontend/vite.config.ts` (completion of the V1-00 minimal config) | P3 §1–§2, §15–§16; §0 L-12, L-13, L-14, L-16 | V1-02 | `mount` and `destroy` leave no leaks (jsdom). Every error code has a policy. | todo |
 | V1-31 | **client: `Connection`, backoff, close codes, `ChunkLoader`, `DocumentSession`** | client | `frontend/src/{net,load,session}/**` | P3 §3–§5; §0 R-5, R-8, R-9 | V1-30 | Reconnect with jitter; resume; resync followed by a full load; remotes buffered until `load-done`. | todo |
 | V1-32 | **client: `TextSyncClient` and `collabSyncPlugin`** | client | `frontend/src/sync/{collabSyncPlugin,TextSyncClient,xform,types}.ts` | P3 §6–§7; §0 PO-16, PO-18, R-6, R-8, L-15 | V1-04, V1-31 | Against a fake server: one batch in flight; `committed` correction; `QUEUE_FULL` retry; the rescue path with its notice; no history (no undo). | todo |
 | V1-33 | **client: `TextEditorView`.** Plugins, commands, toolbar commands, images (toolbar, paste, drop, resize), `AssetCache`, table column resize, undo keys disabled | client | `frontend/src/text/{TextEditorView,plugins,commands,imageUpload}.ts`, `frontend/src/text/nodeviews/**`, `frontend/src/assets/**` | P3 §9, §13; §0 PO-18, PO-24, PO-25, R-10 | V1-03, V1-30 | Each V1 feature can be edited. Image types are enforced. Blob URLs are revoked on destroy. | todo |
 | V1-34 | **client: `PaginationPlugin` and `HeaderFooterRegions`,** with page fields | client | `frontend/src/text/{PaginationPlugin,HeaderFooterRegions,geometry}.ts` | P3 §10–§11; §0 PO-21, PO-23 | V1-33, V1-S3 | Matches the S3 measurements. Tall blocks overflow. Header copies are read-only. | todo |
 | V1-35 | **client: React shell.** Shell, Toolbar, StatusBar, UnsupportedBanner (findings and conversions), ReadOnlyBadge, ShareButton, ErrorScreen, EditorHost, useSession, dialogs | client | `frontend/src/ui/**` (except UploadButton and AnnotationsPanel) | P3 §14; §0 PO-22, L-12 | V1-30, V1-33 | Component tests (Testing Library). "Edit anyway" calls `onEditAnyway`. | todo |
 | V1-36 | **client: end-to-end `mount` wiring** of session, editor and shell | client | `frontend/src/mount.ts` (completion), `frontend/src/ui/EditorHost.tsx` | P3 §2–§3 | V1-31, V1-32, V1-34, V1-35 | It works against the real server from V1-19 in a dev harness. | todo |
-| V1-40 | **End-to-end suite (Playwright)** on Chromium, Firefox and WebKit: two users converge, view-only, reconnect, slow consumer, read-only for unsupported content and "edit anyway", paste images, engine restart | e2e | `e2e/**`, `playwright.config.ts` | P3 §17; HLD §17; §0 L-6 | V1-20, V1-36 | Green on all three engines in CI. | todo |
+| V1-40 | **End-to-end suite (Playwright)** on Chromium, Firefox and WebKit: two users converge, view-only, reconnect, slow consumer, read-only for unsupported content and "edit anyway", paste images, engine restart | e2e | `e2e/**`, `playwright.config.ts`, `.github/workflows/ci.yml` (`e2e` job) | P3 §17; HLD §17; §0 L-6 | V1-20, V1-36 | Green on all three engines in CI. | todo |
 | V1-41 | **Benchmark (S4)** of connections per Core, op latency p50/p99, IPC fan-out and export time, followed by a **proposal** for new default limits | perf | `bench/**`, `docs/benchmarks/V1.md` | HLD §16; PO-4 | V1-20 | Numbers are reported. Any change to the defaults goes to the project owner as an HLD/LLD change. | todo |
 | V1-42 | **Adopter documentation:** README per package (install, LibreOffice requirement, configuration, `authorize`, worker config module, security notes, error-code table) | docs | `shared/README.md`, `backend/README.md`, `frontend/README.md` | HLD §12, §14, §18 | V1-20, V1-36 | Each example in the docs runs. | todo |
-| V1-43 | **V1 release gate.** `ship` skill checklist, CHANGELOG, versions, `npm publish --dry-run`. The real publish happens only on the project owner's go (they own the `@open-docex` npm org). | release | `CHANGELOG.md`, `*/package.json` (version) | AGENTS.md §5–§6 | V1-40, V1-41, V1-42 | The project owner approves. | todo |
+| V1-43 | **V1 release gate.** `ship` skill checklist, CHANGELOG, versions, `npm publish --dry-run`. The real publish happens only on the project owner's go (they own the `@open-docex` npm org). | release | `CHANGELOG.md`, `*/package.json` (version), `.github/workflows/release.yml` | AGENTS.md §5–§6 | V1-40, V1-41, V1-42 | The project owner approves. | todo |
 
 ---
 
@@ -85,7 +85,7 @@ V1-00 ─┬─ V1-01 ─┬─ V1-02 ──────────────
 | ID | Task | Track | Files | LLD | Deps | Acceptance | Status |
 |---|---|---|---|---|---|---|---|
 | V3-01 | **`RedisStreamsQueue`** (node-redis; tested on Redis and Valkey) | server | `backend/src/queue/redis-streams-queue.ts` | P2 §9.4 | V1-20 | Bounds; FIFO across a restart; redelivery is deduplicated. | todo |
-| V3-02 | **`KafkaQueue`** (`@confluentinc/kafka-javascript`), plus the S6 install test | server | `backend/src/queue/kafka-queue.ts` | P2 §9.5; HLD §20 S6 | V1-20 | Per-document order; commit low-watermark; crash replay. | todo |
+| V3-02 | **`KafkaQueue`** (`@confluentinc/kafka-javascript`), plus the S6 install test | server | `backend/src/queue/kafka-queue.ts`, `.github/workflows/ci.yml` (`queues` job) | P2 §9.5; HLD §20 S6 | V1-20 | Per-document order; commit low-watermark; crash replay. | todo |
 | V3-03 | **Epoch lineage acceptance, integration tests and the V3 release gate** | server/release | `backend/src/core/document-instance.ts` (lineage), `backend/test/integration/queues/**` | P2 §8.6 | V3-01, V3-02 | The project owner approves the release. | todo |
 
 ## V4 — End-user upload
@@ -125,8 +125,15 @@ V1-00 ─┬─ V1-01 ─┬─ V1-02 ──────────────
 
 The orchestrator records questions here and asks the project owner. None are open right now.
 
+**Resolved 2026-11-22 (project owner):**
+- V1-00 scope extended with root `tsconfig.json`, `eslint.config.js`, root `vitest.config.ts`, `package-lock.json` and `shared/src/env.d.ts`, which its acceptance needs (P1 §1.1–§1.4).
+- V1-00 creates a minimal `frontend/vite.config.ts` (P1 §1.5 lib mode) so the root `build` works. V1-30 completes it.
+- V1-00's `ci.yml` has the `static`, `test` and `test-windows` jobs. V1-40 adds `e2e`, V3-02 adds `queues`, and V1-43 adds `release.yml`.
+- After V1-00 is merged, the orchestrator may push `main` to origin once, to verify the CI acceptance.
+
 ## Change log
 
 | Date | Change |
 |---|---|
 | 2026-11-19 | Plan created from the HLD and LLD. |
+| 2026-11-22 | V1-00/V1-30/V1-40/V1-43/V3-02 file scopes adjusted per the resolved questions above. V1-00 started. |
