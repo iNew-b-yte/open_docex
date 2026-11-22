@@ -265,7 +265,7 @@ export interface AnnotationResultMsg {
   reqId: number;
   annotations: Annotation[];
 }
-/** Broadcast to the document's other sessions when an annotation changes [V5]. */
+/** Broadcast to the document's other sessions when an annotation changes [V5]. Carries exactly one of `annotation` or `deletedId`. */
 export interface AnnotationChangedMsg {
   type: 'annotation-changed';
   annotation?: Annotation;

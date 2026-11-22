@@ -18,6 +18,7 @@ import { asDocumentId, isAssetId, isClientId, isEpoch, type DocumentId } from '.
 import { decodeUtf8, readBinaryFrame, writeBinaryFrame } from './frames.js';
 import type {
   Annotation,
+  AnnotationChangedMsg,
   ClientMessage,
   ConversionNotice,
   NoticeMsg,
@@ -137,6 +138,20 @@ const notice: Check<NoticeMsg> = (x, path) => {
   }
 };
 
+const annotationChangedFields = v.obj(
+  { type: v.lit('annotation-changed') },
+  { annotation, deletedId: annotationId },
+);
+
+/** `annotation-changed` carries exactly one of `annotation` or `deletedId` (project owner, V1-02 review). */
+const annotationChanged: Check<AnnotationChangedMsg> = (x, path) => {
+  const m = annotationChangedFields(x, path);
+  if ((m.annotation === undefined) === (m.deletedId === undefined)) {
+    throw new ValidationError(path, 'expected exactly one of annotation or deletedId');
+  }
+  return m;
+};
+
 // --- message tables --------------------------------------------------------------------------
 
 type Table<M> = Readonly<Record<string, Check<M>>>;
@@ -228,10 +243,7 @@ const SERVER_TEXT: Table<ServerMessage> = table<ServerMessage>({
     reqId,
     annotations: v.arr(annotation, { max: MAX }),
   }),
-  'annotation-changed': v.obj(
-    { type: v.lit('annotation-changed') },
-    { annotation, deletedId: annotationId },
-  ),
+  'annotation-changed': annotationChanged,
 });
 
 /** Server messages sent in binary frames. */
