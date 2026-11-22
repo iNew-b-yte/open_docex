@@ -8,7 +8,10 @@
  *
  * Versions are `${mtimeNs}:${size}`. `write` stages a temporary file in the target's folder,
  * checks the version, then renames over the target. The gap between that check and the
- * rename is not atomic: only an outside editor writing the same file can race it.
+ * rename is not atomic: only an outside editor writing the same file can race it. When the
+ * file clock is too coarse to move between two writes, `write` sets the new file's mtime 1 ms
+ * past the old one, so its own writes always change the version. An outside same-size edit
+ * within one clock tick can still go unnoticed.
  *
  * Parent folders of a ref are not created: writing into a missing folder fails with
  * `STORAGE_WRITE_FAILED`.
@@ -17,7 +20,7 @@
  */
 import { randomBytes } from 'node:crypto';
 import { constants as fsConstants, type BigIntStats } from 'node:fs';
-import { open, realpath, rename, stat, unlink, type FileHandle } from 'node:fs/promises';
+import { open, realpath, rename, stat, unlink, utimes, type FileHandle } from 'node:fs/promises';
 import path from 'node:path';
 import { OpenDocexError, type ErrorCode } from '@open-docex/shared/errors';
 import type { FileFormat } from '@open-docex/shared/protocol';
@@ -52,7 +55,6 @@ const RESERVED_SEGMENT = /^(con|prn|aux|nul|com\d|lpt\d)(\..*)?$/i;
 /** A drive letter such as `C:` at the start of a ref. */
 const DRIVE_LETTER = /^[a-z]:/i;
 /** C0 control characters and DEL. */
-// eslint-disable-next-line no-control-regex
 const CONTROL_CHAR = /[\u0000-\u001f\u007f]/;
 /** Characters `create` keeps from a display name (LLD Part 2 §11.2). */
 const NAME_DISALLOWED = /[^\p{L}\p{N} ._-]/gu;
@@ -199,6 +201,10 @@ export class LocalFsStorage implements StorageAdapter {
             ? { ok: false, reason: 'conflict' }
             : { ok: false, reason: 'conflict', currentVersion };
         }
+        // The mtime clock can be coarser than two writes (seen on Windows), so a same-size
+        // write could keep the old version. Move the new file's mtime past the old one, so
+        // the version always changes on our own writes.
+        if (current !== null) await ensureLaterMtime(tmp, current);
         // 3. Replace the target.
         await rename(tmp, abs);
         renamed = true;
@@ -298,6 +304,14 @@ async function realpathOfNearest(abs: string): Promise<string> {
       current = parent;
     }
   }
+}
+
+/** Sets `file`'s mtime 1 ms after `previous`'s when it isn't already later. */
+async function ensureLaterMtime(file: string, previous: BigIntStats): Promise<void> {
+  const st = await stat(file, { bigint: true });
+  if (st.mtimeNs > previous.mtimeNs) return;
+  const mtimeSeconds = Number(previous.mtimeNs / 1000n) / 1e6 + 0.001;
+  await utimes(file, Number(st.atimeNs / 1000n) / 1e6, mtimeSeconds);
 }
 
 /** `stat` of a regular file, or `null` when there is none. */
