@@ -1,0 +1,18 @@
+{
+  "name": "open-docex-spike-s3",
+  "private": true,
+  "type": "module",
+  "description": "Spike S3: pagination prototype in ProseMirror (throwaway, not shipped)",
+  "license": "MIT",
+  "scripts": {
+    "build": "node build.mjs",
+    "measure": "node build.mjs && playwright test --config playwright.config.mjs"
+  },
+  "devDependencies": {
+    "esbuild": "^0.28.2",
+    "prosemirror-model": "^1.25.13",
+    "prosemirror-state": "^1.4.4",
+    "prosemirror-transform": "^1.12.7",
+    "prosemirror-view": "^1.43.0"
+  }
+}

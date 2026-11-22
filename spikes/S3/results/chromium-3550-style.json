@@ -1,0 +1,607 @@
+{
+  "browser": "chromium",
+  "browserVersion": "159.0.8154.6",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/159.0.8154.6 Safari/537.36",
+  "os": "Windows_NT 10.0.26300 x64",
+  "cpu": "AMD Ryzen 9 9955HX 16-Core Processor           ",
+  "cores": 32,
+  "memGB": 31.3,
+  "node": "v24.18.0",
+  "viewport": {
+    "width": 1280,
+    "height": 900
+  },
+  "blocks": 3550,
+  "offsetMode": {
+    "init": {
+      "createViewMs": 18.799999952316284,
+      "firstPassMs": 104.59999990463257,
+      "firstPassMeasureMs": 86.69999992847443,
+      "layoutAfterFirstPassMs": 1.7999999523162842,
+      "blocks": 3550,
+      "pageCount": 501
+    },
+    "verify": {
+      "pageCount": 501,
+      "frames": 501,
+      "editorBottomVsLastFrameBottomPx": -285.1875,
+      "maxBlockOutsideBodyBoxPx": 284.5625,
+      "blocksOutsideBodyBox": 814,
+      "firstOutside": {
+        "i": 14,
+        "type": "paragraph",
+        "page": 2,
+        "top": 2387.890625,
+        "bottom": 2524.625,
+        "bodyTopY": 2389.03125,
+        "bodyBottomY": 3319.546875,
+        "h": 136.734375
+      },
+      "overflowBlocks": 2,
+      "headerCopiesInDom": 2,
+      "footerCopiesInDom": 2,
+      "sampleHeaderCopyText": "open_docex spike S3, page 2 of 501",
+      "realFooterText": "Footer, page 501"
+    }
+  },
+  "rectMode": {
+    "init": {
+      "createViewMs": 14.399999976158142,
+      "firstPassMs": 124.39999997615814,
+      "firstPassMeasureMs": 109.29999995231628,
+      "layoutAfterFirstPassMs": 1.5,
+      "blocks": 3550,
+      "pageCount": 500
+    },
+    "verify": {
+      "pageCount": 500,
+      "frames": 500,
+      "editorBottomVsLastFrameBottomPx": 0.5625,
+      "maxBlockOutsideBodyBoxPx": 0.1875,
+      "blocksOutsideBodyBox": 0,
+      "firstOutside": null,
+      "overflowBlocks": 2,
+      "headerCopiesInDom": 2,
+      "footerCopiesInDom": 2,
+      "sampleHeaderCopyText": "open_docex spike S3, page 2 of 500",
+      "realFooterText": "Footer, page 500"
+    }
+  },
+  "measure": "style",
+  "init": {
+    "createViewMs": 11.600000023841858,
+    "firstPassMs": 96.70000004768372,
+    "firstPassMeasureMs": 82.70000004768372,
+    "layoutAfterFirstPassMs": 1.0999999046325684,
+    "blocks": 3550,
+    "pageCount": 500
+  },
+  "verifyInitial": {
+    "pageCount": 500,
+    "frames": 500,
+    "editorBottomVsLastFrameBottomPx": 0,
+    "maxBlockOutsideBodyBoxPx": 0,
+    "blocksOutsideBodyBox": 0,
+    "firstOutside": null,
+    "overflowBlocks": 2,
+    "headerCopiesInDom": 2,
+    "footerCopiesInDom": 2,
+    "sampleHeaderCopyText": "open_docex spike S3, page 2 of 500",
+    "realFooterText": "Footer, page 500"
+  },
+  "typePage1": {
+    "n": 30,
+    "dispatchMs": {
+      "median": 4.3,
+      "p95": 6.4,
+      "max": 7.1
+    },
+    "passMs": {
+      "median": 2.9,
+      "p95": 4,
+      "max": 4
+    },
+    "passMeasureMs": {
+      "median": 0.3,
+      "p95": 0.5,
+      "max": 0.5
+    },
+    "layoutAfterPassMs": {
+      "median": 0,
+      "p95": 0,
+      "max": 0.1
+    },
+    "workMs": {
+      "median": 7.2,
+      "p95": 9.8,
+      "max": 11.1
+    },
+    "toNextFrameMs": {
+      "median": 31.3,
+      "p95": 32.6,
+      "max": 32.7
+    },
+    "fullReasons": [],
+    "measuredBlocks": [
+      1
+    ],
+    "resumeIndex": [
+      1,
+      1
+    ],
+    "changedBreaks": [
+      499,
+      499
+    ]
+  },
+  "typePageMid": {
+    "n": 30,
+    "dispatchMs": {
+      "median": 6,
+      "p95": 7.3,
+      "max": 9.9
+    },
+    "passMs": {
+      "median": 3.9,
+      "p95": 5.4,
+      "max": 6.8
+    },
+    "passMeasureMs": {
+      "median": 0.4,
+      "p95": 1,
+      "max": 1.4
+    },
+    "layoutAfterPassMs": {
+      "median": 0,
+      "p95": 0.1,
+      "max": 0.1
+    },
+    "workMs": {
+      "median": 10.1,
+      "p95": 12.3,
+      "max": 14.4
+    },
+    "toNextFrameMs": {
+      "median": 33.7,
+      "p95": 34.3,
+      "max": 34.5
+    },
+    "fullReasons": [],
+    "measuredBlocks": [
+      1
+    ],
+    "resumeIndex": [
+      1777,
+      1777
+    ],
+    "changedBreaks": [
+      249,
+      249
+    ]
+  },
+  "typeLastPage": {
+    "n": 30,
+    "dispatchMs": {
+      "median": 4.7,
+      "p95": 6.6,
+      "max": 7.3
+    },
+    "passMs": {
+      "median": 0.3,
+      "p95": 0.4,
+      "max": 0.5
+    },
+    "passMeasureMs": {
+      "median": 0.2,
+      "p95": 0.4,
+      "max": 0.5
+    },
+    "layoutAfterPassMs": {
+      "median": 0,
+      "p95": 0,
+      "max": 0.1
+    },
+    "workMs": {
+      "median": 5,
+      "p95": 6.9,
+      "max": 7.5
+    },
+    "toNextFrameMs": {
+      "median": 32.8,
+      "p95": 34.5,
+      "max": 34.7
+    },
+    "fullReasons": [],
+    "measuredBlocks": [
+      1
+    ],
+    "resumeIndex": [
+      3545,
+      3545
+    ],
+    "changedBreaks": [
+      0,
+      0
+    ]
+  },
+  "insertParagraphPage1": {
+    "n": 15,
+    "dispatchMs": {
+      "median": 5.7,
+      "p95": 6.5,
+      "max": 6.5
+    },
+    "passMs": {
+      "median": 8.4,
+      "p95": 20.1,
+      "max": 20.1
+    },
+    "passMeasureMs": {
+      "median": 0.3,
+      "p95": 0.8,
+      "max": 0.8
+    },
+    "layoutAfterPassMs": {
+      "median": 0,
+      "p95": 0.5,
+      "max": 0.5
+    },
+    "workMs": {
+      "median": 14.4,
+      "p95": 27.1,
+      "max": 27.1
+    },
+    "toNextFrameMs": {
+      "median": 35.2,
+      "p95": 41.3,
+      "max": 41.3
+    },
+    "fullReasons": [],
+    "measuredBlocks": [
+      1
+    ],
+    "resumeIndex": [
+      1,
+      1
+    ],
+    "changedBreaks": [
+      499,
+      500
+    ]
+  },
+  "deleteParagraphPage1": {
+    "n": 15,
+    "dispatchMs": {
+      "median": 5.3,
+      "p95": 7.1,
+      "max": 7.1
+    },
+    "passMs": {
+      "median": 7.7,
+      "p95": 17.1,
+      "max": 17.1
+    },
+    "passMeasureMs": {
+      "median": 0.4,
+      "p95": 0.7,
+      "max": 0.7
+    },
+    "layoutAfterPassMs": {
+      "median": 0,
+      "p95": 0.6,
+      "max": 0.6
+    },
+    "workMs": {
+      "median": 14,
+      "p95": 22.2,
+      "max": 22.2
+    },
+    "toNextFrameMs": {
+      "median": 35,
+      "p95": 38.8,
+      "max": 38.8
+    },
+    "fullReasons": [],
+    "measuredBlocks": [
+      0
+    ],
+    "resumeIndex": [
+      1,
+      1
+    ],
+    "changedBreaks": [
+      499,
+      500
+    ]
+  },
+  "insertTallBlockPage1": {
+    "n": 5,
+    "dispatchMs": {
+      "median": 6.3,
+      "p95": 7.4,
+      "max": 7.4
+    },
+    "passMs": {
+      "median": 16.6,
+      "p95": 18.4,
+      "max": 18.4
+    },
+    "passMeasureMs": {
+      "median": 0.4,
+      "p95": 0.6,
+      "max": 0.6
+    },
+    "layoutAfterPassMs": {
+      "median": 2.2,
+      "p95": 2.4,
+      "max": 2.4
+    },
+    "workMs": {
+      "median": 25.1,
+      "p95": 26.3,
+      "max": 26.3
+    },
+    "toNextFrameMs": {
+      "median": 38.8,
+      "p95": 40.6,
+      "max": 40.6
+    },
+    "fullReasons": [],
+    "measuredBlocks": [
+      1
+    ],
+    "resumeIndex": [
+      1,
+      5
+    ],
+    "changedBreaks": [
+      500,
+      501
+    ]
+  },
+  "typeInHeader": {
+    "n": 10,
+    "dispatchMs": {
+      "median": 0.6,
+      "p95": 1.2,
+      "max": 1.2
+    },
+    "passMs": {
+      "median": 2,
+      "p95": 2.4,
+      "max": 2.4
+    },
+    "passMeasureMs": {
+      "median": 2,
+      "p95": 2.4,
+      "max": 2.4
+    },
+    "layoutAfterPassMs": {
+      "median": 0,
+      "p95": 0,
+      "max": 0
+    },
+    "workMs": {
+      "median": 2.6,
+      "p95": 3,
+      "max": 3
+    },
+    "toNextFrameMs": {
+      "median": 31.2,
+      "p95": 32.4,
+      "max": 32.4
+    },
+    "fullReasons": [],
+    "measuredBlocks": [
+      0
+    ],
+    "resumeIndex": [
+      3555,
+      3555
+    ],
+    "changedBreaks": [
+      0,
+      0
+    ]
+  },
+  "growHeader": {
+    "n": 3,
+    "dispatchMs": {
+      "median": 0.7,
+      "p95": 0.8,
+      "max": 0.8
+    },
+    "passMs": {
+      "median": 4.9,
+      "p95": 5.3,
+      "max": 5.3
+    },
+    "passMeasureMs": {
+      "median": 2,
+      "p95": 2.4,
+      "max": 2.4
+    },
+    "layoutAfterPassMs": {
+      "median": 0,
+      "p95": 0,
+      "max": 0
+    },
+    "workMs": {
+      "median": 5.6,
+      "p95": 6.1,
+      "max": 6.1
+    },
+    "toNextFrameMs": {
+      "median": 32.1,
+      "p95": 32.2,
+      "max": 32.2
+    },
+    "fullReasons": [
+      "geometry/header/footer height"
+    ],
+    "measuredBlocks": [
+      0
+    ],
+    "resumeIndex": [
+      0,
+      0
+    ],
+    "changedBreaks": [
+      505,
+      505
+    ]
+  },
+  "verifyAfterEdits": {
+    "pageCount": 506,
+    "frames": 506,
+    "editorBottomVsLastFrameBottomPx": 0.0625,
+    "maxBlockOutsideBodyBoxPx": 0,
+    "blocksOutsideBodyBox": 0,
+    "firstOutside": null,
+    "overflowBlocks": 7,
+    "headerCopiesInDom": 1,
+    "footerCopiesInDom": 1,
+    "sampleHeaderCopyText": "HHHHHHHHHHopen_docex spike S3, page 2 of 506second header linesecond header linesecond header line",
+    "realFooterText": "Footer, page 506"
+  },
+  "keyboardPage1": {
+    "n": 30,
+    "keyToPassEndMs": {
+      "median": 18.5,
+      "p95": 19.8,
+      "max": 19.8
+    },
+    "passMs": {
+      "median": 3.6,
+      "p95": 4.7,
+      "max": 5.2
+    },
+    "layoutAfterPassMs": {
+      "median": 0,
+      "p95": 0,
+      "max": 0
+    },
+    "keyToNextFrameMs": {
+      "median": 31.4,
+      "p95": 32.4,
+      "max": 40.2
+    },
+    "fullReasons": [],
+    "measuredBlocks": [
+      1
+    ],
+    "resumeIndex": [
+      6,
+      6
+    ],
+    "eventTimingKeydownMs": [
+      24,
+      24,
+      24,
+      24,
+      24,
+      24,
+      24,
+      24,
+      24,
+      24,
+      24,
+      24,
+      24,
+      24,
+      24,
+      24,
+      24,
+      24,
+      24,
+      24,
+      24,
+      24,
+      24,
+      24,
+      24,
+      24,
+      24,
+      24,
+      24,
+      24
+    ]
+  },
+  "keyboardLastPage": {
+    "n": 30,
+    "keyToPassEndMs": {
+      "median": 15.2,
+      "p95": 16.2,
+      "max": 17.5
+    },
+    "passMs": {
+      "median": 0.2,
+      "p95": 0.6,
+      "max": 1
+    },
+    "layoutAfterPassMs": {
+      "median": 0,
+      "p95": 0,
+      "max": 0.1
+    },
+    "keyToNextFrameMs": {
+      "median": 31.9,
+      "p95": 32.7,
+      "max": 33
+    },
+    "fullReasons": [],
+    "measuredBlocks": [
+      1
+    ],
+    "resumeIndex": [
+      3550,
+      3550
+    ],
+    "eventTimingKeydownMs": [
+      16,
+      16,
+      16,
+      16,
+      16,
+      16,
+      16,
+      16,
+      16,
+      16,
+      16,
+      16,
+      16,
+      16,
+      16,
+      24,
+      24,
+      24,
+      24,
+      24,
+      24,
+      24,
+      24,
+      24,
+      24,
+      24,
+      24,
+      24,
+      24,
+      24
+    ]
+  },
+  "copiesBuiltTotal": 160,
+  "verifyFinal": {
+    "pageCount": 506,
+    "frames": 506,
+    "editorBottomVsLastFrameBottomPx": 0.046875,
+    "maxBlockOutsideBodyBoxPx": 0.03125,
+    "blocksOutsideBodyBox": 0,
+    "firstOutside": null,
+    "overflowBlocks": 7,
+    "headerCopiesInDom": 7,
+    "footerCopiesInDom": 7,
+    "sampleHeaderCopyText": "HHHHHHHHHHopen_docex spike S3, page 2 of 506second header linesecond header linesecond header line",
+    "realFooterText": "Footer, page 506"
+  }
+}
