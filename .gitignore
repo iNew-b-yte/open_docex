@@ -1,0 +1,10 @@
+node_modules/
+dist/
+coverage/
+*.tsbuildinfo
+*.tgz
+
+# Copied from the root LICENSE by each package's prepack script
+/shared/LICENSE
+/backend/LICENSE
+/frontend/LICENSE

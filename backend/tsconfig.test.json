@@ -1,0 +1,10 @@
+{
+  "extends": "../tsconfig.base.json",
+  "compilerOptions": {
+    "composite": false,
+    "noEmit": true,
+    "types": ["node"],
+    "customConditions": ["@open-docex/source"]
+  },
+  "include": ["src", "test"]
+}

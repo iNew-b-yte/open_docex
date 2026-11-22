@@ -1,0 +1,34 @@
+{
+  "name": "@open-docex/server",
+  "version": "0.0.0",
+  "description": "open_docex server engine for Node.js: WebSocket gateway, document core, persistence and LibreOffice codec.",
+  "license": "MIT",
+  "type": "module",
+  "sideEffects": false,
+  "exports": {
+    ".": {
+      "@open-docex/source": "./src/index.ts",
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "engines": {
+    "node": ">=22.12"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "typecheck": "tsc -p tsconfig.test.json",
+    "prepack": "node -e \"require('fs').copyFileSync('../LICENSE', 'LICENSE')\""
+  },
+  "dependencies": {
+    "@open-docex/shared": "0.0.0",
+    "htmlparser2": "^12.0.0",
+    "ws": "^8.23.0",
+    "yauzl": "^3.4.0"
+  }
+}
