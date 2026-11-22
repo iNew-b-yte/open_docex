@@ -1,0 +1,46 @@
+[
+  {
+    "name": "storage",
+    "direction": "server",
+    "frame": "text",
+    "message": {
+      "type": "notice",
+      "notice": "storage",
+      "state": "local"
+    }
+  },
+  {
+    "name": "read-only",
+    "direction": "server",
+    "frame": "text",
+    "message": {
+      "type": "notice",
+      "notice": "read-only",
+      "readOnly": true,
+      "reason": "unsupported-content"
+    }
+  },
+  {
+    "name": "engine-restarting",
+    "direction": "server",
+    "frame": "text",
+    "message": {
+      "type": "notice",
+      "notice": "engine-restarting"
+    }
+  },
+  {
+    "name": "fields of other variants are dropped",
+    "direction": "server",
+    "frame": "text",
+    "message": {
+      "type": "notice",
+      "notice": "engine-restarting",
+      "state": "local"
+    },
+    "expected": {
+      "type": "notice",
+      "notice": "engine-restarting"
+    }
+  }
+]

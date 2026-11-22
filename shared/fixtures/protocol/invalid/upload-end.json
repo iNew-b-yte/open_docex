@@ -1,0 +1,10 @@
+[
+  {
+    "name": "missing reqId",
+    "direction": "client",
+    "frame": "text",
+    "message": {
+      "type": "upload-end"
+    }
+  }
+]

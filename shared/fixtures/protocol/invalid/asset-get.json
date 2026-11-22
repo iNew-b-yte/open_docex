@@ -1,0 +1,33 @@
+[
+  {
+    "name": "uppercase asset id",
+    "direction": "client",
+    "frame": "text",
+    "message": {
+      "type": "asset-get",
+      "reqId": 1,
+      "assetId": "0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF"
+    }
+  },
+  {
+    "name": "path-like asset id",
+    "direction": "client",
+    "frame": "text",
+    "message": {
+      "type": "asset-get",
+      "reqId": 1,
+      "assetId": "../../etc/passwd"
+    }
+  },
+  {
+    "name": "in a binary frame",
+    "direction": "client",
+    "frame": "binary",
+    "message": {
+      "type": "asset-get",
+      "reqId": 1,
+      "assetId": "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef"
+    },
+    "payload": []
+  }
+]

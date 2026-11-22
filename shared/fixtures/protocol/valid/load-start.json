@@ -1,0 +1,70 @@
+[
+  {
+    "name": "minimal",
+    "direction": "server",
+    "frame": "text",
+    "message": {
+      "type": "load-start",
+      "epoch": "ePoCh_0123456789-abcde",
+      "rev": 0,
+      "kind": "text",
+      "access": "edit",
+      "readOnly": false
+    }
+  },
+  {
+    "name": "every optional field",
+    "direction": "server",
+    "frame": "text",
+    "message": {
+      "type": "load-start",
+      "epoch": "ePoCh_0123456789-abcde",
+      "rev": 17,
+      "kind": "sheet",
+      "access": "view",
+      "readOnly": true,
+      "unsupported": [
+        {
+          "feature": "charts",
+          "count": 2,
+          "where": [
+            "Sheet1!B2"
+          ],
+          "detail": "bar chart"
+        },
+        {
+          "feature": "other",
+          "count": 1
+        }
+      ],
+      "ackedClientSeq": 3,
+      "totalChunks": 4,
+      "limits": {
+        "maxAssetBytes": 10485760
+      },
+      "conversions": [
+        {
+          "feature": "image-to-png",
+          "count": 1,
+          "where": [
+            "page 2"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "empty limits",
+    "direction": "server",
+    "frame": "text",
+    "message": {
+      "type": "load-start",
+      "epoch": "ePoCh_0123456789-abcde",
+      "rev": 1,
+      "kind": "text",
+      "access": "edit",
+      "readOnly": false,
+      "limits": {}
+    }
+  }
+]

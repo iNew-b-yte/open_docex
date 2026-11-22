@@ -1,0 +1,36 @@
+[
+  {
+    "name": "in a text frame",
+    "direction": "client",
+    "frame": "text",
+    "message": {
+      "type": "upload-chunk",
+      "reqId": 1,
+      "seq": 0
+    }
+  },
+  {
+    "name": "negative seq",
+    "direction": "client",
+    "frame": "binary",
+    "message": {
+      "type": "upload-chunk",
+      "reqId": 1,
+      "seq": -1
+    },
+    "payload": [
+      1
+    ]
+  },
+  {
+    "name": "payload over 256 KiB",
+    "direction": "client",
+    "frame": "binary",
+    "message": {
+      "type": "upload-chunk",
+      "reqId": 1,
+      "seq": 0
+    },
+    "payloadLength": 262145
+  }
+]

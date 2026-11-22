@@ -1,0 +1,11 @@
+[
+  {
+    "name": "list",
+    "direction": "client",
+    "frame": "text",
+    "message": {
+      "type": "annotation-list",
+      "reqId": 4
+    }
+  }
+]

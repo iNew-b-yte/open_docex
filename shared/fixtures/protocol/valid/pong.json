@@ -1,0 +1,11 @@
+[
+  {
+    "name": "pong",
+    "direction": "server",
+    "frame": "text",
+    "message": {
+      "type": "pong",
+      "n": 5
+    }
+  }
+]

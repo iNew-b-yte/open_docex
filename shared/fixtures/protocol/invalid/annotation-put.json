@@ -1,0 +1,56 @@
+[
+  {
+    "name": "missing annotation",
+    "direction": "client",
+    "frame": "text",
+    "message": {
+      "type": "annotation-put",
+      "reqId": 1
+    }
+  },
+  {
+    "name": "bad kind",
+    "direction": "client",
+    "frame": "text",
+    "message": {
+      "type": "annotation-put",
+      "reqId": 1,
+      "annotation": {
+        "id": "aNnOt0123456789abcdefg",
+        "kind": "comment",
+        "body": "",
+        "resolved": false
+      }
+    }
+  },
+  {
+    "name": "bad id",
+    "direction": "client",
+    "frame": "text",
+    "message": {
+      "type": "annotation-put",
+      "reqId": 1,
+      "annotation": {
+        "id": "x",
+        "kind": "note",
+        "body": "",
+        "resolved": false
+      }
+    }
+  },
+  {
+    "name": "resolved not a boolean",
+    "direction": "client",
+    "frame": "text",
+    "message": {
+      "type": "annotation-put",
+      "reqId": 1,
+      "annotation": {
+        "id": "aNnOt0123456789abcdefg",
+        "kind": "note",
+        "body": "",
+        "resolved": "no"
+      }
+    }
+  }
+]

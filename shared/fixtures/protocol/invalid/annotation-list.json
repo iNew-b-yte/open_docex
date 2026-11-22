@@ -1,0 +1,11 @@
+[
+  {
+    "name": "reqId not an integer",
+    "direction": "client",
+    "frame": "text",
+    "message": {
+      "type": "annotation-list",
+      "reqId": "x"
+    }
+  }
+]

@@ -1,0 +1,29 @@
+[
+  {
+    "name": "bad mime",
+    "direction": "server",
+    "frame": "text",
+    "message": {
+      "type": "asset",
+      "reqId": 1,
+      "assetId": "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef",
+      "mime": "image/webp",
+      "size": 1
+    }
+  },
+  {
+    "name": "binary with bad asset id",
+    "direction": "server",
+    "frame": "binary",
+    "message": {
+      "type": "asset",
+      "reqId": 1,
+      "assetId": "nothex",
+      "mime": "image/png",
+      "size": 1
+    },
+    "payload": [
+      1
+    ]
+  }
+]

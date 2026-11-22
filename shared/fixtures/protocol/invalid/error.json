@@ -1,0 +1,35 @@
+[
+  {
+    "name": "unknown code",
+    "direction": "server",
+    "frame": "text",
+    "message": {
+      "type": "error",
+      "code": "NOPE",
+      "retryable": false,
+      "message": "x"
+    }
+  },
+  {
+    "name": "retryable not a boolean",
+    "direction": "server",
+    "frame": "text",
+    "message": {
+      "type": "error",
+      "code": "QUEUE_FULL",
+      "retryable": 1,
+      "message": "x"
+    }
+  },
+  {
+    "name": "missing code",
+    "direction": "server",
+    "frame": "text",
+    "message": {
+      "type": "error",
+      "assetId": "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef",
+      "retryable": false,
+      "message": "x"
+    }
+  }
+]

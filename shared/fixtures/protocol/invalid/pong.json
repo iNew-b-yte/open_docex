@@ -1,0 +1,11 @@
+[
+  {
+    "name": "Part 3 id instead of n",
+    "direction": "server",
+    "frame": "text",
+    "message": {
+      "type": "pong",
+      "id": 5
+    }
+  }
+]

@@ -1,0 +1,11 @@
+[
+  {
+    "name": "negative rev",
+    "direction": "server",
+    "frame": "text",
+    "message": {
+      "type": "load-done",
+      "rev": -1
+    }
+  }
+]

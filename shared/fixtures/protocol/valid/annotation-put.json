@@ -1,0 +1,60 @@
+[
+  {
+    "name": "note",
+    "direction": "client",
+    "frame": "text",
+    "message": {
+      "type": "annotation-put",
+      "reqId": 5,
+      "annotation": {
+        "id": "aNnOt0123456789abcdefg",
+        "kind": "note",
+        "body": "Hi",
+        "resolved": false
+      }
+    }
+  },
+  {
+    "name": "reply",
+    "direction": "client",
+    "frame": "text",
+    "message": {
+      "type": "annotation-put",
+      "reqId": 6,
+      "annotation": {
+        "id": "rEpLy0123456789abcdefg",
+        "kind": "note",
+        "body": "Done",
+        "resolved": true,
+        "replyTo": "aNnOt0123456789abcdefg"
+      }
+    }
+  },
+  {
+    "name": "server-owned fields are dropped",
+    "direction": "client",
+    "frame": "text",
+    "message": {
+      "type": "annotation-put",
+      "reqId": 7,
+      "annotation": {
+        "id": "aNnOt0123456789abcdefg",
+        "kind": "bookmark",
+        "body": "",
+        "resolved": false,
+        "authorId": "spoof",
+        "createdAt": "x"
+      }
+    },
+    "expected": {
+      "type": "annotation-put",
+      "reqId": 7,
+      "annotation": {
+        "id": "aNnOt0123456789abcdefg",
+        "kind": "bookmark",
+        "body": "",
+        "resolved": false
+      }
+    }
+  }
+]

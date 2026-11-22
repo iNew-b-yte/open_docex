@@ -1,0 +1,38 @@
+[
+  {
+    "name": "name of 256 characters",
+    "direction": "client",
+    "frame": "text",
+    "message": {
+      "type": "upload-start",
+      "reqId": 1,
+      "name": "nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn.xlsx",
+      "format": "xlsx",
+      "size": 1
+    }
+  },
+  {
+    "name": "unknown format",
+    "direction": "client",
+    "frame": "text",
+    "message": {
+      "type": "upload-start",
+      "reqId": 1,
+      "name": "a.pdf",
+      "format": "pdf",
+      "size": 1
+    }
+  },
+  {
+    "name": "negative size",
+    "direction": "client",
+    "frame": "text",
+    "message": {
+      "type": "upload-start",
+      "reqId": 1,
+      "name": "a.docx",
+      "format": "docx",
+      "size": -5
+    }
+  }
+]

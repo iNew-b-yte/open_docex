@@ -1,0 +1,40 @@
+[
+  {
+    "name": "plain",
+    "direction": "server",
+    "frame": "text",
+    "message": {
+      "type": "ack",
+      "clientSeq": 1,
+      "rev": 5
+    }
+  },
+  {
+    "name": "with committed",
+    "direction": "server",
+    "frame": "text",
+    "message": {
+      "type": "ack",
+      "clientSeq": 2,
+      "rev": 7,
+      "committed": [
+        {
+          "stepType": "replace",
+          "from": 1,
+          "to": 1
+        }
+      ]
+    }
+  },
+  {
+    "name": "every op dropped",
+    "direction": "server",
+    "frame": "text",
+    "message": {
+      "type": "ack",
+      "clientSeq": 3,
+      "rev": 7,
+      "committed": []
+    }
+  }
+]

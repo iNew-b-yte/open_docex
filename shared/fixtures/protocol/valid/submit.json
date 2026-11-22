@@ -1,0 +1,45 @@
+[
+  {
+    "name": "one op",
+    "direction": "client",
+    "frame": "text",
+    "message": {
+      "type": "submit",
+      "clientId": "cLiEnT0123456789abcdef",
+      "clientSeq": 1,
+      "epoch": "ePoCh_0123456789-abcde",
+      "baseRev": 0,
+      "ops": [
+        {
+          "stepType": "replace",
+          "from": 1,
+          "to": 1
+        }
+      ]
+    }
+  },
+  {
+    "name": "several ops",
+    "direction": "client",
+    "frame": "text",
+    "message": {
+      "type": "submit",
+      "clientId": "cLiEnT0123456789abcdef",
+      "clientSeq": 7,
+      "epoch": "ePoCh_0123456789-abcde",
+      "baseRev": 12,
+      "ops": [
+        {
+          "stepType": "replace",
+          "from": 1,
+          "to": 1
+        },
+        {
+          "stepType": "addMark",
+          "from": 1,
+          "to": 3
+        }
+      ]
+    }
+  }
+]

@@ -1,0 +1,29 @@
+[
+  {
+    "name": "empty ops",
+    "direction": "server",
+    "frame": "text",
+    "message": {
+      "type": "remote",
+      "fromRev": 0,
+      "ops": [],
+      "clientId": "oThEr_0123456789abcdef"
+    }
+  },
+  {
+    "name": "missing clientId",
+    "direction": "server",
+    "frame": "text",
+    "message": {
+      "type": "remote",
+      "fromRev": 0,
+      "ops": [
+        {
+          "stepType": "replace",
+          "from": 1,
+          "to": 1
+        }
+      ]
+    }
+  }
+]

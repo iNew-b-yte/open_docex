@@ -1,0 +1,11 @@
+[
+  {
+    "name": "end",
+    "direction": "client",
+    "frame": "text",
+    "message": {
+      "type": "upload-end",
+      "reqId": 1
+    }
+  }
+]

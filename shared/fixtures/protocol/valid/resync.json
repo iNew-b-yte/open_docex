@@ -1,0 +1,29 @@
+[
+  {
+    "name": "epoch-changed",
+    "direction": "server",
+    "frame": "text",
+    "message": {
+      "type": "resync",
+      "reason": "epoch-changed"
+    }
+  },
+  {
+    "name": "history-unavailable",
+    "direction": "server",
+    "frame": "text",
+    "message": {
+      "type": "resync",
+      "reason": "history-unavailable"
+    }
+  },
+  {
+    "name": "inconsistent",
+    "direction": "server",
+    "frame": "text",
+    "message": {
+      "type": "resync",
+      "reason": "inconsistent"
+    }
+  }
+]

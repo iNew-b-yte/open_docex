@@ -1,0 +1,22 @@
+[
+  {
+    "name": "bad deletedId",
+    "direction": "server",
+    "frame": "text",
+    "message": {
+      "type": "annotation-changed",
+      "deletedId": "x"
+    }
+  },
+  {
+    "name": "bad annotation",
+    "direction": "server",
+    "frame": "text",
+    "message": {
+      "type": "annotation-changed",
+      "annotation": {
+        "id": "aNnOt0123456789abcdefg"
+      }
+    }
+  }
+]

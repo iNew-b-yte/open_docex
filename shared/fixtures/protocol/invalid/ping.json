@@ -1,0 +1,20 @@
+[
+  {
+    "name": "missing n",
+    "direction": "client",
+    "frame": "text",
+    "message": {
+      "type": "ping"
+    }
+  },
+  {
+    "name": "string n (Part 3 id is superseded)",
+    "direction": "client",
+    "frame": "text",
+    "message": {
+      "type": "ping",
+      "id": "a",
+      "n": "a"
+    }
+  }
+]

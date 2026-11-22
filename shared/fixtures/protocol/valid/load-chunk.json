@@ -1,0 +1,33 @@
+[
+  {
+    "name": "text doc part",
+    "direction": "server",
+    "frame": "text",
+    "message": {
+      "type": "load-chunk",
+      "seq": 0,
+      "data": {
+        "kind": "text",
+        "part": "doc",
+        "page": {},
+        "header": false,
+        "footer": false
+      }
+    }
+  },
+  {
+    "name": "sheet rows part",
+    "direction": "server",
+    "frame": "text",
+    "message": {
+      "type": "load-chunk",
+      "seq": 2,
+      "data": {
+        "kind": "sheet",
+        "part": "rows",
+        "sheetId": "s1",
+        "rows": []
+      }
+    }
+  }
+]

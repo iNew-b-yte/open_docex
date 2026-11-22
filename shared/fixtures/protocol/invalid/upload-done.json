@@ -1,0 +1,22 @@
+[
+  {
+    "name": "empty documentId",
+    "direction": "server",
+    "frame": "text",
+    "message": {
+      "type": "upload-done",
+      "reqId": 1,
+      "documentId": ""
+    }
+  },
+  {
+    "name": "control character in documentId",
+    "direction": "server",
+    "frame": "text",
+    "message": {
+      "type": "upload-done",
+      "reqId": 1,
+      "documentId": "a\u0000b"
+    }
+  }
+]

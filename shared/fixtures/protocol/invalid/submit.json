@@ -1,0 +1,120 @@
+[
+  {
+    "name": "clientSeq 0",
+    "direction": "client",
+    "frame": "text",
+    "message": {
+      "type": "submit",
+      "clientId": "cLiEnT0123456789abcdef",
+      "clientSeq": 0,
+      "epoch": "ePoCh_0123456789-abcde",
+      "baseRev": 0,
+      "ops": [
+        {
+          "stepType": "replace",
+          "from": 1,
+          "to": 1
+        }
+      ]
+    }
+  },
+  {
+    "name": "fractional baseRev",
+    "direction": "client",
+    "frame": "text",
+    "message": {
+      "type": "submit",
+      "clientId": "cLiEnT0123456789abcdef",
+      "clientSeq": 1,
+      "epoch": "ePoCh_0123456789-abcde",
+      "baseRev": 1.5,
+      "ops": [
+        {
+          "stepType": "replace",
+          "from": 1,
+          "to": 1
+        }
+      ]
+    }
+  },
+  {
+    "name": "unsafe integer clientSeq",
+    "direction": "client",
+    "frame": "text",
+    "message": {
+      "type": "submit",
+      "clientId": "cLiEnT0123456789abcdef",
+      "clientSeq": 9007199254740992,
+      "epoch": "ePoCh_0123456789-abcde",
+      "baseRev": 0,
+      "ops": [
+        {
+          "stepType": "replace",
+          "from": 1,
+          "to": 1
+        }
+      ]
+    }
+  },
+  {
+    "name": "empty ops",
+    "direction": "client",
+    "frame": "text",
+    "message": {
+      "type": "submit",
+      "clientId": "cLiEnT0123456789abcdef",
+      "clientSeq": 1,
+      "epoch": "ePoCh_0123456789-abcde",
+      "baseRev": 0,
+      "ops": []
+    }
+  },
+  {
+    "name": "op not an object",
+    "direction": "client",
+    "frame": "text",
+    "message": {
+      "type": "submit",
+      "clientId": "cLiEnT0123456789abcdef",
+      "clientSeq": 1,
+      "epoch": "ePoCh_0123456789-abcde",
+      "baseRev": 0,
+      "ops": [
+        1
+      ]
+    }
+  },
+  {
+    "name": "op is an array",
+    "direction": "client",
+    "frame": "text",
+    "message": {
+      "type": "submit",
+      "clientId": "cLiEnT0123456789abcdef",
+      "clientSeq": 1,
+      "epoch": "ePoCh_0123456789-abcde",
+      "baseRev": 0,
+      "ops": [
+        []
+      ]
+    }
+  },
+  {
+    "name": "missing epoch",
+    "direction": "client",
+    "frame": "text",
+    "message": {
+      "type": "submit",
+      "clientId": "cLiEnT0123456789abcdef",
+      "clientSeq": 1,
+      "baseRev": 0,
+      "ops": [
+        {
+          "stepType": "replace",
+          "from": 1,
+          "to": 1
+        }
+      ]
+    }
+  }
+]

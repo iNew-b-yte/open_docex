@@ -1,0 +1,12 @@
+[
+  {
+    "name": "delete",
+    "direction": "client",
+    "frame": "text",
+    "message": {
+      "type": "annotation-delete",
+      "reqId": 8,
+      "id": "aNnOt0123456789abcdefg"
+    }
+  }
+]

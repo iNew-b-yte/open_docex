@@ -1,0 +1,12 @@
+[
+  {
+    "name": "bad id",
+    "direction": "client",
+    "frame": "text",
+    "message": {
+      "type": "annotation-delete",
+      "reqId": 1,
+      "id": 7
+    }
+  }
+]

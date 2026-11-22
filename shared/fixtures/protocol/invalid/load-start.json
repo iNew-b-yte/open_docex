@@ -1,0 +1,167 @@
+[
+  {
+    "name": "missing readOnly",
+    "direction": "server",
+    "frame": "text",
+    "message": {
+      "type": "load-start",
+      "epoch": "ePoCh_0123456789-abcde",
+      "rev": 0,
+      "kind": "text",
+      "access": "edit"
+    }
+  },
+  {
+    "name": "bad kind",
+    "direction": "server",
+    "frame": "text",
+    "message": {
+      "type": "load-start",
+      "epoch": "ePoCh_0123456789-abcde",
+      "rev": 0,
+      "kind": "slides",
+      "access": "edit",
+      "readOnly": false
+    }
+  },
+  {
+    "name": "bad access",
+    "direction": "server",
+    "frame": "text",
+    "message": {
+      "type": "load-start",
+      "epoch": "ePoCh_0123456789-abcde",
+      "rev": 0,
+      "kind": "text",
+      "access": "admin",
+      "readOnly": false
+    }
+  },
+  {
+    "name": "unknown unsupported feature",
+    "direction": "server",
+    "frame": "text",
+    "message": {
+      "type": "load-start",
+      "epoch": "ePoCh_0123456789-abcde",
+      "rev": 0,
+      "kind": "text",
+      "access": "edit",
+      "readOnly": true,
+      "unsupported": [
+        {
+          "feature": "macros",
+          "count": 1
+        }
+      ]
+    }
+  },
+  {
+    "name": "Part 2 sample field is not a substitute for count",
+    "direction": "server",
+    "frame": "text",
+    "message": {
+      "type": "load-start",
+      "epoch": "ePoCh_0123456789-abcde",
+      "rev": 0,
+      "kind": "text",
+      "access": "edit",
+      "readOnly": true,
+      "unsupported": [
+        {
+          "feature": "charts",
+          "sample": "x"
+        }
+      ]
+    }
+  },
+  {
+    "name": "where over 20 entries",
+    "direction": "server",
+    "frame": "text",
+    "message": {
+      "type": "load-start",
+      "epoch": "ePoCh_0123456789-abcde",
+      "rev": 0,
+      "kind": "text",
+      "access": "edit",
+      "readOnly": true,
+      "unsupported": [
+        {
+          "feature": "charts",
+          "count": 21,
+          "where": [
+            "p0",
+            "p1",
+            "p2",
+            "p3",
+            "p4",
+            "p5",
+            "p6",
+            "p7",
+            "p8",
+            "p9",
+            "p10",
+            "p11",
+            "p12",
+            "p13",
+            "p14",
+            "p15",
+            "p16",
+            "p17",
+            "p18",
+            "p19",
+            "p20"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "bad conversion feature",
+    "direction": "server",
+    "frame": "text",
+    "message": {
+      "type": "load-start",
+      "epoch": "ePoCh_0123456789-abcde",
+      "rev": 0,
+      "kind": "text",
+      "access": "edit",
+      "readOnly": false,
+      "conversions": [
+        {
+          "feature": "image-to-svg",
+          "count": 1
+        }
+      ]
+    }
+  },
+  {
+    "name": "ackedClientSeq 0",
+    "direction": "server",
+    "frame": "text",
+    "message": {
+      "type": "load-start",
+      "epoch": "ePoCh_0123456789-abcde",
+      "rev": 0,
+      "kind": "text",
+      "access": "edit",
+      "readOnly": false,
+      "ackedClientSeq": 0
+    }
+  },
+  {
+    "name": "limits not an object",
+    "direction": "server",
+    "frame": "text",
+    "message": {
+      "type": "load-start",
+      "epoch": "ePoCh_0123456789-abcde",
+      "rev": 0,
+      "kind": "text",
+      "access": "edit",
+      "readOnly": false,
+      "limits": 5
+    }
+  }
+]

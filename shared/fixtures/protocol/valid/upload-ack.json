@@ -1,0 +1,12 @@
+[
+  {
+    "name": "ack",
+    "direction": "server",
+    "frame": "text",
+    "message": {
+      "type": "upload-ack",
+      "reqId": 1,
+      "receivedBytes": 262144
+    }
+  }
+]

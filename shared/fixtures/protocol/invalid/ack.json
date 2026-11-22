@@ -1,0 +1,23 @@
+[
+  {
+    "name": "clientSeq 0",
+    "direction": "server",
+    "frame": "text",
+    "message": {
+      "type": "ack",
+      "clientSeq": 0,
+      "rev": 0
+    }
+  },
+  {
+    "name": "committed not an array",
+    "direction": "server",
+    "frame": "text",
+    "message": {
+      "type": "ack",
+      "clientSeq": 1,
+      "rev": 0,
+      "committed": {}
+    }
+  }
+]
