@@ -14,7 +14,7 @@
  * top-level `undefined`, function or symbol the result is `undefined`, as with `JSON.stringify`.
  */
 export function canonicalJson(v: unknown): string {
-  return JSON.stringify(v, sortKeysReplacer) as string;
+  return JSON.stringify(v, sortKeysReplacer);
 }
 
 function sortKeysReplacer(_key: string, value: unknown): unknown {
