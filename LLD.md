@@ -179,8 +179,8 @@ open_docex/
 | Package | Folder | `exports` | Runtime deps | Build output |
 |---|---|---|---|---|
 | `@open-docex/shared` | `shared/` | `.`, `./protocol`, `./errors`, `./ids`, `./ot`, `./text`, `./sheet` | `prosemirror-model ^1.25.13`, `prosemirror-transform ^1.12.6`, `prosemirror-tables ^1.8.5` | `dist/**/*.js` + `.d.ts` (tsc) |
-| `@open-docex/server` | `backend/` | `.` | `@open-docex/shared` **exact** same version, `ws`, XML parser (Part 2); optional peers `redis`, `@confluentinc/kafka-javascript` [V3] | `dist/` (tsc) |
-| `@open-docex/client` | `frontend/` | `.`, `./style.css` | `@open-docex/shared` exact, ProseMirror packages, `@univerjs/*` pinned [V2]; peer React (Part 3) | `dist/lib/` (Vite) + `dist/types/` (tsc) |
+| `@open-docex/server` | `backend/` | `.` | `@open-docex/shared` **exact** same version, `ws`, XML parser (Part 2); optional peers `redis`, `@confluentinc/kafka-javascript` [V3]. Dev: `@types/ws`, `@types/yauzl` (MIT) | `dist/` (tsc) |
+| `@open-docex/client` | `frontend/` | `.`, `./style.css` | `@open-docex/shared` exact, ProseMirror packages, `@univerjs/*` pinned [V2]; peer React (Part 3). Dev: `@types/react`, `@types/react-dom` (MIT) | `dist/lib/` (Vite) + `dist/types/` (tsc) |
 
 Example entry in shared's `exports`. The other subpaths have the same shape.
 
@@ -225,7 +225,7 @@ Example entry in shared's `exports`. The other subpaths have the same shape.
 
 ### 1.6 Lint and dependency boundaries
 
-`eslint.config.js` (flat config) uses `typescript-eslint` `recommendedTypeChecked` with `parserOptions.projectService: true`. `no-restricted-imports` enforces the HLD §5 dependency rule:
+`eslint.config.js` (flat config) uses `typescript-eslint` `recommendedTypeChecked` with `parserOptions.project` set to the three `<pkg>/tsconfig.test.json` files, which cover both `src` and `test` (`projectService` only finds `tsconfig.json`, which excludes tests; changed 2026-11-22 with the project owner's approval). Repository scripts and `*.config.ts` files are linted without type information. `no-restricted-imports` enforces the HLD §5 dependency rule:
 
 | Files | Forbidden imports |
 |---|---|
@@ -241,7 +241,7 @@ Example entry in shared's `exports`. The other subpaths have the same shape.
 | Package | Environment | Notes |
 |---|---|---|
 | shared | `node` | DOM parse/serialize tests opt in with `// @vitest-environment jsdom`. `resolve.conditions` and `ssr.resolve.conditions` are `['@open-docex/source', ...defaultServerConditions]`. |
-| backend | `node`, `pool: 'forks'` | Includes `*.lo.test.ts` (real LibreOffice) only when `OPEN_DOCEX_LO_TESTS=1`. Otherwise they are excluded and listed as skipped. |
+| backend | `node`, `pool: 'forks'`; conditions as for shared | `*.lo.test.ts` (real LibreOffice) are always collected and wrap their suites in `describe.skipIf(process.env.OPEN_DOCEX_LO_TESTS !== '1')`, so they are listed as skipped unless `OPEN_DOCEX_LO_TESTS=1` (Vitest cannot list excluded files; changed 2026-11-22 with the project owner's approval). |
 | frontend | `jsdom` | Conditions `['@open-docex/source', ...defaultClientConditions]` |
 
 - **Playwright:** `playwright.config.ts` at the root and specs in `e2e/tests`. `webServer` starts `e2e/harness/server.ts` against built packages. CI runs Chromium (LLD choice until §10 Q10 is decided).
@@ -264,7 +264,9 @@ Example entry in shared's `exports`. The other subpaths have the same shape.
 `scripts/check-licenses.mjs` uses only Node and npm (LLD choice: it reads the hoisted workspace tree reliably).
 
 ```
-nodes = JSON.parse(exec('npm query ".prod, .peer"'))   // prod + installed peers of all workspaces
+prod  = npm query ".prod" ∪ npm query ".peer", minus nodes npm flags `dev`, minus the root and workspaces
+dev   = npm query ".dev" (and nodes flagged `dev`)       // report-only (L-1)
+nodes = prod
 allow = {MIT, ISC, BSD-2-Clause, BSD-3-Clause, Apache-2.0}
 exceptions = read licence-exceptions.json           // [{name, version, licence, reason, approvedBy}]; starts empty
 for n in nodes where n is not a workspace:
@@ -276,7 +278,7 @@ exit 1 if any fail
 ```
 
 - **MPL:** MPL-2.0 is never allowed as an npm dependency. LibreOffice is an external program and is never in the tree (N5, PO-6).
-- **Dev-only dependencies:** reported but not failed (LLD choice pending §10 Q1).
+- **Dev-only dependencies:** reported but not failed (§0 L-1). A peer of a dev tool (for example lightningcss, MPL-2.0, from vite) is flagged `dev` by npm and is therefore report-only. Changed 2026-11-22 with the project owner's approval: the literal `".prod, .peer"` query also returned such peers.
 - **Audit:** `npm audit --omit=dev --audit-level=high` fails CI. A full `npm audit` runs report-only.
 - **Tests (`scripts/test/check-licenses.test.mjs`):** the SPDX evaluator handles OR, AND, parentheses, `WITH` (fail), unknown identifiers, and the exception file. The test runs in the shared project.
 

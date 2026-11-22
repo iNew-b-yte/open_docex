@@ -30,5 +30,9 @@
     "htmlparser2": "^12.0.0",
     "ws": "^8.23.0",
     "yauzl": "^3.4.0"
+  },
+  "devDependencies": {
+    "@types/ws": "^8.18.2",
+    "@types/yauzl": "^3.4.0"
   }
 }

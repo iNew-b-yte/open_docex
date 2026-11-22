@@ -131,9 +131,19 @@ The orchestrator records questions here and asks the project owner. None are ope
 - V1-00's `ci.yml` has the `static`, `test` and `test-windows` jobs. V1-40 adds `e2e`, V3-02 adds `queues`, and V1-43 adds `release.yml`.
 - After V1-00 is merged, the orchestrator may push `main` to origin once, to verify the CI acceptance.
 
+**Resolved 2026-11-22 after V1-00 (project owner):**
+- ESLint type-aware linting uses each package's `tsconfig.test.json`, so test files are linted (LLD P1 §1.6 updated).
+- `@types/ws`, `@types/yauzl`, `@types/react` and `@types/react-dom` were added as devDependencies (LLD P1 §1.3 updated).
+- LLD P1 §1.7 (`*.lo.test.ts` use `describe.skipIf`) and §1.9 (packages flagged dev, including peers of dev tools, are report-only per L-1) were updated to match the implementation.
+
+**Notes for later tasks (from the V1-00 review):**
+- V1-30: `frontend/package.json` has `"sideEffects": false`. Because `./style.css` is exported, V1-30 must check that bundlers keep the CSS import, and raise it if not.
+- V1-43: `dist/tsconfig.tsbuildinfo` is included in the npm tarballs. Decide whether to exclude it.
+
 ## Change log
 
 | Date | Change |
 |---|---|
 | 2026-11-19 | Plan created from the HLD and LLD. |
 | 2026-11-22 | V1-00/V1-30/V1-40/V1-43/V3-02 file scopes adjusted per the resolved questions above. V1-00 started. |
+| 2026-11-22 | V1-00 done (CI run 45012148604 green). Post-review fixes to lint, @types and LLD §1.3/§1.6/§1.7/§1.9 approved and applied. |

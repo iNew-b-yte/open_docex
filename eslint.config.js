@@ -65,7 +65,12 @@ export default defineConfig(
   {
     languageOptions: {
       parserOptions: {
-        projectService: true,
+        // Each package's tsconfig.test.json covers both src and test (LLD Part 1 §1.6).
+        project: [
+          './shared/tsconfig.test.json',
+          './backend/tsconfig.test.json',
+          './frontend/tsconfig.test.json',
+        ],
         tsconfigRootDir: import.meta.dirname,
       },
     },
