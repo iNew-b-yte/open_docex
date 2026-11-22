@@ -60,12 +60,17 @@ const FRONTEND_FORBIDDEN = [SERVER, NODE_PREFIXED];
 const restrict = (patterns) => ({ 'no-restricted-imports': ['error', { patterns }] });
 
 export default defineConfig(
-  { ignores: ['**/dist/**', 'coverage/**'] },
+  { ignores: ['**/dist/**', 'coverage/**', '.claude/**'] },
   tseslint.configs.recommendedTypeChecked,
   {
     languageOptions: {
       parserOptions: {
-        projectService: true,
+        // Each package's tsconfig.test.json covers both src and test (LLD Part 1 §1.6).
+        project: [
+          './shared/tsconfig.test.json',
+          './backend/tsconfig.test.json',
+          './frontend/tsconfig.test.json',
+        ],
         tsconfigRootDir: import.meta.dirname,
       },
     },
