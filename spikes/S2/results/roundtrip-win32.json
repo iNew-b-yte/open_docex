@@ -1,0 +1,4683 @@
+{
+ "meta": {
+  "platform": "win32",
+  "node": "v24.18.0",
+  "date": "2026-11-22T11:28:16.285Z"
+ },
+ "columns": {
+  "source features.fodt": {
+   "checks": [
+    {
+     "feature": "F01",
+     "id": "size 210x148 landscape",
+     "pass": true,
+     "detail": "210x148 landscape"
+    },
+    {
+     "feature": "F01",
+     "id": "margins t15 b20 l25 r30",
+     "pass": true,
+     "detail": "t15 b20 l25 r30; header min-h 0 sp 2; footer min-h 0 sp 2"
+    },
+    {
+     "feature": "F01",
+     "id": "single master page",
+     "pass": true,
+     "detail": "1 master page(s)"
+    },
+    {
+     "feature": "F02",
+     "id": "header \"HDR Page {PAGE} of {COUNT}\"",
+     "pass": true,
+     "detail": "HDR Page {PAGE} of {COUNT}"
+    },
+    {
+     "feature": "F02",
+     "id": "footer \"FTR {PAGE}/{COUNT}\"",
+     "pass": true,
+     "detail": "FTR {PAGE}/{COUNT}"
+    },
+    {
+     "feature": "F02",
+     "id": "no first/left header-footer",
+     "pass": true,
+     "detail": "none"
+    },
+    {
+     "feature": "F03",
+     "id": "default-style Liberation Sans 11pt #333333",
+     "pass": true,
+     "detail": "Liberation Sans 11pt #333333"
+    },
+    {
+     "feature": "F03",
+     "id": "plain run resolves to defaults",
+     "pass": true,
+     "detail": "Liberation Sans 11pt #333333"
+    },
+    {
+     "feature": "F04",
+     "id": "H1 is heading level 1 (Heading_20_1)",
+     "pass": true,
+     "detail": "heading 1 [Standard>Heading>Heading_20_1]"
+    },
+    {
+     "feature": "F04",
+     "id": "H2 is heading level 2 (Heading_20_2)",
+     "pass": true,
+     "detail": "heading 2 [Standard>Heading>Heading_20_2]"
+    },
+    {
+     "feature": "F04",
+     "id": "H3 is heading level 3 (Heading_20_3)",
+     "pass": true,
+     "detail": "heading 3 [Standard>Heading>Heading_20_3]"
+    },
+    {
+     "feature": "F04",
+     "id": "H4 is heading level 4 (Heading_20_4)",
+     "pass": true,
+     "detail": "heading 4 [Standard>Heading>Heading_20_4]"
+    },
+    {
+     "feature": "F04",
+     "id": "H5 is heading level 5 (Heading_20_5)",
+     "pass": true,
+     "detail": "heading 5 [Standard>Heading>Heading_20_5]"
+    },
+    {
+     "feature": "F04",
+     "id": "H6 is heading level 6 (Heading_20_6)",
+     "pass": true,
+     "detail": "heading 6 [Standard>Heading>Heading_20_6]"
+    },
+    {
+     "feature": "F04",
+     "id": "heading align center",
+     "pass": true,
+     "detail": "heading 2 center"
+    },
+    {
+     "feature": "F04",
+     "id": "heading spacing-before 3 / indent-left 8",
+     "pass": true,
+     "detail": "before 3 left 8"
+    },
+    {
+     "feature": "F05",
+     "id": "ALIGN-LEFT",
+     "pass": true,
+     "detail": "start"
+    },
+    {
+     "feature": "F05",
+     "id": "ALIGN-CENTER",
+     "pass": true,
+     "detail": "center"
+    },
+    {
+     "feature": "F05",
+     "id": "ALIGN-RIGHT",
+     "pass": true,
+     "detail": "end"
+    },
+    {
+     "feature": "F05",
+     "id": "ALIGN-JUSTIFY",
+     "pass": true,
+     "detail": "justify"
+    },
+    {
+     "feature": "F06",
+     "id": "before 4 after 6",
+     "pass": true,
+     "detail": "4/6"
+    },
+    {
+     "feature": "F06",
+     "id": "unspaced paragraph has 0/unset",
+     "pass": true,
+     "detail": "undefined/undefined"
+    },
+    {
+     "feature": "F07",
+     "id": "line-height 150%",
+     "pass": true,
+     "detail": "150%"
+    },
+    {
+     "feature": "F08",
+     "id": "left 10 right 15 first 5",
+     "pass": true,
+     "detail": "10/15/5"
+    },
+    {
+     "feature": "F08",
+     "id": "hanging: left 20 first -5",
+     "pass": true,
+     "detail": "20/-5"
+    },
+    {
+     "feature": "F09",
+     "id": "BOLD",
+     "pass": true,
+     "detail": "bold"
+    },
+    {
+     "feature": "F09",
+     "id": "ITALIC",
+     "pass": true,
+     "detail": "italic"
+    },
+    {
+     "feature": "F09",
+     "id": "UNDER",
+     "pass": true,
+     "detail": "underline"
+    },
+    {
+     "feature": "F09",
+     "id": "STRIKE",
+     "pass": true,
+     "detail": "strike"
+    },
+    {
+     "feature": "F09",
+     "id": "PLAIN",
+     "pass": true,
+     "detail": ""
+    },
+    {
+     "feature": "F09",
+     "id": "COMBO bold+italic+#0070c0",
+     "pass": true,
+     "detail": "true true #0070c0"
+    },
+    {
+     "feature": "F10",
+     "id": "fontFamily DejaVu Sans",
+     "pass": true,
+     "detail": "DejaVu Sans"
+    },
+    {
+     "feature": "F10",
+     "id": "fontSize 18pt",
+     "pass": true,
+     "detail": "18pt"
+    },
+    {
+     "feature": "F10",
+     "id": "color #c00000",
+     "pass": true,
+     "detail": "#c00000"
+    },
+    {
+     "feature": "F11",
+     "id": "LINK-HTTP",
+     "pass": true,
+     "detail": "https://example.com/a?b=1&c=2"
+    },
+    {
+     "feature": "F11",
+     "id": "LINK-MAIL",
+     "pass": true,
+     "detail": "mailto:test@example.com"
+    },
+    {
+     "feature": "F12",
+     "id": "\"BREAK-A\\nBREAK-B\"",
+     "pass": true,
+     "detail": "\"BREAK-A\\nBREAK-B\""
+    },
+    {
+     "feature": "F12",
+     "id": "\"TAB-A\\tTAB-B\"",
+     "pass": true,
+     "detail": "\"TAB-A\\tTAB-B\""
+    },
+    {
+     "feature": "F12",
+     "id": "\"SPACE-A    SPACE-B\"",
+     "pass": true,
+     "detail": "\"SPACE-A    SPACE-B\""
+    },
+    {
+     "feature": "F12",
+     "id": "\" LEAD-SPACE\"",
+     "pass": true,
+     "detail": "\" LEAD-SPACE\""
+    },
+    {
+     "feature": "F13",
+     "id": "BUL-1 bullet depth 1",
+     "pass": true,
+     "detail": "bullet 1 (L_bullet)"
+    },
+    {
+     "feature": "F13",
+     "id": "BUL-1-1 bullet depth 2",
+     "pass": true,
+     "detail": "bullet 2 (L_bullet)"
+    },
+    {
+     "feature": "F13",
+     "id": "BUL-2 bullet depth 1",
+     "pass": true,
+     "detail": "bullet 1 (L_bullet)"
+    },
+    {
+     "feature": "F13",
+     "id": "NUM-1 number depth 1",
+     "pass": true,
+     "detail": "number 1 (L_number)"
+    },
+    {
+     "feature": "F13",
+     "id": "NUM-2 number depth 1",
+     "pass": true,
+     "detail": "number 1 (L_number)"
+    },
+    {
+     "feature": "F13",
+     "id": "NUM-2-1 number depth 2",
+     "pass": true,
+     "detail": "number 2 (L_number)"
+    },
+    {
+     "feature": "F13",
+     "id": "BUL-1/BUL-2 one list, NUM another",
+     "pass": true,
+     "detail": "1,1,2"
+    },
+    {
+     "feature": "F14",
+     "id": "one table, 4 rows",
+     "pass": true,
+     "detail": "1 table(s), 4 rows"
+    },
+    {
+     "feature": "F14",
+     "id": "header row = TH-A,TH-B,TH-C",
+     "pass": true,
+     "detail": "HBBB"
+    },
+    {
+     "feature": "F14",
+     "id": "MERGE-COL colspan 2",
+     "pass": true,
+     "detail": 2
+    },
+    {
+     "feature": "F14",
+     "id": "MERGE-ROW rowspan 2",
+     "pass": true,
+     "detail": 2
+    },
+    {
+     "feature": "F14",
+     "id": "cell grid 3 wide incl. covered",
+     "pass": true,
+     "detail": "3,3,3,3"
+    },
+    {
+     "feature": "F15",
+     "id": "col widths 30/50/70",
+     "pass": true,
+     "detail": "30/50/70"
+    },
+    {
+     "feature": "F16",
+     "id": "ALT-PNG image/png 40x20mm as-char alone",
+     "pass": true,
+     "detail": "image/png 40x20 as-char"
+    },
+    {
+     "feature": "F16",
+     "id": "ALT-PNG title/desc kept",
+     "pass": true,
+     "detail": "title=\"ALT-PNG\" desc=\"ALT-PNG desc\""
+    },
+    {
+     "feature": "F16",
+     "id": "ALT-JPEG image/jpeg 30x15mm as-char alone",
+     "pass": true,
+     "detail": "image/jpeg 30x15 as-char"
+    },
+    {
+     "feature": "F16",
+     "id": "ALT-JPEG title/desc kept",
+     "pass": true,
+     "detail": "title=\"ALT-JPEG\" desc=\"ALT-JPEG desc\""
+    },
+    {
+     "feature": "F16",
+     "id": "ALT-GIF image/gif 20x10mm as-char alone",
+     "pass": true,
+     "detail": "image/gif 20x10 as-char"
+    },
+    {
+     "feature": "F16",
+     "id": "ALT-GIF title/desc kept",
+     "pass": true,
+     "detail": "title=\"ALT-GIF\" desc=\"ALT-GIF desc\""
+    },
+    {
+     "feature": "F17",
+     "id": "PB-NEXT break-before page",
+     "pass": true,
+     "detail": "page"
+    },
+    {
+     "feature": "F17",
+     "id": "break between PB2-PREV and PB2-NEXT",
+     "pass": true,
+     "detail": "prev.after=page next.before=undefined"
+    },
+    {
+     "feature": "F17",
+     "id": "no extra empty paragraphs",
+     "pass": true,
+     "detail": "0 empty"
+    }
+   ],
+   "unknown": {},
+   "ignored": {}
+  },
+  "import docx (hand-written)": {
+   "checks": [
+    {
+     "feature": "F01",
+     "id": "size 210x148 landscape",
+     "pass": true,
+     "detail": "210x148 landscape"
+    },
+    {
+     "feature": "F01",
+     "id": "margins t15 b20 l25 r30",
+     "pass": false,
+     "detail": "t7.5 b7.5 l25 r30; header min-h 7.5 sp 6.5; footer min-h 12.5 sp 11.5"
+    },
+    {
+     "feature": "F01",
+     "id": "single master page",
+     "pass": true,
+     "detail": "1 master page(s)"
+    },
+    {
+     "feature": "F02",
+     "id": "header \"HDR Page {PAGE} of {COUNT}\"",
+     "pass": true,
+     "detail": "HDR Page {PAGE} of {COUNT}"
+    },
+    {
+     "feature": "F02",
+     "id": "footer \"FTR {PAGE}/{COUNT}\"",
+     "pass": true,
+     "detail": "FTR {PAGE}/{COUNT}"
+    },
+    {
+     "feature": "F02",
+     "id": "no first/left header-footer",
+     "pass": true,
+     "detail": "none"
+    },
+    {
+     "feature": "F03",
+     "id": "default-style Liberation Sans 11pt #333333",
+     "pass": true,
+     "detail": "Liberation Sans 11pt #333333"
+    },
+    {
+     "feature": "F03",
+     "id": "plain run resolves to defaults",
+     "pass": true,
+     "detail": "Liberation Sans 11pt #333333"
+    },
+    {
+     "feature": "F04",
+     "id": "H1 is heading level 1 (Heading_20_1)",
+     "pass": true,
+     "detail": "heading 1 [Standard>Heading_20_1]"
+    },
+    {
+     "feature": "F04",
+     "id": "H2 is heading level 2 (Heading_20_2)",
+     "pass": true,
+     "detail": "heading 2 [Standard>Heading_20_2]"
+    },
+    {
+     "feature": "F04",
+     "id": "H3 is heading level 3 (Heading_20_3)",
+     "pass": true,
+     "detail": "heading 3 [Standard>Heading_20_3]"
+    },
+    {
+     "feature": "F04",
+     "id": "H4 is heading level 4 (Heading_20_4)",
+     "pass": true,
+     "detail": "heading 4 [Standard>Heading_20_4]"
+    },
+    {
+     "feature": "F04",
+     "id": "H5 is heading level 5 (Heading_20_5)",
+     "pass": true,
+     "detail": "heading 5 [Standard>Heading_20_5]"
+    },
+    {
+     "feature": "F04",
+     "id": "H6 is heading level 6 (Heading_20_6)",
+     "pass": true,
+     "detail": "heading 6 [Standard>Heading_20_6]"
+    },
+    {
+     "feature": "F04",
+     "id": "heading align center",
+     "pass": true,
+     "detail": "heading 2 center"
+    },
+    {
+     "feature": "F04",
+     "id": "heading spacing-before 3 / indent-left 8",
+     "pass": true,
+     "detail": "before 3 left 8"
+    },
+    {
+     "feature": "F05",
+     "id": "ALIGN-LEFT",
+     "pass": true,
+     "detail": "start"
+    },
+    {
+     "feature": "F05",
+     "id": "ALIGN-CENTER",
+     "pass": true,
+     "detail": "center"
+    },
+    {
+     "feature": "F05",
+     "id": "ALIGN-RIGHT",
+     "pass": true,
+     "detail": "end"
+    },
+    {
+     "feature": "F05",
+     "id": "ALIGN-JUSTIFY",
+     "pass": true,
+     "detail": "justify"
+    },
+    {
+     "feature": "F06",
+     "id": "before 4 after 6",
+     "pass": true,
+     "detail": "4/6"
+    },
+    {
+     "feature": "F06",
+     "id": "unspaced paragraph has 0/unset",
+     "pass": true,
+     "detail": "0/0"
+    },
+    {
+     "feature": "F07",
+     "id": "line-height 150%",
+     "pass": true,
+     "detail": "150%"
+    },
+    {
+     "feature": "F08",
+     "id": "left 10 right 15 first 5",
+     "pass": true,
+     "detail": "10/15/5"
+    },
+    {
+     "feature": "F08",
+     "id": "hanging: left 20 first -5",
+     "pass": true,
+     "detail": "20/-5"
+    },
+    {
+     "feature": "F09",
+     "id": "BOLD",
+     "pass": true,
+     "detail": "bold"
+    },
+    {
+     "feature": "F09",
+     "id": "ITALIC",
+     "pass": true,
+     "detail": "italic"
+    },
+    {
+     "feature": "F09",
+     "id": "UNDER",
+     "pass": true,
+     "detail": "underline"
+    },
+    {
+     "feature": "F09",
+     "id": "STRIKE",
+     "pass": true,
+     "detail": "strike"
+    },
+    {
+     "feature": "F09",
+     "id": "PLAIN",
+     "pass": true,
+     "detail": ""
+    },
+    {
+     "feature": "F09",
+     "id": "COMBO bold+italic+#0070c0",
+     "pass": true,
+     "detail": "true true #0070c0"
+    },
+    {
+     "feature": "F10",
+     "id": "fontFamily DejaVu Sans",
+     "pass": true,
+     "detail": "DejaVu Sans"
+    },
+    {
+     "feature": "F10",
+     "id": "fontSize 18pt",
+     "pass": true,
+     "detail": "18pt"
+    },
+    {
+     "feature": "F10",
+     "id": "color #c00000",
+     "pass": true,
+     "detail": "#c00000"
+    },
+    {
+     "feature": "F11",
+     "id": "LINK-HTTP",
+     "pass": true,
+     "detail": "https://example.com/a?b=1&c=2"
+    },
+    {
+     "feature": "F11",
+     "id": "LINK-MAIL",
+     "pass": true,
+     "detail": "mailto:test@example.com"
+    },
+    {
+     "feature": "F12",
+     "id": "\"BREAK-A\\nBREAK-B\"",
+     "pass": true,
+     "detail": "\"BREAK-A\\nBREAK-B\""
+    },
+    {
+     "feature": "F12",
+     "id": "\"TAB-A\\tTAB-B\"",
+     "pass": true,
+     "detail": "\"TAB-A\\tTAB-B\""
+    },
+    {
+     "feature": "F12",
+     "id": "\"SPACE-A    SPACE-B\"",
+     "pass": true,
+     "detail": "\"SPACE-A    SPACE-B\""
+    },
+    {
+     "feature": "F12",
+     "id": "\" LEAD-SPACE\"",
+     "pass": true,
+     "detail": "\" LEAD-SPACE\""
+    },
+    {
+     "feature": "F13",
+     "id": "BUL-1 bullet depth 1",
+     "pass": true,
+     "detail": "bullet 1 (WWNum1)"
+    },
+    {
+     "feature": "F13",
+     "id": "BUL-1-1 bullet depth 2",
+     "pass": true,
+     "detail": "bullet 2 (WWNum1)"
+    },
+    {
+     "feature": "F13",
+     "id": "BUL-2 bullet depth 1",
+     "pass": true,
+     "detail": "bullet 1 (WWNum1)"
+    },
+    {
+     "feature": "F13",
+     "id": "NUM-1 number depth 1",
+     "pass": true,
+     "detail": "number 1 (WWNum2)"
+    },
+    {
+     "feature": "F13",
+     "id": "NUM-2 number depth 1",
+     "pass": true,
+     "detail": "number 1 (WWNum2)"
+    },
+    {
+     "feature": "F13",
+     "id": "NUM-2-1 number depth 2",
+     "pass": true,
+     "detail": "number 2 (WWNum2)"
+    },
+    {
+     "feature": "F13",
+     "id": "BUL-1/BUL-2 one list, NUM another",
+     "pass": true,
+     "detail": "1,1,2"
+    },
+    {
+     "feature": "F14",
+     "id": "one table, 4 rows",
+     "pass": true,
+     "detail": "1 table(s), 4 rows"
+    },
+    {
+     "feature": "F14",
+     "id": "header row = TH-A,TH-B,TH-C",
+     "pass": true,
+     "detail": "HBBB"
+    },
+    {
+     "feature": "F14",
+     "id": "MERGE-COL colspan 2",
+     "pass": true,
+     "detail": 2
+    },
+    {
+     "feature": "F14",
+     "id": "MERGE-ROW rowspan 2",
+     "pass": true,
+     "detail": 2
+    },
+    {
+     "feature": "F14",
+     "id": "cell grid 3 wide incl. covered",
+     "pass": true,
+     "detail": "3,3,3,3"
+    },
+    {
+     "feature": "F15",
+     "id": "col widths 30/50/70",
+     "pass": true,
+     "detail": "30/50/70"
+    },
+    {
+     "feature": "F16",
+     "id": "ALT-PNG image/png 40x20mm as-char alone",
+     "pass": true,
+     "detail": "image/png 40x20 as-char"
+    },
+    {
+     "feature": "F16",
+     "id": "ALT-PNG title/desc kept",
+     "pass": true,
+     "detail": "title=\"ALT-PNG\" desc=\"ALT-PNG desc\""
+    },
+    {
+     "feature": "F16",
+     "id": "ALT-JPEG image/jpeg 30x15mm as-char alone",
+     "pass": true,
+     "detail": "image/jpeg 30x15 as-char"
+    },
+    {
+     "feature": "F16",
+     "id": "ALT-JPEG title/desc kept",
+     "pass": true,
+     "detail": "title=\"ALT-JPEG\" desc=\"ALT-JPEG desc\""
+    },
+    {
+     "feature": "F16",
+     "id": "ALT-GIF image/gif 20x10mm as-char alone",
+     "pass": true,
+     "detail": "image/gif 20x10 as-char"
+    },
+    {
+     "feature": "F16",
+     "id": "ALT-GIF title/desc kept",
+     "pass": true,
+     "detail": "title=\"ALT-GIF\" desc=\"ALT-GIF desc\""
+    },
+    {
+     "feature": "F17",
+     "id": "PB-NEXT break-before page",
+     "pass": true,
+     "detail": "page"
+    },
+    {
+     "feature": "F17",
+     "id": "break between PB2-PREV and PB2-NEXT",
+     "pass": true,
+     "detail": "prev.after=undefined next.before=page"
+    },
+    {
+     "feature": "F17",
+     "id": "no extra empty paragraphs",
+     "pass": true,
+     "detail": "0 empty"
+    }
+   ],
+   "unknown": {},
+   "ignored": {
+    "text:sequence-decls": 1
+   }
+  },
+  "roundtrip x1 docx (hand-written)": {
+   "checks": [
+    {
+     "feature": "F01",
+     "id": "size 210x148 landscape",
+     "pass": true,
+     "detail": "210x148 landscape"
+    },
+    {
+     "feature": "F01",
+     "id": "margins t15 b20 l25 r30",
+     "pass": false,
+     "detail": "t7.5 b7.5 l25 r30; header min-h 7.5 sp 6.5; footer min-h 12.5 sp 11.5"
+    },
+    {
+     "feature": "F01",
+     "id": "single master page",
+     "pass": true,
+     "detail": "1 master page(s)"
+    },
+    {
+     "feature": "F02",
+     "id": "header \"HDR Page {PAGE} of {COUNT}\"",
+     "pass": true,
+     "detail": "HDR Page {PAGE} of {COUNT}"
+    },
+    {
+     "feature": "F02",
+     "id": "footer \"FTR {PAGE}/{COUNT}\"",
+     "pass": true,
+     "detail": "FTR {PAGE}/{COUNT}"
+    },
+    {
+     "feature": "F02",
+     "id": "no first/left header-footer",
+     "pass": true,
+     "detail": "none"
+    },
+    {
+     "feature": "F03",
+     "id": "default-style Liberation Sans 11pt #333333",
+     "pass": true,
+     "detail": "Liberation Sans 11pt #333333"
+    },
+    {
+     "feature": "F03",
+     "id": "plain run resolves to defaults",
+     "pass": true,
+     "detail": "Liberation Sans 11pt #333333"
+    },
+    {
+     "feature": "F04",
+     "id": "H1 is heading level 1 (Heading_20_1)",
+     "pass": true,
+     "detail": "heading 1 [Standard>Heading_20_1>P1]"
+    },
+    {
+     "feature": "F04",
+     "id": "H2 is heading level 2 (Heading_20_2)",
+     "pass": true,
+     "detail": "heading 2 [Standard>Heading_20_2>P2]"
+    },
+    {
+     "feature": "F04",
+     "id": "H3 is heading level 3 (Heading_20_3)",
+     "pass": true,
+     "detail": "heading 3 [Standard>Heading_20_3>P3]"
+    },
+    {
+     "feature": "F04",
+     "id": "H4 is heading level 4 (Heading_20_4)",
+     "pass": true,
+     "detail": "heading 4 [Standard>Heading_20_4>P4]"
+    },
+    {
+     "feature": "F04",
+     "id": "H5 is heading level 5 (Heading_20_5)",
+     "pass": true,
+     "detail": "heading 5 [Standard>Heading_20_5>P5]"
+    },
+    {
+     "feature": "F04",
+     "id": "H6 is heading level 6 (Heading_20_6)",
+     "pass": true,
+     "detail": "heading 6 [Standard>Heading_20_6>P6]"
+    },
+    {
+     "feature": "F04",
+     "id": "heading align center",
+     "pass": true,
+     "detail": "heading 2 center"
+    },
+    {
+     "feature": "F04",
+     "id": "heading spacing-before 3 / indent-left 8",
+     "pass": true,
+     "detail": "before 3 left 8"
+    },
+    {
+     "feature": "F05",
+     "id": "ALIGN-LEFT",
+     "pass": true,
+     "detail": "start"
+    },
+    {
+     "feature": "F05",
+     "id": "ALIGN-CENTER",
+     "pass": true,
+     "detail": "center"
+    },
+    {
+     "feature": "F05",
+     "id": "ALIGN-RIGHT",
+     "pass": true,
+     "detail": "end"
+    },
+    {
+     "feature": "F05",
+     "id": "ALIGN-JUSTIFY",
+     "pass": true,
+     "detail": "justify"
+    },
+    {
+     "feature": "F06",
+     "id": "before 4 after 6",
+     "pass": true,
+     "detail": "4/6"
+    },
+    {
+     "feature": "F06",
+     "id": "unspaced paragraph has 0/unset",
+     "pass": true,
+     "detail": "0/0"
+    },
+    {
+     "feature": "F07",
+     "id": "line-height 150%",
+     "pass": true,
+     "detail": "150%"
+    },
+    {
+     "feature": "F08",
+     "id": "left 10 right 15 first 5",
+     "pass": true,
+     "detail": "10/15/5"
+    },
+    {
+     "feature": "F08",
+     "id": "hanging: left 20 first -5",
+     "pass": true,
+     "detail": "20/-5"
+    },
+    {
+     "feature": "F09",
+     "id": "BOLD",
+     "pass": true,
+     "detail": "bold"
+    },
+    {
+     "feature": "F09",
+     "id": "ITALIC",
+     "pass": true,
+     "detail": "italic"
+    },
+    {
+     "feature": "F09",
+     "id": "UNDER",
+     "pass": true,
+     "detail": "underline"
+    },
+    {
+     "feature": "F09",
+     "id": "STRIKE",
+     "pass": true,
+     "detail": "strike"
+    },
+    {
+     "feature": "F09",
+     "id": "PLAIN",
+     "pass": true,
+     "detail": ""
+    },
+    {
+     "feature": "F09",
+     "id": "COMBO bold+italic+#0070c0",
+     "pass": true,
+     "detail": "true true #0070c0"
+    },
+    {
+     "feature": "F10",
+     "id": "fontFamily DejaVu Sans",
+     "pass": true,
+     "detail": "DejaVu Sans"
+    },
+    {
+     "feature": "F10",
+     "id": "fontSize 18pt",
+     "pass": true,
+     "detail": "18pt"
+    },
+    {
+     "feature": "F10",
+     "id": "color #c00000",
+     "pass": true,
+     "detail": "#c00000"
+    },
+    {
+     "feature": "F11",
+     "id": "LINK-HTTP",
+     "pass": true,
+     "detail": "https://example.com/a?b=1&c=2"
+    },
+    {
+     "feature": "F11",
+     "id": "LINK-MAIL",
+     "pass": true,
+     "detail": "mailto:test@example.com"
+    },
+    {
+     "feature": "F12",
+     "id": "\"BREAK-A\\nBREAK-B\"",
+     "pass": true,
+     "detail": "\"BREAK-A\\nBREAK-B\""
+    },
+    {
+     "feature": "F12",
+     "id": "\"TAB-A\\tTAB-B\"",
+     "pass": true,
+     "detail": "\"TAB-A\\tTAB-B\""
+    },
+    {
+     "feature": "F12",
+     "id": "\"SPACE-A    SPACE-B\"",
+     "pass": true,
+     "detail": "\"SPACE-A    SPACE-B\""
+    },
+    {
+     "feature": "F12",
+     "id": "\" LEAD-SPACE\"",
+     "pass": true,
+     "detail": "\" LEAD-SPACE\""
+    },
+    {
+     "feature": "F13",
+     "id": "BUL-1 bullet depth 1",
+     "pass": true,
+     "detail": "bullet 1 (WWNum2)"
+    },
+    {
+     "feature": "F13",
+     "id": "BUL-1-1 bullet depth 2",
+     "pass": true,
+     "detail": "bullet 2 (WWNum2)"
+    },
+    {
+     "feature": "F13",
+     "id": "BUL-2 bullet depth 1",
+     "pass": true,
+     "detail": "bullet 1 (WWNum2)"
+    },
+    {
+     "feature": "F13",
+     "id": "NUM-1 number depth 1",
+     "pass": true,
+     "detail": "number 1 (WWNum3)"
+    },
+    {
+     "feature": "F13",
+     "id": "NUM-2 number depth 1",
+     "pass": true,
+     "detail": "number 1 (WWNum3)"
+    },
+    {
+     "feature": "F13",
+     "id": "NUM-2-1 number depth 2",
+     "pass": true,
+     "detail": "number 2 (WWNum3)"
+    },
+    {
+     "feature": "F13",
+     "id": "BUL-1/BUL-2 one list, NUM another",
+     "pass": true,
+     "detail": "1,1,2"
+    },
+    {
+     "feature": "F14",
+     "id": "one table, 4 rows",
+     "pass": true,
+     "detail": "1 table(s), 4 rows"
+    },
+    {
+     "feature": "F14",
+     "id": "header row = TH-A,TH-B,TH-C",
+     "pass": true,
+     "detail": "HBBB"
+    },
+    {
+     "feature": "F14",
+     "id": "MERGE-COL colspan 2",
+     "pass": true,
+     "detail": 2
+    },
+    {
+     "feature": "F14",
+     "id": "MERGE-ROW rowspan 2",
+     "pass": true,
+     "detail": 2
+    },
+    {
+     "feature": "F14",
+     "id": "cell grid 3 wide incl. covered",
+     "pass": true,
+     "detail": "3,3,3,3"
+    },
+    {
+     "feature": "F15",
+     "id": "col widths 30/50/70",
+     "pass": true,
+     "detail": "30/50/70"
+    },
+    {
+     "feature": "F16",
+     "id": "ALT-PNG image/png 40x20mm as-char alone",
+     "pass": true,
+     "detail": "image/png 40x20 as-char"
+    },
+    {
+     "feature": "F16",
+     "id": "ALT-PNG title/desc kept",
+     "pass": false,
+     "detail": "title=undefined desc=\"ALT-PNG\\nALT-PNG desc\""
+    },
+    {
+     "feature": "F16",
+     "id": "ALT-JPEG image/jpeg 30x15mm as-char alone",
+     "pass": true,
+     "detail": "image/jpeg 30x15 as-char"
+    },
+    {
+     "feature": "F16",
+     "id": "ALT-JPEG title/desc kept",
+     "pass": false,
+     "detail": "title=undefined desc=\"ALT-JPEG\\nALT-JPEG desc\""
+    },
+    {
+     "feature": "F16",
+     "id": "ALT-GIF image/gif 20x10mm as-char alone",
+     "pass": true,
+     "detail": "image/gif 20x10 as-char"
+    },
+    {
+     "feature": "F16",
+     "id": "ALT-GIF title/desc kept",
+     "pass": false,
+     "detail": "title=undefined desc=\"ALT-GIF\\nALT-GIF desc\""
+    },
+    {
+     "feature": "F17",
+     "id": "PB-NEXT break-before page",
+     "pass": true,
+     "detail": "page"
+    },
+    {
+     "feature": "F17",
+     "id": "break between PB2-PREV and PB2-NEXT",
+     "pass": true,
+     "detail": "prev.after=undefined next.before=page"
+    },
+    {
+     "feature": "F17",
+     "id": "no extra empty paragraphs",
+     "pass": true,
+     "detail": "0 empty"
+    }
+   ],
+   "unknown": {},
+   "ignored": {
+    "text:sequence-decls": 1
+   }
+  },
+  "roundtrip x2 docx (hand-written)": {
+   "checks": [
+    {
+     "feature": "F01",
+     "id": "size 210x148 landscape",
+     "pass": true,
+     "detail": "210x148 landscape"
+    },
+    {
+     "feature": "F01",
+     "id": "margins t15 b20 l25 r30",
+     "pass": false,
+     "detail": "t7.5 b7.5 l25 r30; header min-h 7.5 sp 6.5; footer min-h 12.5 sp 11.5"
+    },
+    {
+     "feature": "F01",
+     "id": "single master page",
+     "pass": true,
+     "detail": "1 master page(s)"
+    },
+    {
+     "feature": "F02",
+     "id": "header \"HDR Page {PAGE} of {COUNT}\"",
+     "pass": true,
+     "detail": "HDR Page {PAGE} of {COUNT}"
+    },
+    {
+     "feature": "F02",
+     "id": "footer \"FTR {PAGE}/{COUNT}\"",
+     "pass": true,
+     "detail": "FTR {PAGE}/{COUNT}"
+    },
+    {
+     "feature": "F02",
+     "id": "no first/left header-footer",
+     "pass": true,
+     "detail": "none"
+    },
+    {
+     "feature": "F03",
+     "id": "default-style Liberation Sans 11pt #333333",
+     "pass": true,
+     "detail": "Liberation Sans 11pt #333333"
+    },
+    {
+     "feature": "F03",
+     "id": "plain run resolves to defaults",
+     "pass": true,
+     "detail": "Liberation Sans 11pt #333333"
+    },
+    {
+     "feature": "F04",
+     "id": "H1 is heading level 1 (Heading_20_1)",
+     "pass": true,
+     "detail": "heading 1 [Standard>Heading_20_1>P1]"
+    },
+    {
+     "feature": "F04",
+     "id": "H2 is heading level 2 (Heading_20_2)",
+     "pass": true,
+     "detail": "heading 2 [Standard>Heading_20_2>P2]"
+    },
+    {
+     "feature": "F04",
+     "id": "H3 is heading level 3 (Heading_20_3)",
+     "pass": true,
+     "detail": "heading 3 [Standard>Heading_20_3>P3]"
+    },
+    {
+     "feature": "F04",
+     "id": "H4 is heading level 4 (Heading_20_4)",
+     "pass": true,
+     "detail": "heading 4 [Standard>Heading_20_4>P4]"
+    },
+    {
+     "feature": "F04",
+     "id": "H5 is heading level 5 (Heading_20_5)",
+     "pass": true,
+     "detail": "heading 5 [Standard>Heading_20_5>P5]"
+    },
+    {
+     "feature": "F04",
+     "id": "H6 is heading level 6 (Heading_20_6)",
+     "pass": true,
+     "detail": "heading 6 [Standard>Heading_20_6>P6]"
+    },
+    {
+     "feature": "F04",
+     "id": "heading align center",
+     "pass": true,
+     "detail": "heading 2 center"
+    },
+    {
+     "feature": "F04",
+     "id": "heading spacing-before 3 / indent-left 8",
+     "pass": true,
+     "detail": "before 3 left 8"
+    },
+    {
+     "feature": "F05",
+     "id": "ALIGN-LEFT",
+     "pass": true,
+     "detail": "start"
+    },
+    {
+     "feature": "F05",
+     "id": "ALIGN-CENTER",
+     "pass": true,
+     "detail": "center"
+    },
+    {
+     "feature": "F05",
+     "id": "ALIGN-RIGHT",
+     "pass": true,
+     "detail": "end"
+    },
+    {
+     "feature": "F05",
+     "id": "ALIGN-JUSTIFY",
+     "pass": true,
+     "detail": "justify"
+    },
+    {
+     "feature": "F06",
+     "id": "before 4 after 6",
+     "pass": true,
+     "detail": "4/6"
+    },
+    {
+     "feature": "F06",
+     "id": "unspaced paragraph has 0/unset",
+     "pass": true,
+     "detail": "0/0"
+    },
+    {
+     "feature": "F07",
+     "id": "line-height 150%",
+     "pass": true,
+     "detail": "150%"
+    },
+    {
+     "feature": "F08",
+     "id": "left 10 right 15 first 5",
+     "pass": true,
+     "detail": "10/15/5"
+    },
+    {
+     "feature": "F08",
+     "id": "hanging: left 20 first -5",
+     "pass": true,
+     "detail": "20/-5"
+    },
+    {
+     "feature": "F09",
+     "id": "BOLD",
+     "pass": true,
+     "detail": "bold"
+    },
+    {
+     "feature": "F09",
+     "id": "ITALIC",
+     "pass": true,
+     "detail": "italic"
+    },
+    {
+     "feature": "F09",
+     "id": "UNDER",
+     "pass": true,
+     "detail": "underline"
+    },
+    {
+     "feature": "F09",
+     "id": "STRIKE",
+     "pass": true,
+     "detail": "strike"
+    },
+    {
+     "feature": "F09",
+     "id": "PLAIN",
+     "pass": true,
+     "detail": ""
+    },
+    {
+     "feature": "F09",
+     "id": "COMBO bold+italic+#0070c0",
+     "pass": true,
+     "detail": "true true #0070c0"
+    },
+    {
+     "feature": "F10",
+     "id": "fontFamily DejaVu Sans",
+     "pass": true,
+     "detail": "DejaVu Sans"
+    },
+    {
+     "feature": "F10",
+     "id": "fontSize 18pt",
+     "pass": true,
+     "detail": "18pt"
+    },
+    {
+     "feature": "F10",
+     "id": "color #c00000",
+     "pass": true,
+     "detail": "#c00000"
+    },
+    {
+     "feature": "F11",
+     "id": "LINK-HTTP",
+     "pass": true,
+     "detail": "https://example.com/a?b=1&c=2"
+    },
+    {
+     "feature": "F11",
+     "id": "LINK-MAIL",
+     "pass": true,
+     "detail": "mailto:test@example.com"
+    },
+    {
+     "feature": "F12",
+     "id": "\"BREAK-A\\nBREAK-B\"",
+     "pass": true,
+     "detail": "\"BREAK-A\\nBREAK-B\""
+    },
+    {
+     "feature": "F12",
+     "id": "\"TAB-A\\tTAB-B\"",
+     "pass": true,
+     "detail": "\"TAB-A\\tTAB-B\""
+    },
+    {
+     "feature": "F12",
+     "id": "\"SPACE-A    SPACE-B\"",
+     "pass": true,
+     "detail": "\"SPACE-A    SPACE-B\""
+    },
+    {
+     "feature": "F12",
+     "id": "\" LEAD-SPACE\"",
+     "pass": true,
+     "detail": "\" LEAD-SPACE\""
+    },
+    {
+     "feature": "F13",
+     "id": "BUL-1 bullet depth 1",
+     "pass": true,
+     "detail": "bullet 1 (WWNum2)"
+    },
+    {
+     "feature": "F13",
+     "id": "BUL-1-1 bullet depth 2",
+     "pass": true,
+     "detail": "bullet 2 (WWNum2)"
+    },
+    {
+     "feature": "F13",
+     "id": "BUL-2 bullet depth 1",
+     "pass": true,
+     "detail": "bullet 1 (WWNum2)"
+    },
+    {
+     "feature": "F13",
+     "id": "NUM-1 number depth 1",
+     "pass": true,
+     "detail": "number 1 (WWNum3)"
+    },
+    {
+     "feature": "F13",
+     "id": "NUM-2 number depth 1",
+     "pass": true,
+     "detail": "number 1 (WWNum3)"
+    },
+    {
+     "feature": "F13",
+     "id": "NUM-2-1 number depth 2",
+     "pass": true,
+     "detail": "number 2 (WWNum3)"
+    },
+    {
+     "feature": "F13",
+     "id": "BUL-1/BUL-2 one list, NUM another",
+     "pass": true,
+     "detail": "1,1,2"
+    },
+    {
+     "feature": "F14",
+     "id": "one table, 4 rows",
+     "pass": true,
+     "detail": "1 table(s), 4 rows"
+    },
+    {
+     "feature": "F14",
+     "id": "header row = TH-A,TH-B,TH-C",
+     "pass": true,
+     "detail": "HBBB"
+    },
+    {
+     "feature": "F14",
+     "id": "MERGE-COL colspan 2",
+     "pass": true,
+     "detail": 2
+    },
+    {
+     "feature": "F14",
+     "id": "MERGE-ROW rowspan 2",
+     "pass": true,
+     "detail": 2
+    },
+    {
+     "feature": "F14",
+     "id": "cell grid 3 wide incl. covered",
+     "pass": true,
+     "detail": "3,3,3,3"
+    },
+    {
+     "feature": "F15",
+     "id": "col widths 30/50/70",
+     "pass": true,
+     "detail": "30/50/70"
+    },
+    {
+     "feature": "F16",
+     "id": "ALT-PNG image/png 40x20mm as-char alone",
+     "pass": true,
+     "detail": "image/png 40x20 as-char"
+    },
+    {
+     "feature": "F16",
+     "id": "ALT-PNG title/desc kept",
+     "pass": false,
+     "detail": "title=undefined desc=\"ALT-PNG\\nALT-PNG desc\""
+    },
+    {
+     "feature": "F16",
+     "id": "ALT-JPEG image/jpeg 30x15mm as-char alone",
+     "pass": true,
+     "detail": "image/jpeg 30x15 as-char"
+    },
+    {
+     "feature": "F16",
+     "id": "ALT-JPEG title/desc kept",
+     "pass": false,
+     "detail": "title=undefined desc=\"ALT-JPEG\\nALT-JPEG desc\""
+    },
+    {
+     "feature": "F16",
+     "id": "ALT-GIF image/gif 20x10mm as-char alone",
+     "pass": true,
+     "detail": "image/gif 20x10 as-char"
+    },
+    {
+     "feature": "F16",
+     "id": "ALT-GIF title/desc kept",
+     "pass": false,
+     "detail": "title=undefined desc=\"ALT-GIF\\nALT-GIF desc\""
+    },
+    {
+     "feature": "F17",
+     "id": "PB-NEXT break-before page",
+     "pass": true,
+     "detail": "page"
+    },
+    {
+     "feature": "F17",
+     "id": "break between PB2-PREV and PB2-NEXT",
+     "pass": true,
+     "detail": "prev.after=undefined next.before=page"
+    },
+    {
+     "feature": "F17",
+     "id": "no extra empty paragraphs",
+     "pass": true,
+     "detail": "0 empty"
+    }
+   ],
+   "unknown": {},
+   "ignored": {
+    "text:sequence-decls": 1
+   }
+  },
+  "import docx (LO-written)": {
+   "checks": [
+    {
+     "feature": "F01",
+     "id": "size 210x148 landscape",
+     "pass": true,
+     "detail": "210x148 landscape"
+    },
+    {
+     "feature": "F01",
+     "id": "margins t15 b20 l25 r30",
+     "pass": true,
+     "detail": "t15 b20 l25 r30; header min-h 6.5 sp 5.5; footer min-h 6.5 sp 5.5"
+    },
+    {
+     "feature": "F01",
+     "id": "single master page",
+     "pass": true,
+     "detail": "1 master page(s)"
+    },
+    {
+     "feature": "F02",
+     "id": "header \"HDR Page {PAGE} of {COUNT}\"",
+     "pass": true,
+     "detail": "HDR Page {PAGE} of {COUNT}"
+    },
+    {
+     "feature": "F02",
+     "id": "footer \"FTR {PAGE}/{COUNT}\"",
+     "pass": true,
+     "detail": "FTR {PAGE}/{COUNT}"
+    },
+    {
+     "feature": "F02",
+     "id": "no first/left header-footer",
+     "pass": true,
+     "detail": "none"
+    },
+    {
+     "feature": "F03",
+     "id": "default-style Liberation Sans 11pt #333333",
+     "pass": true,
+     "detail": "Liberation Sans 11pt #333333"
+    },
+    {
+     "feature": "F03",
+     "id": "plain run resolves to defaults",
+     "pass": true,
+     "detail": "Liberation Sans 11pt #333333"
+    },
+    {
+     "feature": "F04",
+     "id": "H1 is heading level 1 (Heading_20_1)",
+     "pass": true,
+     "detail": "heading 1 [Standard>Heading>Heading_20_1>P3]"
+    },
+    {
+     "feature": "F04",
+     "id": "H2 is heading level 2 (Heading_20_2)",
+     "pass": true,
+     "detail": "heading 2 [Standard>Heading>Heading_20_2>P4]"
+    },
+    {
+     "feature": "F04",
+     "id": "H3 is heading level 3 (Heading_20_3)",
+     "pass": true,
+     "detail": "heading 3 [Standard>Heading>Heading_20_3>P5]"
+    },
+    {
+     "feature": "F04",
+     "id": "H4 is heading level 4 (Heading_20_4)",
+     "pass": true,
+     "detail": "heading 4 [Standard>Heading>Heading_20_4>P6]"
+    },
+    {
+     "feature": "F04",
+     "id": "H5 is heading level 5 (Heading_20_5)",
+     "pass": true,
+     "detail": "heading 5 [Standard>Heading>Heading_20_5>P7]"
+    },
+    {
+     "feature": "F04",
+     "id": "H6 is heading level 6 (Heading_20_6)",
+     "pass": true,
+     "detail": "heading 6 [Standard>Heading>Heading_20_6>P8]"
+    },
+    {
+     "feature": "F04",
+     "id": "heading align center",
+     "pass": true,
+     "detail": "heading 2 center"
+    },
+    {
+     "feature": "F04",
+     "id": "heading spacing-before 3 / indent-left 8",
+     "pass": true,
+     "detail": "before 3 left 8"
+    },
+    {
+     "feature": "F05",
+     "id": "ALIGN-LEFT",
+     "pass": true,
+     "detail": "start"
+    },
+    {
+     "feature": "F05",
+     "id": "ALIGN-CENTER",
+     "pass": true,
+     "detail": "center"
+    },
+    {
+     "feature": "F05",
+     "id": "ALIGN-RIGHT",
+     "pass": true,
+     "detail": "end"
+    },
+    {
+     "feature": "F05",
+     "id": "ALIGN-JUSTIFY",
+     "pass": true,
+     "detail": "justify"
+    },
+    {
+     "feature": "F06",
+     "id": "before 4 after 6",
+     "pass": true,
+     "detail": "4/6"
+    },
+    {
+     "feature": "F06",
+     "id": "unspaced paragraph has 0/unset",
+     "pass": true,
+     "detail": "0/0"
+    },
+    {
+     "feature": "F07",
+     "id": "line-height 150%",
+     "pass": true,
+     "detail": "150%"
+    },
+    {
+     "feature": "F08",
+     "id": "left 10 right 15 first 5",
+     "pass": true,
+     "detail": "10/15/5"
+    },
+    {
+     "feature": "F08",
+     "id": "hanging: left 20 first -5",
+     "pass": true,
+     "detail": "20/-5"
+    },
+    {
+     "feature": "F09",
+     "id": "BOLD",
+     "pass": true,
+     "detail": "bold"
+    },
+    {
+     "feature": "F09",
+     "id": "ITALIC",
+     "pass": true,
+     "detail": "italic"
+    },
+    {
+     "feature": "F09",
+     "id": "UNDER",
+     "pass": true,
+     "detail": "underline"
+    },
+    {
+     "feature": "F09",
+     "id": "STRIKE",
+     "pass": true,
+     "detail": "strike"
+    },
+    {
+     "feature": "F09",
+     "id": "PLAIN",
+     "pass": true,
+     "detail": ""
+    },
+    {
+     "feature": "F09",
+     "id": "COMBO bold+italic+#0070c0",
+     "pass": true,
+     "detail": "true true #0070c0"
+    },
+    {
+     "feature": "F10",
+     "id": "fontFamily DejaVu Sans",
+     "pass": true,
+     "detail": "DejaVu Sans"
+    },
+    {
+     "feature": "F10",
+     "id": "fontSize 18pt",
+     "pass": true,
+     "detail": "18pt"
+    },
+    {
+     "feature": "F10",
+     "id": "color #c00000",
+     "pass": true,
+     "detail": "#c00000"
+    },
+    {
+     "feature": "F11",
+     "id": "LINK-HTTP",
+     "pass": true,
+     "detail": "https://example.com/a?b=1&c=2"
+    },
+    {
+     "feature": "F11",
+     "id": "LINK-MAIL",
+     "pass": true,
+     "detail": "mailto:test@example.com"
+    },
+    {
+     "feature": "F12",
+     "id": "\"BREAK-A\\nBREAK-B\"",
+     "pass": true,
+     "detail": "\"BREAK-A\\nBREAK-B\""
+    },
+    {
+     "feature": "F12",
+     "id": "\"TAB-A\\tTAB-B\"",
+     "pass": true,
+     "detail": "\"TAB-A\\tTAB-B\""
+    },
+    {
+     "feature": "F12",
+     "id": "\"SPACE-A    SPACE-B\"",
+     "pass": true,
+     "detail": "\"SPACE-A    SPACE-B\""
+    },
+    {
+     "feature": "F12",
+     "id": "\" LEAD-SPACE\"",
+     "pass": true,
+     "detail": "\" LEAD-SPACE\""
+    },
+    {
+     "feature": "F13",
+     "id": "BUL-1 bullet depth 1",
+     "pass": true,
+     "detail": "bullet 1 (WWNum2)"
+    },
+    {
+     "feature": "F13",
+     "id": "BUL-1-1 bullet depth 2",
+     "pass": true,
+     "detail": "bullet 2 (WWNum2)"
+    },
+    {
+     "feature": "F13",
+     "id": "BUL-2 bullet depth 1",
+     "pass": true,
+     "detail": "bullet 1 (WWNum2)"
+    },
+    {
+     "feature": "F13",
+     "id": "NUM-1 number depth 1",
+     "pass": true,
+     "detail": "number 1 (WWNum3)"
+    },
+    {
+     "feature": "F13",
+     "id": "NUM-2 number depth 1",
+     "pass": true,
+     "detail": "number 1 (WWNum3)"
+    },
+    {
+     "feature": "F13",
+     "id": "NUM-2-1 number depth 2",
+     "pass": true,
+     "detail": "number 2 (WWNum3)"
+    },
+    {
+     "feature": "F13",
+     "id": "BUL-1/BUL-2 one list, NUM another",
+     "pass": true,
+     "detail": "2,2,3"
+    },
+    {
+     "feature": "F14",
+     "id": "one table, 4 rows",
+     "pass": true,
+     "detail": "1 table(s), 4 rows"
+    },
+    {
+     "feature": "F14",
+     "id": "header row = TH-A,TH-B,TH-C",
+     "pass": true,
+     "detail": "HBBB"
+    },
+    {
+     "feature": "F14",
+     "id": "MERGE-COL colspan 2",
+     "pass": true,
+     "detail": 2
+    },
+    {
+     "feature": "F14",
+     "id": "MERGE-ROW rowspan 2",
+     "pass": true,
+     "detail": 2
+    },
+    {
+     "feature": "F14",
+     "id": "cell grid 3 wide incl. covered",
+     "pass": true,
+     "detail": "3,3,3,3"
+    },
+    {
+     "feature": "F15",
+     "id": "col widths 30/50/70",
+     "pass": true,
+     "detail": "30.2/50/69.9"
+    },
+    {
+     "feature": "F16",
+     "id": "ALT-PNG image/png 40x20mm as-char alone",
+     "pass": true,
+     "detail": "image/png 40x20 as-char"
+    },
+    {
+     "feature": "F16",
+     "id": "ALT-PNG title/desc kept",
+     "pass": true,
+     "detail": "title=\"ALT-PNG\" desc=\"ALT-PNG desc\""
+    },
+    {
+     "feature": "F16",
+     "id": "ALT-JPEG image/jpeg 30x15mm as-char alone",
+     "pass": true,
+     "detail": "image/jpeg 30x15 as-char"
+    },
+    {
+     "feature": "F16",
+     "id": "ALT-JPEG title/desc kept",
+     "pass": true,
+     "detail": "title=\"ALT-JPEG\" desc=\"ALT-JPEG desc\""
+    },
+    {
+     "feature": "F16",
+     "id": "ALT-GIF image/gif 20x10mm as-char alone",
+     "pass": true,
+     "detail": "image/gif 20x10 as-char"
+    },
+    {
+     "feature": "F16",
+     "id": "ALT-GIF title/desc kept",
+     "pass": true,
+     "detail": "title=\"ALT-GIF\" desc=\"ALT-GIF desc\""
+    },
+    {
+     "feature": "F17",
+     "id": "PB-NEXT break-before page",
+     "pass": true,
+     "detail": "page"
+    },
+    {
+     "feature": "F17",
+     "id": "break between PB2-PREV and PB2-NEXT",
+     "pass": true,
+     "detail": "prev.after=undefined next.before=page"
+    },
+    {
+     "feature": "F17",
+     "id": "no extra empty paragraphs",
+     "pass": true,
+     "detail": "0 empty"
+    }
+   ],
+   "unknown": {},
+   "ignored": {
+    "text:sequence-decls": 1
+   }
+  },
+  "roundtrip x1 docx (LO-written)": {
+   "checks": [
+    {
+     "feature": "F01",
+     "id": "size 210x148 landscape",
+     "pass": true,
+     "detail": "210x148 landscape"
+    },
+    {
+     "feature": "F01",
+     "id": "margins t15 b20 l25 r30",
+     "pass": true,
+     "detail": "t15 b20 l25 r30; header min-h 6.5 sp 5.5; footer min-h 6.5 sp 5.5"
+    },
+    {
+     "feature": "F01",
+     "id": "single master page",
+     "pass": true,
+     "detail": "1 master page(s)"
+    },
+    {
+     "feature": "F02",
+     "id": "header \"HDR Page {PAGE} of {COUNT}\"",
+     "pass": true,
+     "detail": "HDR Page {PAGE} of {COUNT}"
+    },
+    {
+     "feature": "F02",
+     "id": "footer \"FTR {PAGE}/{COUNT}\"",
+     "pass": true,
+     "detail": "FTR {PAGE}/{COUNT}"
+    },
+    {
+     "feature": "F02",
+     "id": "no first/left header-footer",
+     "pass": true,
+     "detail": "none"
+    },
+    {
+     "feature": "F03",
+     "id": "default-style Liberation Sans 11pt #333333",
+     "pass": true,
+     "detail": "Liberation Sans 11pt #333333"
+    },
+    {
+     "feature": "F03",
+     "id": "plain run resolves to defaults",
+     "pass": true,
+     "detail": "Liberation Sans 11pt #333333"
+    },
+    {
+     "feature": "F04",
+     "id": "H1 is heading level 1 (Heading_20_1)",
+     "pass": true,
+     "detail": "heading 1 [Standard>Heading>Heading_20_1>P3]"
+    },
+    {
+     "feature": "F04",
+     "id": "H2 is heading level 2 (Heading_20_2)",
+     "pass": true,
+     "detail": "heading 2 [Standard>Heading>Heading_20_2>P4]"
+    },
+    {
+     "feature": "F04",
+     "id": "H3 is heading level 3 (Heading_20_3)",
+     "pass": true,
+     "detail": "heading 3 [Standard>Heading>Heading_20_3>P5]"
+    },
+    {
+     "feature": "F04",
+     "id": "H4 is heading level 4 (Heading_20_4)",
+     "pass": true,
+     "detail": "heading 4 [Standard>Heading>Heading_20_4>P6]"
+    },
+    {
+     "feature": "F04",
+     "id": "H5 is heading level 5 (Heading_20_5)",
+     "pass": true,
+     "detail": "heading 5 [Standard>Heading>Heading_20_5>P7]"
+    },
+    {
+     "feature": "F04",
+     "id": "H6 is heading level 6 (Heading_20_6)",
+     "pass": true,
+     "detail": "heading 6 [Standard>Heading>Heading_20_6>P8]"
+    },
+    {
+     "feature": "F04",
+     "id": "heading align center",
+     "pass": true,
+     "detail": "heading 2 center"
+    },
+    {
+     "feature": "F04",
+     "id": "heading spacing-before 3 / indent-left 8",
+     "pass": true,
+     "detail": "before 3 left 8"
+    },
+    {
+     "feature": "F05",
+     "id": "ALIGN-LEFT",
+     "pass": true,
+     "detail": "start"
+    },
+    {
+     "feature": "F05",
+     "id": "ALIGN-CENTER",
+     "pass": true,
+     "detail": "center"
+    },
+    {
+     "feature": "F05",
+     "id": "ALIGN-RIGHT",
+     "pass": true,
+     "detail": "end"
+    },
+    {
+     "feature": "F05",
+     "id": "ALIGN-JUSTIFY",
+     "pass": true,
+     "detail": "justify"
+    },
+    {
+     "feature": "F06",
+     "id": "before 4 after 6",
+     "pass": true,
+     "detail": "4/6"
+    },
+    {
+     "feature": "F06",
+     "id": "unspaced paragraph has 0/unset",
+     "pass": true,
+     "detail": "0/0"
+    },
+    {
+     "feature": "F07",
+     "id": "line-height 150%",
+     "pass": true,
+     "detail": "150%"
+    },
+    {
+     "feature": "F08",
+     "id": "left 10 right 15 first 5",
+     "pass": true,
+     "detail": "10/15/5"
+    },
+    {
+     "feature": "F08",
+     "id": "hanging: left 20 first -5",
+     "pass": true,
+     "detail": "20/-5"
+    },
+    {
+     "feature": "F09",
+     "id": "BOLD",
+     "pass": true,
+     "detail": "bold"
+    },
+    {
+     "feature": "F09",
+     "id": "ITALIC",
+     "pass": true,
+     "detail": "italic"
+    },
+    {
+     "feature": "F09",
+     "id": "UNDER",
+     "pass": true,
+     "detail": "underline"
+    },
+    {
+     "feature": "F09",
+     "id": "STRIKE",
+     "pass": true,
+     "detail": "strike"
+    },
+    {
+     "feature": "F09",
+     "id": "PLAIN",
+     "pass": true,
+     "detail": ""
+    },
+    {
+     "feature": "F09",
+     "id": "COMBO bold+italic+#0070c0",
+     "pass": true,
+     "detail": "true true #0070c0"
+    },
+    {
+     "feature": "F10",
+     "id": "fontFamily DejaVu Sans",
+     "pass": true,
+     "detail": "DejaVu Sans"
+    },
+    {
+     "feature": "F10",
+     "id": "fontSize 18pt",
+     "pass": true,
+     "detail": "18pt"
+    },
+    {
+     "feature": "F10",
+     "id": "color #c00000",
+     "pass": true,
+     "detail": "#c00000"
+    },
+    {
+     "feature": "F11",
+     "id": "LINK-HTTP",
+     "pass": true,
+     "detail": "https://example.com/a?b=1&c=2"
+    },
+    {
+     "feature": "F11",
+     "id": "LINK-MAIL",
+     "pass": true,
+     "detail": "mailto:test@example.com"
+    },
+    {
+     "feature": "F12",
+     "id": "\"BREAK-A\\nBREAK-B\"",
+     "pass": true,
+     "detail": "\"BREAK-A\\nBREAK-B\""
+    },
+    {
+     "feature": "F12",
+     "id": "\"TAB-A\\tTAB-B\"",
+     "pass": true,
+     "detail": "\"TAB-A\\tTAB-B\""
+    },
+    {
+     "feature": "F12",
+     "id": "\"SPACE-A    SPACE-B\"",
+     "pass": true,
+     "detail": "\"SPACE-A    SPACE-B\""
+    },
+    {
+     "feature": "F12",
+     "id": "\" LEAD-SPACE\"",
+     "pass": true,
+     "detail": "\" LEAD-SPACE\""
+    },
+    {
+     "feature": "F13",
+     "id": "BUL-1 bullet depth 1",
+     "pass": true,
+     "detail": "bullet 1 (WWNum3)"
+    },
+    {
+     "feature": "F13",
+     "id": "BUL-1-1 bullet depth 2",
+     "pass": true,
+     "detail": "bullet 2 (WWNum3)"
+    },
+    {
+     "feature": "F13",
+     "id": "BUL-2 bullet depth 1",
+     "pass": true,
+     "detail": "bullet 1 (WWNum3)"
+    },
+    {
+     "feature": "F13",
+     "id": "NUM-1 number depth 1",
+     "pass": true,
+     "detail": "number 1 (WWNum4)"
+    },
+    {
+     "feature": "F13",
+     "id": "NUM-2 number depth 1",
+     "pass": true,
+     "detail": "number 1 (WWNum4)"
+    },
+    {
+     "feature": "F13",
+     "id": "NUM-2-1 number depth 2",
+     "pass": true,
+     "detail": "number 2 (WWNum4)"
+    },
+    {
+     "feature": "F13",
+     "id": "BUL-1/BUL-2 one list, NUM another",
+     "pass": true,
+     "detail": "2,2,3"
+    },
+    {
+     "feature": "F14",
+     "id": "one table, 4 rows",
+     "pass": true,
+     "detail": "1 table(s), 4 rows"
+    },
+    {
+     "feature": "F14",
+     "id": "header row = TH-A,TH-B,TH-C",
+     "pass": true,
+     "detail": "HBBB"
+    },
+    {
+     "feature": "F14",
+     "id": "MERGE-COL colspan 2",
+     "pass": true,
+     "detail": 2
+    },
+    {
+     "feature": "F14",
+     "id": "MERGE-ROW rowspan 2",
+     "pass": true,
+     "detail": 2
+    },
+    {
+     "feature": "F14",
+     "id": "cell grid 3 wide incl. covered",
+     "pass": true,
+     "detail": "3,3,3,3"
+    },
+    {
+     "feature": "F15",
+     "id": "col widths 30/50/70",
+     "pass": true,
+     "detail": "30.2/50/69.9"
+    },
+    {
+     "feature": "F16",
+     "id": "ALT-PNG image/png 40x20mm as-char alone",
+     "pass": true,
+     "detail": "image/png 40x20 as-char"
+    },
+    {
+     "feature": "F16",
+     "id": "ALT-PNG title/desc kept",
+     "pass": false,
+     "detail": "title=undefined desc=\"ALT-PNG\\nALT-PNG desc\""
+    },
+    {
+     "feature": "F16",
+     "id": "ALT-JPEG image/jpeg 30x15mm as-char alone",
+     "pass": true,
+     "detail": "image/jpeg 30x15 as-char"
+    },
+    {
+     "feature": "F16",
+     "id": "ALT-JPEG title/desc kept",
+     "pass": false,
+     "detail": "title=undefined desc=\"ALT-JPEG\\nALT-JPEG desc\""
+    },
+    {
+     "feature": "F16",
+     "id": "ALT-GIF image/gif 20x10mm as-char alone",
+     "pass": true,
+     "detail": "image/gif 20x10 as-char"
+    },
+    {
+     "feature": "F16",
+     "id": "ALT-GIF title/desc kept",
+     "pass": false,
+     "detail": "title=undefined desc=\"ALT-GIF\\nALT-GIF desc\""
+    },
+    {
+     "feature": "F17",
+     "id": "PB-NEXT break-before page",
+     "pass": true,
+     "detail": "page"
+    },
+    {
+     "feature": "F17",
+     "id": "break between PB2-PREV and PB2-NEXT",
+     "pass": true,
+     "detail": "prev.after=undefined next.before=page"
+    },
+    {
+     "feature": "F17",
+     "id": "no extra empty paragraphs",
+     "pass": true,
+     "detail": "0 empty"
+    }
+   ],
+   "unknown": {},
+   "ignored": {
+    "text:sequence-decls": 1
+   }
+  },
+  "roundtrip x2 docx (LO-written)": {
+   "checks": [
+    {
+     "feature": "F01",
+     "id": "size 210x148 landscape",
+     "pass": true,
+     "detail": "210x148 landscape"
+    },
+    {
+     "feature": "F01",
+     "id": "margins t15 b20 l25 r30",
+     "pass": true,
+     "detail": "t15 b20 l25 r30; header min-h 6.5 sp 5.5; footer min-h 6.5 sp 5.5"
+    },
+    {
+     "feature": "F01",
+     "id": "single master page",
+     "pass": true,
+     "detail": "1 master page(s)"
+    },
+    {
+     "feature": "F02",
+     "id": "header \"HDR Page {PAGE} of {COUNT}\"",
+     "pass": true,
+     "detail": "HDR Page {PAGE} of {COUNT}"
+    },
+    {
+     "feature": "F02",
+     "id": "footer \"FTR {PAGE}/{COUNT}\"",
+     "pass": true,
+     "detail": "FTR {PAGE}/{COUNT}"
+    },
+    {
+     "feature": "F02",
+     "id": "no first/left header-footer",
+     "pass": true,
+     "detail": "none"
+    },
+    {
+     "feature": "F03",
+     "id": "default-style Liberation Sans 11pt #333333",
+     "pass": true,
+     "detail": "Liberation Sans 11pt #333333"
+    },
+    {
+     "feature": "F03",
+     "id": "plain run resolves to defaults",
+     "pass": true,
+     "detail": "Liberation Sans 11pt #333333"
+    },
+    {
+     "feature": "F04",
+     "id": "H1 is heading level 1 (Heading_20_1)",
+     "pass": true,
+     "detail": "heading 1 [Standard>Heading>Heading_20_1>P3]"
+    },
+    {
+     "feature": "F04",
+     "id": "H2 is heading level 2 (Heading_20_2)",
+     "pass": true,
+     "detail": "heading 2 [Standard>Heading>Heading_20_2>P4]"
+    },
+    {
+     "feature": "F04",
+     "id": "H3 is heading level 3 (Heading_20_3)",
+     "pass": true,
+     "detail": "heading 3 [Standard>Heading>Heading_20_3>P5]"
+    },
+    {
+     "feature": "F04",
+     "id": "H4 is heading level 4 (Heading_20_4)",
+     "pass": true,
+     "detail": "heading 4 [Standard>Heading>Heading_20_4>P6]"
+    },
+    {
+     "feature": "F04",
+     "id": "H5 is heading level 5 (Heading_20_5)",
+     "pass": true,
+     "detail": "heading 5 [Standard>Heading>Heading_20_5>P7]"
+    },
+    {
+     "feature": "F04",
+     "id": "H6 is heading level 6 (Heading_20_6)",
+     "pass": true,
+     "detail": "heading 6 [Standard>Heading>Heading_20_6>P8]"
+    },
+    {
+     "feature": "F04",
+     "id": "heading align center",
+     "pass": true,
+     "detail": "heading 2 center"
+    },
+    {
+     "feature": "F04",
+     "id": "heading spacing-before 3 / indent-left 8",
+     "pass": true,
+     "detail": "before 3 left 8"
+    },
+    {
+     "feature": "F05",
+     "id": "ALIGN-LEFT",
+     "pass": true,
+     "detail": "start"
+    },
+    {
+     "feature": "F05",
+     "id": "ALIGN-CENTER",
+     "pass": true,
+     "detail": "center"
+    },
+    {
+     "feature": "F05",
+     "id": "ALIGN-RIGHT",
+     "pass": true,
+     "detail": "end"
+    },
+    {
+     "feature": "F05",
+     "id": "ALIGN-JUSTIFY",
+     "pass": true,
+     "detail": "justify"
+    },
+    {
+     "feature": "F06",
+     "id": "before 4 after 6",
+     "pass": true,
+     "detail": "4/6"
+    },
+    {
+     "feature": "F06",
+     "id": "unspaced paragraph has 0/unset",
+     "pass": true,
+     "detail": "0/0"
+    },
+    {
+     "feature": "F07",
+     "id": "line-height 150%",
+     "pass": true,
+     "detail": "150%"
+    },
+    {
+     "feature": "F08",
+     "id": "left 10 right 15 first 5",
+     "pass": true,
+     "detail": "10/15/5"
+    },
+    {
+     "feature": "F08",
+     "id": "hanging: left 20 first -5",
+     "pass": true,
+     "detail": "20/-5"
+    },
+    {
+     "feature": "F09",
+     "id": "BOLD",
+     "pass": true,
+     "detail": "bold"
+    },
+    {
+     "feature": "F09",
+     "id": "ITALIC",
+     "pass": true,
+     "detail": "italic"
+    },
+    {
+     "feature": "F09",
+     "id": "UNDER",
+     "pass": true,
+     "detail": "underline"
+    },
+    {
+     "feature": "F09",
+     "id": "STRIKE",
+     "pass": true,
+     "detail": "strike"
+    },
+    {
+     "feature": "F09",
+     "id": "PLAIN",
+     "pass": true,
+     "detail": ""
+    },
+    {
+     "feature": "F09",
+     "id": "COMBO bold+italic+#0070c0",
+     "pass": true,
+     "detail": "true true #0070c0"
+    },
+    {
+     "feature": "F10",
+     "id": "fontFamily DejaVu Sans",
+     "pass": true,
+     "detail": "DejaVu Sans"
+    },
+    {
+     "feature": "F10",
+     "id": "fontSize 18pt",
+     "pass": true,
+     "detail": "18pt"
+    },
+    {
+     "feature": "F10",
+     "id": "color #c00000",
+     "pass": true,
+     "detail": "#c00000"
+    },
+    {
+     "feature": "F11",
+     "id": "LINK-HTTP",
+     "pass": true,
+     "detail": "https://example.com/a?b=1&c=2"
+    },
+    {
+     "feature": "F11",
+     "id": "LINK-MAIL",
+     "pass": true,
+     "detail": "mailto:test@example.com"
+    },
+    {
+     "feature": "F12",
+     "id": "\"BREAK-A\\nBREAK-B\"",
+     "pass": true,
+     "detail": "\"BREAK-A\\nBREAK-B\""
+    },
+    {
+     "feature": "F12",
+     "id": "\"TAB-A\\tTAB-B\"",
+     "pass": true,
+     "detail": "\"TAB-A\\tTAB-B\""
+    },
+    {
+     "feature": "F12",
+     "id": "\"SPACE-A    SPACE-B\"",
+     "pass": true,
+     "detail": "\"SPACE-A    SPACE-B\""
+    },
+    {
+     "feature": "F12",
+     "id": "\" LEAD-SPACE\"",
+     "pass": true,
+     "detail": "\" LEAD-SPACE\""
+    },
+    {
+     "feature": "F13",
+     "id": "BUL-1 bullet depth 1",
+     "pass": true,
+     "detail": "bullet 1 (WWNum3)"
+    },
+    {
+     "feature": "F13",
+     "id": "BUL-1-1 bullet depth 2",
+     "pass": true,
+     "detail": "bullet 2 (WWNum3)"
+    },
+    {
+     "feature": "F13",
+     "id": "BUL-2 bullet depth 1",
+     "pass": true,
+     "detail": "bullet 1 (WWNum3)"
+    },
+    {
+     "feature": "F13",
+     "id": "NUM-1 number depth 1",
+     "pass": true,
+     "detail": "number 1 (WWNum4)"
+    },
+    {
+     "feature": "F13",
+     "id": "NUM-2 number depth 1",
+     "pass": true,
+     "detail": "number 1 (WWNum4)"
+    },
+    {
+     "feature": "F13",
+     "id": "NUM-2-1 number depth 2",
+     "pass": true,
+     "detail": "number 2 (WWNum4)"
+    },
+    {
+     "feature": "F13",
+     "id": "BUL-1/BUL-2 one list, NUM another",
+     "pass": true,
+     "detail": "2,2,3"
+    },
+    {
+     "feature": "F14",
+     "id": "one table, 4 rows",
+     "pass": true,
+     "detail": "1 table(s), 4 rows"
+    },
+    {
+     "feature": "F14",
+     "id": "header row = TH-A,TH-B,TH-C",
+     "pass": true,
+     "detail": "HBBB"
+    },
+    {
+     "feature": "F14",
+     "id": "MERGE-COL colspan 2",
+     "pass": true,
+     "detail": 2
+    },
+    {
+     "feature": "F14",
+     "id": "MERGE-ROW rowspan 2",
+     "pass": true,
+     "detail": 2
+    },
+    {
+     "feature": "F14",
+     "id": "cell grid 3 wide incl. covered",
+     "pass": true,
+     "detail": "3,3,3,3"
+    },
+    {
+     "feature": "F15",
+     "id": "col widths 30/50/70",
+     "pass": true,
+     "detail": "30.2/49.9/69.9"
+    },
+    {
+     "feature": "F16",
+     "id": "ALT-PNG image/png 40x20mm as-char alone",
+     "pass": true,
+     "detail": "image/png 40x20 as-char"
+    },
+    {
+     "feature": "F16",
+     "id": "ALT-PNG title/desc kept",
+     "pass": false,
+     "detail": "title=undefined desc=\"ALT-PNG\\nALT-PNG desc\""
+    },
+    {
+     "feature": "F16",
+     "id": "ALT-JPEG image/jpeg 30x15mm as-char alone",
+     "pass": true,
+     "detail": "image/jpeg 30x15 as-char"
+    },
+    {
+     "feature": "F16",
+     "id": "ALT-JPEG title/desc kept",
+     "pass": false,
+     "detail": "title=undefined desc=\"ALT-JPEG\\nALT-JPEG desc\""
+    },
+    {
+     "feature": "F16",
+     "id": "ALT-GIF image/gif 20x10mm as-char alone",
+     "pass": true,
+     "detail": "image/gif 20x10 as-char"
+    },
+    {
+     "feature": "F16",
+     "id": "ALT-GIF title/desc kept",
+     "pass": false,
+     "detail": "title=undefined desc=\"ALT-GIF\\nALT-GIF desc\""
+    },
+    {
+     "feature": "F17",
+     "id": "PB-NEXT break-before page",
+     "pass": true,
+     "detail": "page"
+    },
+    {
+     "feature": "F17",
+     "id": "break between PB2-PREV and PB2-NEXT",
+     "pass": true,
+     "detail": "prev.after=undefined next.before=page"
+    },
+    {
+     "feature": "F17",
+     "id": "no extra empty paragraphs",
+     "pass": true,
+     "detail": "0 empty"
+    }
+   ],
+   "unknown": {},
+   "ignored": {
+    "text:sequence-decls": 1
+   }
+  },
+  "import odt": {
+   "checks": [
+    {
+     "feature": "F01",
+     "id": "size 210x148 landscape",
+     "pass": true,
+     "detail": "210x148 landscape"
+    },
+    {
+     "feature": "F01",
+     "id": "margins t15 b20 l25 r30",
+     "pass": true,
+     "detail": "t15 b20 l25 r30; header min-h 0 sp 2; footer min-h 0 sp 2"
+    },
+    {
+     "feature": "F01",
+     "id": "single master page",
+     "pass": true,
+     "detail": "1 master page(s)"
+    },
+    {
+     "feature": "F02",
+     "id": "header \"HDR Page {PAGE} of {COUNT}\"",
+     "pass": true,
+     "detail": "HDR Page {PAGE} of {COUNT}"
+    },
+    {
+     "feature": "F02",
+     "id": "footer \"FTR {PAGE}/{COUNT}\"",
+     "pass": true,
+     "detail": "FTR {PAGE}/{COUNT}"
+    },
+    {
+     "feature": "F02",
+     "id": "no first/left header-footer",
+     "pass": true,
+     "detail": "none"
+    },
+    {
+     "feature": "F03",
+     "id": "default-style Liberation Sans 11pt #333333",
+     "pass": true,
+     "detail": "Liberation Sans 11pt #333333"
+    },
+    {
+     "feature": "F03",
+     "id": "plain run resolves to defaults",
+     "pass": true,
+     "detail": "Liberation Sans 11pt #333333"
+    },
+    {
+     "feature": "F04",
+     "id": "H1 is heading level 1 (Heading_20_1)",
+     "pass": true,
+     "detail": "heading 1 [Standard>Heading>Heading_20_1]"
+    },
+    {
+     "feature": "F04",
+     "id": "H2 is heading level 2 (Heading_20_2)",
+     "pass": true,
+     "detail": "heading 2 [Standard>Heading>Heading_20_2]"
+    },
+    {
+     "feature": "F04",
+     "id": "H3 is heading level 3 (Heading_20_3)",
+     "pass": true,
+     "detail": "heading 3 [Standard>Heading>Heading_20_3]"
+    },
+    {
+     "feature": "F04",
+     "id": "H4 is heading level 4 (Heading_20_4)",
+     "pass": true,
+     "detail": "heading 4 [Standard>Heading>Heading_20_4]"
+    },
+    {
+     "feature": "F04",
+     "id": "H5 is heading level 5 (Heading_20_5)",
+     "pass": true,
+     "detail": "heading 5 [Standard>Heading>Heading_20_5]"
+    },
+    {
+     "feature": "F04",
+     "id": "H6 is heading level 6 (Heading_20_6)",
+     "pass": true,
+     "detail": "heading 6 [Standard>Heading>Heading_20_6]"
+    },
+    {
+     "feature": "F04",
+     "id": "heading align center",
+     "pass": true,
+     "detail": "heading 2 center"
+    },
+    {
+     "feature": "F04",
+     "id": "heading spacing-before 3 / indent-left 8",
+     "pass": true,
+     "detail": "before 3 left 8"
+    },
+    {
+     "feature": "F05",
+     "id": "ALIGN-LEFT",
+     "pass": true,
+     "detail": "start"
+    },
+    {
+     "feature": "F05",
+     "id": "ALIGN-CENTER",
+     "pass": true,
+     "detail": "center"
+    },
+    {
+     "feature": "F05",
+     "id": "ALIGN-RIGHT",
+     "pass": true,
+     "detail": "end"
+    },
+    {
+     "feature": "F05",
+     "id": "ALIGN-JUSTIFY",
+     "pass": true,
+     "detail": "justify"
+    },
+    {
+     "feature": "F06",
+     "id": "before 4 after 6",
+     "pass": true,
+     "detail": "4/6"
+    },
+    {
+     "feature": "F06",
+     "id": "unspaced paragraph has 0/unset",
+     "pass": true,
+     "detail": "undefined/undefined"
+    },
+    {
+     "feature": "F07",
+     "id": "line-height 150%",
+     "pass": true,
+     "detail": "150%"
+    },
+    {
+     "feature": "F08",
+     "id": "left 10 right 15 first 5",
+     "pass": true,
+     "detail": "10/15/5"
+    },
+    {
+     "feature": "F08",
+     "id": "hanging: left 20 first -5",
+     "pass": true,
+     "detail": "20/-5"
+    },
+    {
+     "feature": "F09",
+     "id": "BOLD",
+     "pass": true,
+     "detail": "bold"
+    },
+    {
+     "feature": "F09",
+     "id": "ITALIC",
+     "pass": true,
+     "detail": "italic"
+    },
+    {
+     "feature": "F09",
+     "id": "UNDER",
+     "pass": true,
+     "detail": "underline"
+    },
+    {
+     "feature": "F09",
+     "id": "STRIKE",
+     "pass": true,
+     "detail": "strike"
+    },
+    {
+     "feature": "F09",
+     "id": "PLAIN",
+     "pass": true,
+     "detail": ""
+    },
+    {
+     "feature": "F09",
+     "id": "COMBO bold+italic+#0070c0",
+     "pass": true,
+     "detail": "true true #0070c0"
+    },
+    {
+     "feature": "F10",
+     "id": "fontFamily DejaVu Sans",
+     "pass": true,
+     "detail": "DejaVu Sans"
+    },
+    {
+     "feature": "F10",
+     "id": "fontSize 18pt",
+     "pass": true,
+     "detail": "18pt"
+    },
+    {
+     "feature": "F10",
+     "id": "color #c00000",
+     "pass": true,
+     "detail": "#c00000"
+    },
+    {
+     "feature": "F11",
+     "id": "LINK-HTTP",
+     "pass": true,
+     "detail": "https://example.com/a?b=1&c=2"
+    },
+    {
+     "feature": "F11",
+     "id": "LINK-MAIL",
+     "pass": true,
+     "detail": "mailto:test@example.com"
+    },
+    {
+     "feature": "F12",
+     "id": "\"BREAK-A\\nBREAK-B\"",
+     "pass": true,
+     "detail": "\"BREAK-A\\nBREAK-B\""
+    },
+    {
+     "feature": "F12",
+     "id": "\"TAB-A\\tTAB-B\"",
+     "pass": true,
+     "detail": "\"TAB-A\\tTAB-B\""
+    },
+    {
+     "feature": "F12",
+     "id": "\"SPACE-A    SPACE-B\"",
+     "pass": true,
+     "detail": "\"SPACE-A    SPACE-B\""
+    },
+    {
+     "feature": "F12",
+     "id": "\" LEAD-SPACE\"",
+     "pass": true,
+     "detail": "\" LEAD-SPACE\""
+    },
+    {
+     "feature": "F13",
+     "id": "BUL-1 bullet depth 1",
+     "pass": true,
+     "detail": "bullet 1 (L1)"
+    },
+    {
+     "feature": "F13",
+     "id": "BUL-1-1 bullet depth 2",
+     "pass": true,
+     "detail": "bullet 2 (L1)"
+    },
+    {
+     "feature": "F13",
+     "id": "BUL-2 bullet depth 1",
+     "pass": true,
+     "detail": "bullet 1 (L1)"
+    },
+    {
+     "feature": "F13",
+     "id": "NUM-1 number depth 1",
+     "pass": true,
+     "detail": "number 1 (L2)"
+    },
+    {
+     "feature": "F13",
+     "id": "NUM-2 number depth 1",
+     "pass": true,
+     "detail": "number 1 (L2)"
+    },
+    {
+     "feature": "F13",
+     "id": "NUM-2-1 number depth 2",
+     "pass": true,
+     "detail": "number 2 (L2)"
+    },
+    {
+     "feature": "F13",
+     "id": "BUL-1/BUL-2 one list, NUM another",
+     "pass": true,
+     "detail": "1,1,2"
+    },
+    {
+     "feature": "F14",
+     "id": "one table, 4 rows",
+     "pass": true,
+     "detail": "1 table(s), 4 rows"
+    },
+    {
+     "feature": "F14",
+     "id": "header row = TH-A,TH-B,TH-C",
+     "pass": true,
+     "detail": "HBBB"
+    },
+    {
+     "feature": "F14",
+     "id": "MERGE-COL colspan 2",
+     "pass": true,
+     "detail": 2
+    },
+    {
+     "feature": "F14",
+     "id": "MERGE-ROW rowspan 2",
+     "pass": true,
+     "detail": 2
+    },
+    {
+     "feature": "F14",
+     "id": "cell grid 3 wide incl. covered",
+     "pass": true,
+     "detail": "3,3,3,3"
+    },
+    {
+     "feature": "F15",
+     "id": "col widths 30/50/70",
+     "pass": true,
+     "detail": "30.2/50/69.9"
+    },
+    {
+     "feature": "F16",
+     "id": "ALT-PNG image/png 40x20mm as-char alone",
+     "pass": true,
+     "detail": "image/png 40x20 as-char"
+    },
+    {
+     "feature": "F16",
+     "id": "ALT-PNG title/desc kept",
+     "pass": true,
+     "detail": "title=\"ALT-PNG\" desc=\"ALT-PNG desc\""
+    },
+    {
+     "feature": "F16",
+     "id": "ALT-JPEG image/jpeg 30x15mm as-char alone",
+     "pass": true,
+     "detail": "image/jpeg 30x15 as-char"
+    },
+    {
+     "feature": "F16",
+     "id": "ALT-JPEG title/desc kept",
+     "pass": true,
+     "detail": "title=\"ALT-JPEG\" desc=\"ALT-JPEG desc\""
+    },
+    {
+     "feature": "F16",
+     "id": "ALT-GIF image/gif 20x10mm as-char alone",
+     "pass": true,
+     "detail": "image/gif 20x10 as-char"
+    },
+    {
+     "feature": "F16",
+     "id": "ALT-GIF title/desc kept",
+     "pass": true,
+     "detail": "title=\"ALT-GIF\" desc=\"ALT-GIF desc\""
+    },
+    {
+     "feature": "F17",
+     "id": "PB-NEXT break-before page",
+     "pass": true,
+     "detail": "page"
+    },
+    {
+     "feature": "F17",
+     "id": "break between PB2-PREV and PB2-NEXT",
+     "pass": true,
+     "detail": "prev.after=page next.before=undefined"
+    },
+    {
+     "feature": "F17",
+     "id": "no extra empty paragraphs",
+     "pass": true,
+     "detail": "0 empty"
+    }
+   ],
+   "unknown": {},
+   "ignored": {
+    "text:sequence-decls": 1
+   }
+  },
+  "roundtrip x1 odt": {
+   "checks": [
+    {
+     "feature": "F01",
+     "id": "size 210x148 landscape",
+     "pass": true,
+     "detail": "210x148 landscape"
+    },
+    {
+     "feature": "F01",
+     "id": "margins t15 b20 l25 r30",
+     "pass": true,
+     "detail": "t15 b20 l25 r30; header min-h 0 sp 2; footer min-h 0 sp 2"
+    },
+    {
+     "feature": "F01",
+     "id": "single master page",
+     "pass": true,
+     "detail": "1 master page(s)"
+    },
+    {
+     "feature": "F02",
+     "id": "header \"HDR Page {PAGE} of {COUNT}\"",
+     "pass": true,
+     "detail": "HDR Page {PAGE} of {COUNT}"
+    },
+    {
+     "feature": "F02",
+     "id": "footer \"FTR {PAGE}/{COUNT}\"",
+     "pass": true,
+     "detail": "FTR {PAGE}/{COUNT}"
+    },
+    {
+     "feature": "F02",
+     "id": "no first/left header-footer",
+     "pass": true,
+     "detail": "none"
+    },
+    {
+     "feature": "F03",
+     "id": "default-style Liberation Sans 11pt #333333",
+     "pass": true,
+     "detail": "Liberation Sans 11pt #333333"
+    },
+    {
+     "feature": "F03",
+     "id": "plain run resolves to defaults",
+     "pass": true,
+     "detail": "Liberation Sans 11pt #333333"
+    },
+    {
+     "feature": "F04",
+     "id": "H1 is heading level 1 (Heading_20_1)",
+     "pass": true,
+     "detail": "heading 1 [Standard>Heading>Heading_20_1]"
+    },
+    {
+     "feature": "F04",
+     "id": "H2 is heading level 2 (Heading_20_2)",
+     "pass": true,
+     "detail": "heading 2 [Standard>Heading>Heading_20_2]"
+    },
+    {
+     "feature": "F04",
+     "id": "H3 is heading level 3 (Heading_20_3)",
+     "pass": true,
+     "detail": "heading 3 [Standard>Heading>Heading_20_3]"
+    },
+    {
+     "feature": "F04",
+     "id": "H4 is heading level 4 (Heading_20_4)",
+     "pass": true,
+     "detail": "heading 4 [Standard>Heading>Heading_20_4]"
+    },
+    {
+     "feature": "F04",
+     "id": "H5 is heading level 5 (Heading_20_5)",
+     "pass": true,
+     "detail": "heading 5 [Standard>Heading>Heading_20_5]"
+    },
+    {
+     "feature": "F04",
+     "id": "H6 is heading level 6 (Heading_20_6)",
+     "pass": true,
+     "detail": "heading 6 [Standard>Heading>Heading_20_6]"
+    },
+    {
+     "feature": "F04",
+     "id": "heading align center",
+     "pass": true,
+     "detail": "heading 2 center"
+    },
+    {
+     "feature": "F04",
+     "id": "heading spacing-before 3 / indent-left 8",
+     "pass": true,
+     "detail": "before 3 left 8"
+    },
+    {
+     "feature": "F05",
+     "id": "ALIGN-LEFT",
+     "pass": true,
+     "detail": "start"
+    },
+    {
+     "feature": "F05",
+     "id": "ALIGN-CENTER",
+     "pass": true,
+     "detail": "center"
+    },
+    {
+     "feature": "F05",
+     "id": "ALIGN-RIGHT",
+     "pass": true,
+     "detail": "end"
+    },
+    {
+     "feature": "F05",
+     "id": "ALIGN-JUSTIFY",
+     "pass": true,
+     "detail": "justify"
+    },
+    {
+     "feature": "F06",
+     "id": "before 4 after 6",
+     "pass": true,
+     "detail": "4/6"
+    },
+    {
+     "feature": "F06",
+     "id": "unspaced paragraph has 0/unset",
+     "pass": true,
+     "detail": "undefined/undefined"
+    },
+    {
+     "feature": "F07",
+     "id": "line-height 150%",
+     "pass": true,
+     "detail": "150%"
+    },
+    {
+     "feature": "F08",
+     "id": "left 10 right 15 first 5",
+     "pass": true,
+     "detail": "10/15/5"
+    },
+    {
+     "feature": "F08",
+     "id": "hanging: left 20 first -5",
+     "pass": true,
+     "detail": "20/-5"
+    },
+    {
+     "feature": "F09",
+     "id": "BOLD",
+     "pass": true,
+     "detail": "bold"
+    },
+    {
+     "feature": "F09",
+     "id": "ITALIC",
+     "pass": true,
+     "detail": "italic"
+    },
+    {
+     "feature": "F09",
+     "id": "UNDER",
+     "pass": true,
+     "detail": "underline"
+    },
+    {
+     "feature": "F09",
+     "id": "STRIKE",
+     "pass": true,
+     "detail": "strike"
+    },
+    {
+     "feature": "F09",
+     "id": "PLAIN",
+     "pass": true,
+     "detail": ""
+    },
+    {
+     "feature": "F09",
+     "id": "COMBO bold+italic+#0070c0",
+     "pass": true,
+     "detail": "true true #0070c0"
+    },
+    {
+     "feature": "F10",
+     "id": "fontFamily DejaVu Sans",
+     "pass": true,
+     "detail": "DejaVu Sans"
+    },
+    {
+     "feature": "F10",
+     "id": "fontSize 18pt",
+     "pass": true,
+     "detail": "18pt"
+    },
+    {
+     "feature": "F10",
+     "id": "color #c00000",
+     "pass": true,
+     "detail": "#c00000"
+    },
+    {
+     "feature": "F11",
+     "id": "LINK-HTTP",
+     "pass": true,
+     "detail": "https://example.com/a?b=1&c=2"
+    },
+    {
+     "feature": "F11",
+     "id": "LINK-MAIL",
+     "pass": true,
+     "detail": "mailto:test@example.com"
+    },
+    {
+     "feature": "F12",
+     "id": "\"BREAK-A\\nBREAK-B\"",
+     "pass": true,
+     "detail": "\"BREAK-A\\nBREAK-B\""
+    },
+    {
+     "feature": "F12",
+     "id": "\"TAB-A\\tTAB-B\"",
+     "pass": true,
+     "detail": "\"TAB-A\\tTAB-B\""
+    },
+    {
+     "feature": "F12",
+     "id": "\"SPACE-A    SPACE-B\"",
+     "pass": true,
+     "detail": "\"SPACE-A    SPACE-B\""
+    },
+    {
+     "feature": "F12",
+     "id": "\" LEAD-SPACE\"",
+     "pass": true,
+     "detail": "\" LEAD-SPACE\""
+    },
+    {
+     "feature": "F13",
+     "id": "BUL-1 bullet depth 1",
+     "pass": true,
+     "detail": "bullet 1 (L1)"
+    },
+    {
+     "feature": "F13",
+     "id": "BUL-1-1 bullet depth 2",
+     "pass": true,
+     "detail": "bullet 2 (L1)"
+    },
+    {
+     "feature": "F13",
+     "id": "BUL-2 bullet depth 1",
+     "pass": true,
+     "detail": "bullet 1 (L1)"
+    },
+    {
+     "feature": "F13",
+     "id": "NUM-1 number depth 1",
+     "pass": true,
+     "detail": "number 1 (L2)"
+    },
+    {
+     "feature": "F13",
+     "id": "NUM-2 number depth 1",
+     "pass": true,
+     "detail": "number 1 (L2)"
+    },
+    {
+     "feature": "F13",
+     "id": "NUM-2-1 number depth 2",
+     "pass": true,
+     "detail": "number 2 (L2)"
+    },
+    {
+     "feature": "F13",
+     "id": "BUL-1/BUL-2 one list, NUM another",
+     "pass": true,
+     "detail": "1,1,2"
+    },
+    {
+     "feature": "F14",
+     "id": "one table, 4 rows",
+     "pass": true,
+     "detail": "1 table(s), 4 rows"
+    },
+    {
+     "feature": "F14",
+     "id": "header row = TH-A,TH-B,TH-C",
+     "pass": true,
+     "detail": "HBBB"
+    },
+    {
+     "feature": "F14",
+     "id": "MERGE-COL colspan 2",
+     "pass": true,
+     "detail": 2
+    },
+    {
+     "feature": "F14",
+     "id": "MERGE-ROW rowspan 2",
+     "pass": true,
+     "detail": 2
+    },
+    {
+     "feature": "F14",
+     "id": "cell grid 3 wide incl. covered",
+     "pass": true,
+     "detail": "3,3,3,3"
+    },
+    {
+     "feature": "F15",
+     "id": "col widths 30/50/70",
+     "pass": true,
+     "detail": "30.2/50/69.9"
+    },
+    {
+     "feature": "F16",
+     "id": "ALT-PNG image/png 40x20mm as-char alone",
+     "pass": true,
+     "detail": "image/png 40x20 as-char"
+    },
+    {
+     "feature": "F16",
+     "id": "ALT-PNG title/desc kept",
+     "pass": true,
+     "detail": "title=\"ALT-PNG\" desc=\"ALT-PNG desc\""
+    },
+    {
+     "feature": "F16",
+     "id": "ALT-JPEG image/jpeg 30x15mm as-char alone",
+     "pass": true,
+     "detail": "image/jpeg 30x15 as-char"
+    },
+    {
+     "feature": "F16",
+     "id": "ALT-JPEG title/desc kept",
+     "pass": true,
+     "detail": "title=\"ALT-JPEG\" desc=\"ALT-JPEG desc\""
+    },
+    {
+     "feature": "F16",
+     "id": "ALT-GIF image/gif 20x10mm as-char alone",
+     "pass": true,
+     "detail": "image/gif 20x10 as-char"
+    },
+    {
+     "feature": "F16",
+     "id": "ALT-GIF title/desc kept",
+     "pass": true,
+     "detail": "title=\"ALT-GIF\" desc=\"ALT-GIF desc\""
+    },
+    {
+     "feature": "F17",
+     "id": "PB-NEXT break-before page",
+     "pass": true,
+     "detail": "page"
+    },
+    {
+     "feature": "F17",
+     "id": "break between PB2-PREV and PB2-NEXT",
+     "pass": true,
+     "detail": "prev.after=page next.before=undefined"
+    },
+    {
+     "feature": "F17",
+     "id": "no extra empty paragraphs",
+     "pass": true,
+     "detail": "0 empty"
+    }
+   ],
+   "unknown": {},
+   "ignored": {
+    "text:sequence-decls": 1
+   }
+  },
+  "roundtrip x2 odt": {
+   "checks": [
+    {
+     "feature": "F01",
+     "id": "size 210x148 landscape",
+     "pass": true,
+     "detail": "210x148 landscape"
+    },
+    {
+     "feature": "F01",
+     "id": "margins t15 b20 l25 r30",
+     "pass": true,
+     "detail": "t15 b20 l25 r30; header min-h 0 sp 2; footer min-h 0 sp 2"
+    },
+    {
+     "feature": "F01",
+     "id": "single master page",
+     "pass": true,
+     "detail": "1 master page(s)"
+    },
+    {
+     "feature": "F02",
+     "id": "header \"HDR Page {PAGE} of {COUNT}\"",
+     "pass": true,
+     "detail": "HDR Page {PAGE} of {COUNT}"
+    },
+    {
+     "feature": "F02",
+     "id": "footer \"FTR {PAGE}/{COUNT}\"",
+     "pass": true,
+     "detail": "FTR {PAGE}/{COUNT}"
+    },
+    {
+     "feature": "F02",
+     "id": "no first/left header-footer",
+     "pass": true,
+     "detail": "none"
+    },
+    {
+     "feature": "F03",
+     "id": "default-style Liberation Sans 11pt #333333",
+     "pass": true,
+     "detail": "Liberation Sans 11pt #333333"
+    },
+    {
+     "feature": "F03",
+     "id": "plain run resolves to defaults",
+     "pass": true,
+     "detail": "Liberation Sans 11pt #333333"
+    },
+    {
+     "feature": "F04",
+     "id": "H1 is heading level 1 (Heading_20_1)",
+     "pass": true,
+     "detail": "heading 1 [Standard>Heading>Heading_20_1]"
+    },
+    {
+     "feature": "F04",
+     "id": "H2 is heading level 2 (Heading_20_2)",
+     "pass": true,
+     "detail": "heading 2 [Standard>Heading>Heading_20_2]"
+    },
+    {
+     "feature": "F04",
+     "id": "H3 is heading level 3 (Heading_20_3)",
+     "pass": true,
+     "detail": "heading 3 [Standard>Heading>Heading_20_3]"
+    },
+    {
+     "feature": "F04",
+     "id": "H4 is heading level 4 (Heading_20_4)",
+     "pass": true,
+     "detail": "heading 4 [Standard>Heading>Heading_20_4]"
+    },
+    {
+     "feature": "F04",
+     "id": "H5 is heading level 5 (Heading_20_5)",
+     "pass": true,
+     "detail": "heading 5 [Standard>Heading>Heading_20_5]"
+    },
+    {
+     "feature": "F04",
+     "id": "H6 is heading level 6 (Heading_20_6)",
+     "pass": true,
+     "detail": "heading 6 [Standard>Heading>Heading_20_6]"
+    },
+    {
+     "feature": "F04",
+     "id": "heading align center",
+     "pass": true,
+     "detail": "heading 2 center"
+    },
+    {
+     "feature": "F04",
+     "id": "heading spacing-before 3 / indent-left 8",
+     "pass": true,
+     "detail": "before 3 left 8"
+    },
+    {
+     "feature": "F05",
+     "id": "ALIGN-LEFT",
+     "pass": true,
+     "detail": "start"
+    },
+    {
+     "feature": "F05",
+     "id": "ALIGN-CENTER",
+     "pass": true,
+     "detail": "center"
+    },
+    {
+     "feature": "F05",
+     "id": "ALIGN-RIGHT",
+     "pass": true,
+     "detail": "end"
+    },
+    {
+     "feature": "F05",
+     "id": "ALIGN-JUSTIFY",
+     "pass": true,
+     "detail": "justify"
+    },
+    {
+     "feature": "F06",
+     "id": "before 4 after 6",
+     "pass": true,
+     "detail": "4/6"
+    },
+    {
+     "feature": "F06",
+     "id": "unspaced paragraph has 0/unset",
+     "pass": true,
+     "detail": "undefined/undefined"
+    },
+    {
+     "feature": "F07",
+     "id": "line-height 150%",
+     "pass": true,
+     "detail": "150%"
+    },
+    {
+     "feature": "F08",
+     "id": "left 10 right 15 first 5",
+     "pass": true,
+     "detail": "10/15/5"
+    },
+    {
+     "feature": "F08",
+     "id": "hanging: left 20 first -5",
+     "pass": true,
+     "detail": "20/-5"
+    },
+    {
+     "feature": "F09",
+     "id": "BOLD",
+     "pass": true,
+     "detail": "bold"
+    },
+    {
+     "feature": "F09",
+     "id": "ITALIC",
+     "pass": true,
+     "detail": "italic"
+    },
+    {
+     "feature": "F09",
+     "id": "UNDER",
+     "pass": true,
+     "detail": "underline"
+    },
+    {
+     "feature": "F09",
+     "id": "STRIKE",
+     "pass": true,
+     "detail": "strike"
+    },
+    {
+     "feature": "F09",
+     "id": "PLAIN",
+     "pass": true,
+     "detail": ""
+    },
+    {
+     "feature": "F09",
+     "id": "COMBO bold+italic+#0070c0",
+     "pass": true,
+     "detail": "true true #0070c0"
+    },
+    {
+     "feature": "F10",
+     "id": "fontFamily DejaVu Sans",
+     "pass": true,
+     "detail": "DejaVu Sans"
+    },
+    {
+     "feature": "F10",
+     "id": "fontSize 18pt",
+     "pass": true,
+     "detail": "18pt"
+    },
+    {
+     "feature": "F10",
+     "id": "color #c00000",
+     "pass": true,
+     "detail": "#c00000"
+    },
+    {
+     "feature": "F11",
+     "id": "LINK-HTTP",
+     "pass": true,
+     "detail": "https://example.com/a?b=1&c=2"
+    },
+    {
+     "feature": "F11",
+     "id": "LINK-MAIL",
+     "pass": true,
+     "detail": "mailto:test@example.com"
+    },
+    {
+     "feature": "F12",
+     "id": "\"BREAK-A\\nBREAK-B\"",
+     "pass": true,
+     "detail": "\"BREAK-A\\nBREAK-B\""
+    },
+    {
+     "feature": "F12",
+     "id": "\"TAB-A\\tTAB-B\"",
+     "pass": true,
+     "detail": "\"TAB-A\\tTAB-B\""
+    },
+    {
+     "feature": "F12",
+     "id": "\"SPACE-A    SPACE-B\"",
+     "pass": true,
+     "detail": "\"SPACE-A    SPACE-B\""
+    },
+    {
+     "feature": "F12",
+     "id": "\" LEAD-SPACE\"",
+     "pass": true,
+     "detail": "\" LEAD-SPACE\""
+    },
+    {
+     "feature": "F13",
+     "id": "BUL-1 bullet depth 1",
+     "pass": true,
+     "detail": "bullet 1 (L1)"
+    },
+    {
+     "feature": "F13",
+     "id": "BUL-1-1 bullet depth 2",
+     "pass": true,
+     "detail": "bullet 2 (L1)"
+    },
+    {
+     "feature": "F13",
+     "id": "BUL-2 bullet depth 1",
+     "pass": true,
+     "detail": "bullet 1 (L1)"
+    },
+    {
+     "feature": "F13",
+     "id": "NUM-1 number depth 1",
+     "pass": true,
+     "detail": "number 1 (L2)"
+    },
+    {
+     "feature": "F13",
+     "id": "NUM-2 number depth 1",
+     "pass": true,
+     "detail": "number 1 (L2)"
+    },
+    {
+     "feature": "F13",
+     "id": "NUM-2-1 number depth 2",
+     "pass": true,
+     "detail": "number 2 (L2)"
+    },
+    {
+     "feature": "F13",
+     "id": "BUL-1/BUL-2 one list, NUM another",
+     "pass": true,
+     "detail": "1,1,2"
+    },
+    {
+     "feature": "F14",
+     "id": "one table, 4 rows",
+     "pass": true,
+     "detail": "1 table(s), 4 rows"
+    },
+    {
+     "feature": "F14",
+     "id": "header row = TH-A,TH-B,TH-C",
+     "pass": true,
+     "detail": "HBBB"
+    },
+    {
+     "feature": "F14",
+     "id": "MERGE-COL colspan 2",
+     "pass": true,
+     "detail": 2
+    },
+    {
+     "feature": "F14",
+     "id": "MERGE-ROW rowspan 2",
+     "pass": true,
+     "detail": 2
+    },
+    {
+     "feature": "F14",
+     "id": "cell grid 3 wide incl. covered",
+     "pass": true,
+     "detail": "3,3,3,3"
+    },
+    {
+     "feature": "F15",
+     "id": "col widths 30/50/70",
+     "pass": true,
+     "detail": "30.2/50/69.9"
+    },
+    {
+     "feature": "F16",
+     "id": "ALT-PNG image/png 40x20mm as-char alone",
+     "pass": true,
+     "detail": "image/png 40x20 as-char"
+    },
+    {
+     "feature": "F16",
+     "id": "ALT-PNG title/desc kept",
+     "pass": true,
+     "detail": "title=\"ALT-PNG\" desc=\"ALT-PNG desc\""
+    },
+    {
+     "feature": "F16",
+     "id": "ALT-JPEG image/jpeg 30x15mm as-char alone",
+     "pass": true,
+     "detail": "image/jpeg 30x15 as-char"
+    },
+    {
+     "feature": "F16",
+     "id": "ALT-JPEG title/desc kept",
+     "pass": true,
+     "detail": "title=\"ALT-JPEG\" desc=\"ALT-JPEG desc\""
+    },
+    {
+     "feature": "F16",
+     "id": "ALT-GIF image/gif 20x10mm as-char alone",
+     "pass": true,
+     "detail": "image/gif 20x10 as-char"
+    },
+    {
+     "feature": "F16",
+     "id": "ALT-GIF title/desc kept",
+     "pass": true,
+     "detail": "title=\"ALT-GIF\" desc=\"ALT-GIF desc\""
+    },
+    {
+     "feature": "F17",
+     "id": "PB-NEXT break-before page",
+     "pass": true,
+     "detail": "page"
+    },
+    {
+     "feature": "F17",
+     "id": "break between PB2-PREV and PB2-NEXT",
+     "pass": true,
+     "detail": "prev.after=page next.before=undefined"
+    },
+    {
+     "feature": "F17",
+     "id": "no extra empty paragraphs",
+     "pass": true,
+     "detail": "0 empty"
+    }
+   ],
+   "unknown": {},
+   "ignored": {
+    "text:sequence-decls": 1
+   }
+  },
+  "export docx": {
+   "checks": [
+    {
+     "feature": "F01",
+     "id": "size 210x148 landscape",
+     "pass": true,
+     "detail": "210x148 landscape"
+    },
+    {
+     "feature": "F01",
+     "id": "margins t15 b20 l25 r30",
+     "pass": true,
+     "detail": "t15 b20 l25 r30; header min-h 6.5 sp 5.5; footer min-h 6.5 sp 5.5"
+    },
+    {
+     "feature": "F01",
+     "id": "single master page",
+     "pass": true,
+     "detail": "1 master page(s)"
+    },
+    {
+     "feature": "F02",
+     "id": "header \"HDR Page {PAGE} of {COUNT}\"",
+     "pass": true,
+     "detail": "HDR Page {PAGE} of {COUNT}"
+    },
+    {
+     "feature": "F02",
+     "id": "footer \"FTR {PAGE}/{COUNT}\"",
+     "pass": true,
+     "detail": "FTR {PAGE}/{COUNT}"
+    },
+    {
+     "feature": "F02",
+     "id": "no first/left header-footer",
+     "pass": true,
+     "detail": "none"
+    },
+    {
+     "feature": "F03",
+     "id": "default-style Liberation Sans 11pt #333333",
+     "pass": true,
+     "detail": "Liberation Sans 11pt #333333"
+    },
+    {
+     "feature": "F03",
+     "id": "plain run resolves to defaults",
+     "pass": true,
+     "detail": "Liberation Sans 11pt #333333"
+    },
+    {
+     "feature": "F04",
+     "id": "H1 is heading level 1 (Heading_20_1)",
+     "pass": true,
+     "detail": "heading 1 [Standard>Heading>Heading_20_1>P3]"
+    },
+    {
+     "feature": "F04",
+     "id": "H2 is heading level 2 (Heading_20_2)",
+     "pass": true,
+     "detail": "heading 2 [Standard>Heading>Heading_20_2>P4]"
+    },
+    {
+     "feature": "F04",
+     "id": "H3 is heading level 3 (Heading_20_3)",
+     "pass": true,
+     "detail": "heading 3 [Standard>Heading>Heading_20_3>P5]"
+    },
+    {
+     "feature": "F04",
+     "id": "H4 is heading level 4 (Heading_20_4)",
+     "pass": true,
+     "detail": "heading 4 [Standard>Heading>Heading_20_4>P6]"
+    },
+    {
+     "feature": "F04",
+     "id": "H5 is heading level 5 (Heading_20_5)",
+     "pass": true,
+     "detail": "heading 5 [Standard>Heading>Heading_20_5>P7]"
+    },
+    {
+     "feature": "F04",
+     "id": "H6 is heading level 6 (Heading_20_6)",
+     "pass": true,
+     "detail": "heading 6 [Standard>Heading>Heading_20_6>P8]"
+    },
+    {
+     "feature": "F04",
+     "id": "heading align center",
+     "pass": true,
+     "detail": "heading 2 center"
+    },
+    {
+     "feature": "F04",
+     "id": "heading spacing-before 3 / indent-left 8",
+     "pass": true,
+     "detail": "before 3 left 8"
+    },
+    {
+     "feature": "F05",
+     "id": "ALIGN-LEFT",
+     "pass": true,
+     "detail": "start"
+    },
+    {
+     "feature": "F05",
+     "id": "ALIGN-CENTER",
+     "pass": true,
+     "detail": "center"
+    },
+    {
+     "feature": "F05",
+     "id": "ALIGN-RIGHT",
+     "pass": true,
+     "detail": "end"
+    },
+    {
+     "feature": "F05",
+     "id": "ALIGN-JUSTIFY",
+     "pass": true,
+     "detail": "justify"
+    },
+    {
+     "feature": "F06",
+     "id": "before 4 after 6",
+     "pass": true,
+     "detail": "4/6"
+    },
+    {
+     "feature": "F06",
+     "id": "unspaced paragraph has 0/unset",
+     "pass": true,
+     "detail": "0/0"
+    },
+    {
+     "feature": "F07",
+     "id": "line-height 150%",
+     "pass": true,
+     "detail": "150%"
+    },
+    {
+     "feature": "F08",
+     "id": "left 10 right 15 first 5",
+     "pass": true,
+     "detail": "10/15/5"
+    },
+    {
+     "feature": "F08",
+     "id": "hanging: left 20 first -5",
+     "pass": true,
+     "detail": "20/-5"
+    },
+    {
+     "feature": "F09",
+     "id": "BOLD",
+     "pass": true,
+     "detail": "bold"
+    },
+    {
+     "feature": "F09",
+     "id": "ITALIC",
+     "pass": true,
+     "detail": "italic"
+    },
+    {
+     "feature": "F09",
+     "id": "UNDER",
+     "pass": true,
+     "detail": "underline"
+    },
+    {
+     "feature": "F09",
+     "id": "STRIKE",
+     "pass": true,
+     "detail": "strike"
+    },
+    {
+     "feature": "F09",
+     "id": "PLAIN",
+     "pass": true,
+     "detail": ""
+    },
+    {
+     "feature": "F09",
+     "id": "COMBO bold+italic+#0070c0",
+     "pass": true,
+     "detail": "true true #0070c0"
+    },
+    {
+     "feature": "F10",
+     "id": "fontFamily DejaVu Sans",
+     "pass": true,
+     "detail": "DejaVu Sans"
+    },
+    {
+     "feature": "F10",
+     "id": "fontSize 18pt",
+     "pass": true,
+     "detail": "18pt"
+    },
+    {
+     "feature": "F10",
+     "id": "color #c00000",
+     "pass": true,
+     "detail": "#c00000"
+    },
+    {
+     "feature": "F11",
+     "id": "LINK-HTTP",
+     "pass": true,
+     "detail": "https://example.com/a?b=1&c=2"
+    },
+    {
+     "feature": "F11",
+     "id": "LINK-MAIL",
+     "pass": true,
+     "detail": "mailto:test@example.com"
+    },
+    {
+     "feature": "F12",
+     "id": "\"BREAK-A\\nBREAK-B\"",
+     "pass": true,
+     "detail": "\"BREAK-A\\nBREAK-B\""
+    },
+    {
+     "feature": "F12",
+     "id": "\"TAB-A\\tTAB-B\"",
+     "pass": true,
+     "detail": "\"TAB-A\\tTAB-B\""
+    },
+    {
+     "feature": "F12",
+     "id": "\"SPACE-A    SPACE-B\"",
+     "pass": true,
+     "detail": "\"SPACE-A    SPACE-B\""
+    },
+    {
+     "feature": "F12",
+     "id": "\" LEAD-SPACE\"",
+     "pass": true,
+     "detail": "\" LEAD-SPACE\""
+    },
+    {
+     "feature": "F13",
+     "id": "BUL-1 bullet depth 1",
+     "pass": true,
+     "detail": "bullet 1 (WWNum2)"
+    },
+    {
+     "feature": "F13",
+     "id": "BUL-1-1 bullet depth 2",
+     "pass": true,
+     "detail": "bullet 2 (WWNum2)"
+    },
+    {
+     "feature": "F13",
+     "id": "BUL-2 bullet depth 1",
+     "pass": true,
+     "detail": "bullet 1 (WWNum2)"
+    },
+    {
+     "feature": "F13",
+     "id": "NUM-1 number depth 1",
+     "pass": true,
+     "detail": "number 1 (WWNum3)"
+    },
+    {
+     "feature": "F13",
+     "id": "NUM-2 number depth 1",
+     "pass": true,
+     "detail": "number 1 (WWNum3)"
+    },
+    {
+     "feature": "F13",
+     "id": "NUM-2-1 number depth 2",
+     "pass": true,
+     "detail": "number 2 (WWNum3)"
+    },
+    {
+     "feature": "F13",
+     "id": "BUL-1/BUL-2 one list, NUM another",
+     "pass": true,
+     "detail": "2,2,3"
+    },
+    {
+     "feature": "F14",
+     "id": "one table, 4 rows",
+     "pass": true,
+     "detail": "1 table(s), 4 rows"
+    },
+    {
+     "feature": "F14",
+     "id": "header row = TH-A,TH-B,TH-C",
+     "pass": true,
+     "detail": "HBBB"
+    },
+    {
+     "feature": "F14",
+     "id": "MERGE-COL colspan 2",
+     "pass": true,
+     "detail": 2
+    },
+    {
+     "feature": "F14",
+     "id": "MERGE-ROW rowspan 2",
+     "pass": true,
+     "detail": 2
+    },
+    {
+     "feature": "F14",
+     "id": "cell grid 3 wide incl. covered",
+     "pass": true,
+     "detail": "3,3,3,3"
+    },
+    {
+     "feature": "F15",
+     "id": "col widths 30/50/70",
+     "pass": true,
+     "detail": "30.2/50/69.9"
+    },
+    {
+     "feature": "F16",
+     "id": "ALT-PNG image/png 40x20mm as-char alone",
+     "pass": true,
+     "detail": "image/png 40x20 as-char"
+    },
+    {
+     "feature": "F16",
+     "id": "ALT-PNG title/desc kept",
+     "pass": true,
+     "detail": "title=\"ALT-PNG\" desc=\"ALT-PNG desc\""
+    },
+    {
+     "feature": "F16",
+     "id": "ALT-JPEG image/jpeg 30x15mm as-char alone",
+     "pass": true,
+     "detail": "image/jpeg 30x15 as-char"
+    },
+    {
+     "feature": "F16",
+     "id": "ALT-JPEG title/desc kept",
+     "pass": true,
+     "detail": "title=\"ALT-JPEG\" desc=\"ALT-JPEG desc\""
+    },
+    {
+     "feature": "F16",
+     "id": "ALT-GIF image/gif 20x10mm as-char alone",
+     "pass": true,
+     "detail": "image/gif 20x10 as-char"
+    },
+    {
+     "feature": "F16",
+     "id": "ALT-GIF title/desc kept",
+     "pass": true,
+     "detail": "title=\"ALT-GIF\" desc=\"ALT-GIF desc\""
+    },
+    {
+     "feature": "F17",
+     "id": "PB-NEXT break-before page",
+     "pass": true,
+     "detail": "page"
+    },
+    {
+     "feature": "F17",
+     "id": "break between PB2-PREV and PB2-NEXT",
+     "pass": true,
+     "detail": "prev.after=undefined next.before=page"
+    },
+    {
+     "feature": "F17",
+     "id": "no extra empty paragraphs",
+     "pass": true,
+     "detail": "0 empty"
+    }
+   ],
+   "unknown": {},
+   "ignored": {
+    "text:sequence-decls": 1
+   }
+  },
+  "export odt": {
+   "checks": [
+    {
+     "feature": "F01",
+     "id": "size 210x148 landscape",
+     "pass": true,
+     "detail": "210x148 landscape"
+    },
+    {
+     "feature": "F01",
+     "id": "margins t15 b20 l25 r30",
+     "pass": true,
+     "detail": "t15 b20 l25 r30; header min-h 0 sp 2; footer min-h 0 sp 2"
+    },
+    {
+     "feature": "F01",
+     "id": "single master page",
+     "pass": true,
+     "detail": "1 master page(s)"
+    },
+    {
+     "feature": "F02",
+     "id": "header \"HDR Page {PAGE} of {COUNT}\"",
+     "pass": true,
+     "detail": "HDR Page {PAGE} of {COUNT}"
+    },
+    {
+     "feature": "F02",
+     "id": "footer \"FTR {PAGE}/{COUNT}\"",
+     "pass": true,
+     "detail": "FTR {PAGE}/{COUNT}"
+    },
+    {
+     "feature": "F02",
+     "id": "no first/left header-footer",
+     "pass": true,
+     "detail": "none"
+    },
+    {
+     "feature": "F03",
+     "id": "default-style Liberation Sans 11pt #333333",
+     "pass": true,
+     "detail": "Liberation Sans 11pt #333333"
+    },
+    {
+     "feature": "F03",
+     "id": "plain run resolves to defaults",
+     "pass": true,
+     "detail": "Liberation Sans 11pt #333333"
+    },
+    {
+     "feature": "F04",
+     "id": "H1 is heading level 1 (Heading_20_1)",
+     "pass": true,
+     "detail": "heading 1 [Standard>Heading>Heading_20_1]"
+    },
+    {
+     "feature": "F04",
+     "id": "H2 is heading level 2 (Heading_20_2)",
+     "pass": true,
+     "detail": "heading 2 [Standard>Heading>Heading_20_2]"
+    },
+    {
+     "feature": "F04",
+     "id": "H3 is heading level 3 (Heading_20_3)",
+     "pass": true,
+     "detail": "heading 3 [Standard>Heading>Heading_20_3]"
+    },
+    {
+     "feature": "F04",
+     "id": "H4 is heading level 4 (Heading_20_4)",
+     "pass": true,
+     "detail": "heading 4 [Standard>Heading>Heading_20_4]"
+    },
+    {
+     "feature": "F04",
+     "id": "H5 is heading level 5 (Heading_20_5)",
+     "pass": true,
+     "detail": "heading 5 [Standard>Heading>Heading_20_5]"
+    },
+    {
+     "feature": "F04",
+     "id": "H6 is heading level 6 (Heading_20_6)",
+     "pass": true,
+     "detail": "heading 6 [Standard>Heading>Heading_20_6]"
+    },
+    {
+     "feature": "F04",
+     "id": "heading align center",
+     "pass": true,
+     "detail": "heading 2 center"
+    },
+    {
+     "feature": "F04",
+     "id": "heading spacing-before 3 / indent-left 8",
+     "pass": true,
+     "detail": "before 3 left 8"
+    },
+    {
+     "feature": "F05",
+     "id": "ALIGN-LEFT",
+     "pass": true,
+     "detail": "start"
+    },
+    {
+     "feature": "F05",
+     "id": "ALIGN-CENTER",
+     "pass": true,
+     "detail": "center"
+    },
+    {
+     "feature": "F05",
+     "id": "ALIGN-RIGHT",
+     "pass": true,
+     "detail": "end"
+    },
+    {
+     "feature": "F05",
+     "id": "ALIGN-JUSTIFY",
+     "pass": true,
+     "detail": "justify"
+    },
+    {
+     "feature": "F06",
+     "id": "before 4 after 6",
+     "pass": true,
+     "detail": "4/6"
+    },
+    {
+     "feature": "F06",
+     "id": "unspaced paragraph has 0/unset",
+     "pass": true,
+     "detail": "undefined/undefined"
+    },
+    {
+     "feature": "F07",
+     "id": "line-height 150%",
+     "pass": true,
+     "detail": "150%"
+    },
+    {
+     "feature": "F08",
+     "id": "left 10 right 15 first 5",
+     "pass": true,
+     "detail": "10/15/5"
+    },
+    {
+     "feature": "F08",
+     "id": "hanging: left 20 first -5",
+     "pass": true,
+     "detail": "20/-5"
+    },
+    {
+     "feature": "F09",
+     "id": "BOLD",
+     "pass": true,
+     "detail": "bold"
+    },
+    {
+     "feature": "F09",
+     "id": "ITALIC",
+     "pass": true,
+     "detail": "italic"
+    },
+    {
+     "feature": "F09",
+     "id": "UNDER",
+     "pass": true,
+     "detail": "underline"
+    },
+    {
+     "feature": "F09",
+     "id": "STRIKE",
+     "pass": true,
+     "detail": "strike"
+    },
+    {
+     "feature": "F09",
+     "id": "PLAIN",
+     "pass": true,
+     "detail": ""
+    },
+    {
+     "feature": "F09",
+     "id": "COMBO bold+italic+#0070c0",
+     "pass": true,
+     "detail": "true true #0070c0"
+    },
+    {
+     "feature": "F10",
+     "id": "fontFamily DejaVu Sans",
+     "pass": true,
+     "detail": "DejaVu Sans"
+    },
+    {
+     "feature": "F10",
+     "id": "fontSize 18pt",
+     "pass": true,
+     "detail": "18pt"
+    },
+    {
+     "feature": "F10",
+     "id": "color #c00000",
+     "pass": true,
+     "detail": "#c00000"
+    },
+    {
+     "feature": "F11",
+     "id": "LINK-HTTP",
+     "pass": true,
+     "detail": "https://example.com/a?b=1&c=2"
+    },
+    {
+     "feature": "F11",
+     "id": "LINK-MAIL",
+     "pass": true,
+     "detail": "mailto:test@example.com"
+    },
+    {
+     "feature": "F12",
+     "id": "\"BREAK-A\\nBREAK-B\"",
+     "pass": true,
+     "detail": "\"BREAK-A\\nBREAK-B\""
+    },
+    {
+     "feature": "F12",
+     "id": "\"TAB-A\\tTAB-B\"",
+     "pass": true,
+     "detail": "\"TAB-A\\tTAB-B\""
+    },
+    {
+     "feature": "F12",
+     "id": "\"SPACE-A    SPACE-B\"",
+     "pass": true,
+     "detail": "\"SPACE-A    SPACE-B\""
+    },
+    {
+     "feature": "F12",
+     "id": "\" LEAD-SPACE\"",
+     "pass": true,
+     "detail": "\" LEAD-SPACE\""
+    },
+    {
+     "feature": "F13",
+     "id": "BUL-1 bullet depth 1",
+     "pass": true,
+     "detail": "bullet 1 (L1)"
+    },
+    {
+     "feature": "F13",
+     "id": "BUL-1-1 bullet depth 2",
+     "pass": true,
+     "detail": "bullet 2 (L1)"
+    },
+    {
+     "feature": "F13",
+     "id": "BUL-2 bullet depth 1",
+     "pass": true,
+     "detail": "bullet 1 (L1)"
+    },
+    {
+     "feature": "F13",
+     "id": "NUM-1 number depth 1",
+     "pass": true,
+     "detail": "number 1 (L2)"
+    },
+    {
+     "feature": "F13",
+     "id": "NUM-2 number depth 1",
+     "pass": true,
+     "detail": "number 1 (L2)"
+    },
+    {
+     "feature": "F13",
+     "id": "NUM-2-1 number depth 2",
+     "pass": true,
+     "detail": "number 2 (L2)"
+    },
+    {
+     "feature": "F13",
+     "id": "BUL-1/BUL-2 one list, NUM another",
+     "pass": true,
+     "detail": "1,1,2"
+    },
+    {
+     "feature": "F14",
+     "id": "one table, 4 rows",
+     "pass": true,
+     "detail": "1 table(s), 4 rows"
+    },
+    {
+     "feature": "F14",
+     "id": "header row = TH-A,TH-B,TH-C",
+     "pass": true,
+     "detail": "HBBB"
+    },
+    {
+     "feature": "F14",
+     "id": "MERGE-COL colspan 2",
+     "pass": true,
+     "detail": 2
+    },
+    {
+     "feature": "F14",
+     "id": "MERGE-ROW rowspan 2",
+     "pass": true,
+     "detail": 2
+    },
+    {
+     "feature": "F14",
+     "id": "cell grid 3 wide incl. covered",
+     "pass": true,
+     "detail": "3,3,3,3"
+    },
+    {
+     "feature": "F15",
+     "id": "col widths 30/50/70",
+     "pass": true,
+     "detail": "30.2/50/69.9"
+    },
+    {
+     "feature": "F16",
+     "id": "ALT-PNG image/png 40x20mm as-char alone",
+     "pass": true,
+     "detail": "image/png 40x20 as-char"
+    },
+    {
+     "feature": "F16",
+     "id": "ALT-PNG title/desc kept",
+     "pass": true,
+     "detail": "title=\"ALT-PNG\" desc=\"ALT-PNG desc\""
+    },
+    {
+     "feature": "F16",
+     "id": "ALT-JPEG image/jpeg 30x15mm as-char alone",
+     "pass": true,
+     "detail": "image/jpeg 30x15 as-char"
+    },
+    {
+     "feature": "F16",
+     "id": "ALT-JPEG title/desc kept",
+     "pass": true,
+     "detail": "title=\"ALT-JPEG\" desc=\"ALT-JPEG desc\""
+    },
+    {
+     "feature": "F16",
+     "id": "ALT-GIF image/gif 20x10mm as-char alone",
+     "pass": true,
+     "detail": "image/gif 20x10 as-char"
+    },
+    {
+     "feature": "F16",
+     "id": "ALT-GIF title/desc kept",
+     "pass": true,
+     "detail": "title=\"ALT-GIF\" desc=\"ALT-GIF desc\""
+    },
+    {
+     "feature": "F17",
+     "id": "PB-NEXT break-before page",
+     "pass": true,
+     "detail": "page"
+    },
+    {
+     "feature": "F17",
+     "id": "break between PB2-PREV and PB2-NEXT",
+     "pass": true,
+     "detail": "prev.after=page next.before=undefined"
+    },
+    {
+     "feature": "F17",
+     "id": "no extra empty paragraphs",
+     "pass": true,
+     "detail": "0 empty"
+    }
+   ],
+   "unknown": {},
+   "ignored": {
+    "text:sequence-decls": 1
+   }
+  }
+ },
+ "timings": [
+  {
+   "label": "import docx",
+   "target": "fodt",
+   "ms": 7382,
+   "ok": true
+  },
+  {
+   "label": "export docx",
+   "target": "docx",
+   "ms": 2495,
+   "ok": true
+  },
+  {
+   "label": "import docx",
+   "target": "fodt",
+   "ms": 2202,
+   "ok": true
+  },
+  {
+   "label": "export docx",
+   "target": "docx",
+   "ms": 2555,
+   "ok": true
+  },
+  {
+   "label": "import docx",
+   "target": "fodt",
+   "ms": 2235,
+   "ok": true
+  },
+  {
+   "label": "import docx",
+   "target": "fodt",
+   "ms": 2168,
+   "ok": true
+  },
+  {
+   "label": "export docx",
+   "target": "docx",
+   "ms": 2556,
+   "ok": true
+  },
+  {
+   "label": "import docx",
+   "target": "fodt",
+   "ms": 2206,
+   "ok": true
+  },
+  {
+   "label": "export docx",
+   "target": "docx",
+   "ms": 2564,
+   "ok": true
+  },
+  {
+   "label": "import docx",
+   "target": "fodt",
+   "ms": 2285,
+   "ok": true
+  },
+  {
+   "label": "import odt",
+   "target": "fodt",
+   "ms": 1720,
+   "ok": true
+  },
+  {
+   "label": "export odt",
+   "target": "odt",
+   "ms": 1910,
+   "ok": true
+  },
+  {
+   "label": "import odt",
+   "target": "fodt",
+   "ms": 1759,
+   "ok": true
+  },
+  {
+   "label": "export odt",
+   "target": "odt",
+   "ms": 1820,
+   "ok": true
+  },
+  {
+   "label": "import odt",
+   "target": "fodt",
+   "ms": 1726,
+   "ok": true
+  },
+  {
+   "label": "export docx",
+   "target": "docx",
+   "ms": 1746,
+   "ok": true
+  },
+  {
+   "label": "import docx",
+   "target": "fodt",
+   "ms": 2192,
+   "ok": true
+  },
+  {
+   "label": "export odt",
+   "target": "odt",
+   "ms": 1777,
+   "ok": true
+  },
+  {
+   "label": "import odt",
+   "target": "fodt",
+   "ms": 1736,
+   "ok": true
+  }
+ ]
+}

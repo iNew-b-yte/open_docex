@@ -1,0 +1,183 @@
+{
+ "meta": {
+  "platform": "win32",
+  "node": "v24.18.0",
+  "cpus": 32,
+  "cpu": "AMD Ryzen 9 9955HX 16-Core Processor           ",
+  "memGB": 31,
+  "date": "2026-11-22T11:16:47.668Z"
+ },
+ "coldFirstConversionMs": [
+  5317,
+  5373,
+  5271
+ ],
+ "sizes": {
+  "features.docx": 13037,
+  "features.odt": 28172,
+  "features.fodt": 20613,
+  "features.fodt from docx import": 82401,
+  "big.fodt": 1110206,
+  "big.docx": 34895,
+  "big.odt": 38210
+ },
+ "warm": {
+  "docx->fodt (import)": {
+   "n": 5,
+   "min": 2147,
+   "median": 2163,
+   "max": 2180
+  },
+  "odt->fodt (import)": {
+   "n": 5,
+   "min": 1723,
+   "median": 1763,
+   "max": 1835
+  },
+  "fodt->docx (export)": {
+   "n": 5,
+   "min": 1730,
+   "median": 1763,
+   "max": 1820
+  },
+  "fodt->odt (export)": {
+   "n": 5,
+   "min": 1787,
+   "median": 1792,
+   "max": 1842
+  },
+  "big fodt->docx (export)": {
+   "n": 5,
+   "min": 2461,
+   "median": 2477,
+   "max": 2534
+  },
+  "big fodt->odt (export)": {
+   "n": 5,
+   "min": 2722,
+   "median": 2809,
+   "max": 2818
+  },
+  "big docx->fodt (import)": {
+   "n": 5,
+   "min": 3567,
+   "median": 3603,
+   "max": 3735
+  },
+  "big odt->fodt (import)": {
+   "n": 5,
+   "min": 2821,
+   "median": 2826,
+   "max": 2941
+  }
+ },
+ "concurrency": {
+  "sofficeBinBefore": 0,
+  "own profiles (warm) x2": {
+   "n": 2,
+   "wallMs": 2425,
+   "ok": 2,
+   "perJobMs": [
+    2409,
+    2420
+   ],
+   "exitCodes": [
+    0,
+    0
+   ],
+   "leftoverSofficeBin": 0
+  },
+  "own profiles (warm) x4": {
+   "n": 4,
+   "wallMs": 2671,
+   "ok": 4,
+   "perJobMs": [
+    2670,
+    2632,
+    2646,
+    2631
+   ],
+   "exitCodes": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "leftoverSofficeBin": 0
+  },
+  "own profiles (warm) x8": {
+   "n": 8,
+   "wallMs": 3565,
+   "ok": 8,
+   "perJobMs": [
+    3491,
+    3558,
+    3508,
+    3487,
+    3514,
+    3436,
+    3414,
+    3437
+   ],
+   "exitCodes": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "leftoverSofficeBin": 0
+  },
+  "shared profile x4": {
+   "n": 4,
+   "wallMs": 4728,
+   "ok": 2,
+   "perJobMs": [
+    2255,
+    2166,
+    4623,
+    4712
+   ],
+   "exitCodes": [
+    0,
+    1,
+    1,
+    0
+   ],
+   "leftoverSofficeBin": 0,
+   "failureOutput": [
+    "",
+    ""
+   ]
+  },
+  "own fresh profiles (cold) x4": {
+   "n": 4,
+   "wallMs": 7539,
+   "ok": 4,
+   "perJobMs": [
+    7517,
+    7497,
+    7469,
+    7525
+   ],
+   "exitCodes": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "leftoverSofficeBin": 0
+  }
+ },
+ "timeoutKill": {
+  "timedOut": true,
+  "ok": false,
+  "ms": 1632,
+  "sofficeBinBefore": 0,
+  "sofficeBinAfter": 0,
+  "slotUsableAfterReset": true
+ }
+}

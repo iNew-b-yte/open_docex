@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" xmlns:wp="http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing" xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main" xmlns:pic="http://schemas.openxmlformats.org/drawingml/2006/picture">
+<w:body>
+<w:p><w:pPr><w:pStyle w:val="Heading1"/></w:pPr><w:r><w:t>H1 Heading one</w:t></w:r></w:p>
+<w:p><w:pPr><w:pStyle w:val="Heading2"/></w:pPr><w:r><w:t>H2 Heading two</w:t></w:r></w:p>
+<w:p><w:pPr><w:pStyle w:val="Heading3"/></w:pPr><w:r><w:t>H3 Heading three</w:t></w:r></w:p>
+<w:p><w:pPr><w:pStyle w:val="Heading4"/></w:pPr><w:r><w:t>H4 Heading four</w:t></w:r></w:p>
+<w:p><w:pPr><w:pStyle w:val="Heading5"/></w:pPr><w:r><w:t>H5 Heading five</w:t></w:r></w:p>
+<w:p><w:pPr><w:pStyle w:val="Heading6"/></w:pPr><w:r><w:t>H6 Heading six</w:t></w:r></w:p>
+<w:p><w:pPr><w:pStyle w:val="Heading2"/><w:jc w:val="center"/></w:pPr><w:r><w:t>H2C centered heading</w:t></w:r></w:p>
+<w:p><w:pPr><w:pStyle w:val="Heading3"/><w:spacing w:before="170"/><w:ind w:left="454"/></w:pPr><w:r><w:t>H3S spaced heading</w:t></w:r></w:p>
+<w:p><w:pPr><w:jc w:val="left"/></w:pPr><w:r><w:t>ALIGN-LEFT paragraph</w:t></w:r></w:p>
+<w:p><w:pPr><w:jc w:val="center"/></w:pPr><w:r><w:t>ALIGN-CENTER paragraph</w:t></w:r></w:p>
+<w:p><w:pPr><w:jc w:val="right"/></w:pPr><w:r><w:t>ALIGN-RIGHT paragraph</w:t></w:r></w:p>
+<w:p><w:pPr><w:jc w:val="both"/></w:pPr><w:r><w:t>ALIGN-JUSTIFY paragraph with enough words to wrap across more than one line so that justification is visible on the page.</w:t></w:r></w:p>
+<w:p><w:pPr><w:spacing w:before="227" w:after="340"/></w:pPr><w:r><w:t>SPACING before 4mm after 6mm</w:t></w:r></w:p>
+<w:p><w:pPr><w:spacing w:line="360" w:lineRule="auto"/></w:pPr><w:r><w:t>LINEHEIGHT 150 percent</w:t></w:r></w:p>
+<w:p><w:pPr><w:ind w:left="567" w:right="850" w:firstLine="283"/></w:pPr><w:r><w:t>INDENT left 10mm right 15mm first 5mm</w:t></w:r></w:p>
+<w:p><w:pPr><w:ind w:left="1134" w:hanging="283"/></w:pPr><w:r><w:t>INDENT-HANG left 20mm first -5mm</w:t></w:r></w:p>
+<w:p>
+<w:r><w:t xml:space="preserve">Marks: </w:t></w:r>
+<w:r><w:rPr><w:b/></w:rPr><w:t>BOLD</w:t></w:r><w:r><w:t xml:space="preserve"> </w:t></w:r>
+<w:r><w:rPr><w:i/></w:rPr><w:t>ITALIC</w:t></w:r><w:r><w:t xml:space="preserve"> </w:t></w:r>
+<w:r><w:rPr><w:u w:val="single"/></w:rPr><w:t>UNDER</w:t></w:r><w:r><w:t xml:space="preserve"> </w:t></w:r>
+<w:r><w:rPr><w:strike/></w:rPr><w:t>STRIKE</w:t></w:r><w:r><w:t xml:space="preserve"> </w:t></w:r>
+<w:r><w:rPr><w:rFonts w:ascii="DejaVu Sans" w:hAnsi="DejaVu Sans" w:cs="DejaVu Sans"/></w:rPr><w:t>FONTFAM</w:t></w:r><w:r><w:t xml:space="preserve"> </w:t></w:r>
+<w:r><w:rPr><w:sz w:val="36"/><w:szCs w:val="36"/></w:rPr><w:t>FONTSIZE</w:t></w:r><w:r><w:t xml:space="preserve"> </w:t></w:r>
+<w:r><w:rPr><w:color w:val="C00000"/></w:rPr><w:t>COLOR</w:t></w:r><w:r><w:t xml:space="preserve"> </w:t></w:r>
+<w:r><w:rPr><w:b/><w:i/><w:color w:val="0070C0"/></w:rPr><w:t>COMBO</w:t></w:r>
+<w:r><w:t xml:space="preserve"> PLAIN</w:t></w:r>
+</w:p>
+<w:p><w:r><w:t xml:space="preserve">Links: </w:t></w:r><w:hyperlink r:id="rId8"><w:r><w:t>LINK-HTTP</w:t></w:r></w:hyperlink><w:r><w:t xml:space="preserve"> and </w:t></w:r><w:hyperlink r:id="rId9"><w:r><w:t>LINK-MAIL</w:t></w:r></w:hyperlink></w:p>
+<w:p><w:r><w:t>BREAK-A</w:t></w:r><w:r><w:br/></w:r><w:r><w:t>BREAK-B</w:t></w:r></w:p>
+<w:p><w:r><w:t>TAB-A</w:t></w:r><w:r><w:tab/></w:r><w:r><w:t>TAB-B</w:t></w:r></w:p>
+<w:p><w:r><w:t xml:space="preserve">SPACE-A    SPACE-B</w:t></w:r></w:p>
+<w:p><w:r><w:t xml:space="preserve"> LEAD-SPACE</w:t></w:r></w:p>
+<w:p><w:pPr><w:pStyle w:val="ListParagraph"/><w:numPr><w:ilvl w:val="0"/><w:numId w:val="1"/></w:numPr></w:pPr><w:r><w:t>BUL-1</w:t></w:r></w:p>
+<w:p><w:pPr><w:pStyle w:val="ListParagraph"/><w:numPr><w:ilvl w:val="1"/><w:numId w:val="1"/></w:numPr></w:pPr><w:r><w:t>BUL-1-1</w:t></w:r></w:p>
+<w:p><w:pPr><w:pStyle w:val="ListParagraph"/><w:numPr><w:ilvl w:val="0"/><w:numId w:val="1"/></w:numPr></w:pPr><w:r><w:t>BUL-2</w:t></w:r></w:p>
+<w:p><w:pPr><w:pStyle w:val="ListParagraph"/><w:numPr><w:ilvl w:val="0"/><w:numId w:val="2"/></w:numPr></w:pPr><w:r><w:t>NUM-1</w:t></w:r></w:p>
+<w:p><w:pPr><w:pStyle w:val="ListParagraph"/><w:numPr><w:ilvl w:val="0"/><w:numId w:val="2"/></w:numPr></w:pPr><w:r><w:t>NUM-2</w:t></w:r></w:p>
+<w:p><w:pPr><w:pStyle w:val="ListParagraph"/><w:numPr><w:ilvl w:val="1"/><w:numId w:val="2"/></w:numPr></w:pPr><w:r><w:t>NUM-2-1</w:t></w:r></w:p>
+<w:tbl>
+<w:tblPr><w:tblW w:w="8505" w:type="dxa"/><w:tblLayout w:type="fixed"/></w:tblPr>
+<w:tblGrid><w:gridCol w:w="1701"/><w:gridCol w:w="2835"/><w:gridCol w:w="3969"/></w:tblGrid>
+<w:tr><w:trPr><w:tblHeader/></w:trPr>
+<w:tc><w:tcPr><w:tcW w:w="1701" w:type="dxa"/></w:tcPr><w:p><w:r><w:t>TH-A</w:t></w:r></w:p></w:tc>
+<w:tc><w:tcPr><w:tcW w:w="2835" w:type="dxa"/></w:tcPr><w:p><w:r><w:t>TH-B</w:t></w:r></w:p></w:tc>
+<w:tc><w:tcPr><w:tcW w:w="3969" w:type="dxa"/></w:tcPr><w:p><w:r><w:t>TH-C</w:t></w:r></w:p></w:tc>
+</w:tr>
+<w:tr>
+<w:tc><w:tcPr><w:tcW w:w="4536" w:type="dxa"/><w:gridSpan w:val="2"/></w:tcPr><w:p><w:r><w:t>MERGE-COL</w:t></w:r></w:p></w:tc>
+<w:tc><w:tcPr><w:tcW w:w="3969" w:type="dxa"/></w:tcPr><w:p><w:r><w:t>R2C3</w:t></w:r></w:p></w:tc>
+</w:tr>
+<w:tr>
+<w:tc><w:tcPr><w:tcW w:w="1701" w:type="dxa"/><w:vMerge w:val="restart"/></w:tcPr><w:p><w:r><w:t>MERGE-ROW</w:t></w:r></w:p></w:tc>
+<w:tc><w:tcPr><w:tcW w:w="2835" w:type="dxa"/></w:tcPr><w:p><w:r><w:t>R3C2</w:t></w:r></w:p></w:tc>
+<w:tc><w:tcPr><w:tcW w:w="3969" w:type="dxa"/></w:tcPr><w:p><w:r><w:t>R3C3</w:t></w:r></w:p></w:tc>
+</w:tr>
+<w:tr>
+<w:tc><w:tcPr><w:tcW w:w="1701" w:type="dxa"/><w:vMerge/></w:tcPr><w:p/></w:tc>
+<w:tc><w:tcPr><w:tcW w:w="2835" w:type="dxa"/></w:tcPr><w:p><w:r><w:t>R4C2</w:t></w:r></w:p></w:tc>
+<w:tc><w:tcPr><w:tcW w:w="3969" w:type="dxa"/></w:tcPr><w:p><w:r><w:t>R4C3</w:t></w:r></w:p></w:tc>
+</w:tr>
+</w:tbl>
+<w:p><w:r><w:t>PB2-PREV break after</w:t></w:r><w:r><w:br w:type="page"/></w:r></w:p>
+<w:p><w:r><w:t>PB2-NEXT</w:t></w:r></w:p>
+<w:p><w:pPr><w:pageBreakBefore/></w:pPr><w:r><w:t>PB-NEXT break before</w:t></w:r></w:p>
+<w:p><w:r><w:drawing><wp:inline distT="0" distB="0" distL="0" distR="0"><wp:extent cx="1440000" cy="720000"/><wp:docPr id="1" name="ImgPng" title="ALT-PNG" descr="ALT-PNG desc"/><a:graphic><a:graphicData uri="http://schemas.openxmlformats.org/drawingml/2006/picture"><pic:pic><pic:nvPicPr><pic:cNvPr id="1" name="image1.png"/><pic:cNvPicPr/></pic:nvPicPr><pic:blipFill><a:blip r:embed="rId5"/><a:stretch><a:fillRect/></a:stretch></pic:blipFill><pic:spPr><a:xfrm><a:off x="0" y="0"/><a:ext cx="1440000" cy="720000"/></a:xfrm><a:prstGeom prst="rect"><a:avLst/></a:prstGeom></pic:spPr></pic:pic></a:graphicData></a:graphic></wp:inline></w:drawing></w:r></w:p>
+<w:p><w:r><w:drawing><wp:inline distT="0" distB="0" distL="0" distR="0"><wp:extent cx="1080000" cy="540000"/><wp:docPr id="2" name="ImgJpeg" title="ALT-JPEG" descr="ALT-JPEG desc"/><a:graphic><a:graphicData uri="http://schemas.openxmlformats.org/drawingml/2006/picture"><pic:pic><pic:nvPicPr><pic:cNvPr id="2" name="image2.jpeg"/><pic:cNvPicPr/></pic:nvPicPr><pic:blipFill><a:blip r:embed="rId6"/><a:stretch><a:fillRect/></a:stretch></pic:blipFill><pic:spPr><a:xfrm><a:off x="0" y="0"/><a:ext cx="1080000" cy="540000"/></a:xfrm><a:prstGeom prst="rect"><a:avLst/></a:prstGeom></pic:spPr></pic:pic></a:graphicData></a:graphic></wp:inline></w:drawing></w:r></w:p>
+<w:p><w:r><w:drawing><wp:inline distT="0" distB="0" distL="0" distR="0"><wp:extent cx="720000" cy="360000"/><wp:docPr id="3" name="ImgGif" title="ALT-GIF" descr="ALT-GIF desc"/><a:graphic><a:graphicData uri="http://schemas.openxmlformats.org/drawingml/2006/picture"><pic:pic><pic:nvPicPr><pic:cNvPr id="3" name="image3.gif"/><pic:cNvPicPr/></pic:nvPicPr><pic:blipFill><a:blip r:embed="rId7"/><a:stretch><a:fillRect/></a:stretch></pic:blipFill><pic:spPr><a:xfrm><a:off x="0" y="0"/><a:ext cx="720000" cy="360000"/></a:xfrm><a:prstGeom prst="rect"><a:avLst/></a:prstGeom></pic:spPr></pic:pic></a:graphicData></a:graphic></wp:inline></w:drawing></w:r></w:p>
+<w:p><w:r><w:t>END-OF-DOC</w:t></w:r></w:p>
+<w:sectPr>
+<w:headerReference w:type="default" r:id="rId3"/>
+<w:footerReference w:type="default" r:id="rId4"/>
+<w:pgSz w:w="11906" w:h="8391" w:orient="landscape"/>
+<w:pgMar w:top="850" w:right="1701" w:bottom="1134" w:left="1417" w:header="425" w:footer="425" w:gutter="0"/>
+</w:sectPr>
+</w:body>
+</w:document>

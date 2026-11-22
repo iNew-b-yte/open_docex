@@ -1,0 +1,342 @@
+{
+ "meta": {
+  "platform": "win32",
+  "date": "2026-11-22T11:23:02.274Z"
+ },
+ "standalone": {
+  "emf": {
+   "ok": true,
+   "ms": 1498,
+   "width": 1191,
+   "height": 1684,
+   "bytes": 10423,
+   "filter": "draw_png_Export"
+  },
+  "wmf": {
+   "ok": true,
+   "ms": 1516,
+   "width": 1191,
+   "height": 1684,
+   "bytes": 10423,
+   "filter": "draw_png_Export"
+  },
+  "tif": {
+   "ok": true,
+   "ms": 1524,
+   "width": 1191,
+   "height": 1684,
+   "bytes": 12931,
+   "filter": "draw_png_Export"
+  },
+  "svg": {
+   "ok": true,
+   "ms": 1487,
+   "width": 96,
+   "height": 48,
+   "bytes": 947,
+   "filter": "draw_png_Export"
+  }
+ },
+ "inDocument": {
+  "legacy-images.fodt": [
+   {
+    "title": "ALT-EMF",
+    "size": "32.0x16.0mm",
+    "images": [
+     "image/x-emf / sniffed image/x-emf",
+     "image/png / sniffed image/png"
+    ]
+   },
+   {
+    "title": "ALT-WMF",
+    "size": "32.0x16.0mm",
+    "images": [
+     "image/x-wmf / sniffed image/x-wmf",
+     "image/png / sniffed image/png"
+    ]
+   },
+   {
+    "title": "ALT-TIFF",
+    "size": "32.0x16.0mm",
+    "images": [
+     "image/tiff / sniffed image/tiff"
+    ]
+   },
+   {
+    "title": "ALT-SVG",
+    "size": "32.0x16.0mm",
+    "images": [
+     "image/svg+xml / sniffed image/svg+xml"
+    ]
+   }
+  ],
+  "legacy-images.odt": [
+   {
+    "title": "ALT-EMF",
+    "size": "32.0x16.0mm",
+    "images": [
+     "image/x-emf / sniffed image/x-emf",
+     "image/png / sniffed image/png"
+    ]
+   },
+   {
+    "title": "ALT-WMF",
+    "size": "32.0x16.0mm",
+    "images": [
+     "image/x-wmf / sniffed image/x-wmf",
+     "image/png / sniffed image/png"
+    ]
+   },
+   {
+    "title": "ALT-TIFF",
+    "size": "32.0x16.0mm",
+    "images": [
+     "image/tiff / sniffed image/tiff"
+    ]
+   },
+   {
+    "title": "ALT-SVG",
+    "size": "32.0x16.0mm",
+    "images": [
+     "image/svg+xml / sniffed image/svg+xml"
+    ]
+   }
+  ],
+  "legacy-images.docx": [
+   {
+    "title": "ALT-EMF",
+    "size": "32.0x16.0mm",
+    "images": [
+     "image/x-emf / sniffed image/x-emf",
+     "image/png / sniffed image/png"
+    ]
+   },
+   {
+    "title": "ALT-WMF",
+    "size": "32.0x16.0mm",
+    "images": [
+     "image/x-wmf / sniffed image/x-wmf",
+     "image/png / sniffed image/png"
+    ]
+   },
+   {
+    "title": "ALT-TIFF",
+    "size": "32.0x16.0mm",
+    "images": [
+     "image/tiff / sniffed image/tiff"
+    ]
+   },
+   {
+    "title": "ALT-SVG",
+    "size": "32.0x16.0mm",
+    "images": [
+     "image/svg+xml / sniffed image/svg+xml"
+    ]
+   }
+  ]
+ },
+ "pipeline": {
+  "legacy-images.fodt": [
+   {
+    "title": "ALT-EMF",
+    "from": "image/x-emf",
+    "ok": true,
+    "ms": 1516,
+    "width": 1191,
+    "height": 1684,
+    "bytes": 10423,
+    "filter": "draw_png_Export"
+   },
+   {
+    "title": "ALT-WMF",
+    "from": "image/x-wmf",
+    "ok": true,
+    "ms": 1529,
+    "width": 1191,
+    "height": 1684,
+    "bytes": 10423,
+    "filter": "draw_png_Export"
+   },
+   {
+    "title": "ALT-TIFF",
+    "from": "image/tiff",
+    "ok": true,
+    "ms": 1590,
+    "width": 1191,
+    "height": 1684,
+    "bytes": 12931,
+    "filter": "draw_png_Export"
+   },
+   {
+    "title": "ALT-SVG",
+    "from": "image/svg+xml",
+    "ok": true,
+    "ms": 1493,
+    "width": 96,
+    "height": 48,
+    "bytes": 947,
+    "filter": "draw_png_Export"
+   }
+  ],
+  "legacy-images.odt": [
+   {
+    "title": "ALT-EMF",
+    "from": "image/x-emf",
+    "ok": true,
+    "ms": 1596,
+    "width": 1191,
+    "height": 1684,
+    "bytes": 10423,
+    "filter": "draw_png_Export"
+   },
+   {
+    "title": "ALT-WMF",
+    "from": "image/x-wmf",
+    "ok": true,
+    "ms": 1540,
+    "width": 1191,
+    "height": 1684,
+    "bytes": 10423,
+    "filter": "draw_png_Export"
+   },
+   {
+    "title": "ALT-TIFF",
+    "from": "image/tiff",
+    "ok": true,
+    "ms": 1512,
+    "width": 1191,
+    "height": 1684,
+    "bytes": 12931,
+    "filter": "draw_png_Export"
+   },
+   {
+    "title": "ALT-SVG",
+    "from": "image/svg+xml",
+    "ok": true,
+    "ms": 1465,
+    "width": 96,
+    "height": 48,
+    "bytes": 947,
+    "filter": "draw_png_Export"
+   }
+  ],
+  "legacy-images.docx": [
+   {
+    "title": "ALT-EMF",
+    "from": "image/x-emf",
+    "ok": true,
+    "ms": 1506,
+    "width": 1191,
+    "height": 1684,
+    "bytes": 10423,
+    "filter": "draw_png_Export"
+   },
+   {
+    "title": "ALT-WMF",
+    "from": "image/x-wmf",
+    "ok": true,
+    "ms": 1548,
+    "width": 1191,
+    "height": 1684,
+    "bytes": 10423,
+    "filter": "draw_png_Export"
+   },
+   {
+    "title": "ALT-TIFF",
+    "from": "image/tiff",
+    "ok": true,
+    "ms": 1499,
+    "width": 1191,
+    "height": 1684,
+    "bytes": 12931,
+    "filter": "draw_png_Export"
+   },
+   {
+    "title": "ALT-SVG",
+    "from": "image/svg+xml",
+    "ok": true,
+    "ms": 1494,
+    "width": 96,
+    "height": 48,
+    "bytes": 947,
+    "filter": "draw_png_Export"
+   }
+  ]
+ },
+ "wrapper": {
+  "emf default": {
+   "ok": true,
+   "ms": 1487,
+   "width": 181,
+   "height": 91,
+   "bytes": 1830
+  },
+  "emf PixelWidth 378 x 189 (32x16mm at 300 dpi)": {
+   "ok": true,
+   "ms": 1497,
+   "width": 378,
+   "height": 189,
+   "bytes": 3768
+  },
+  "wmf default": {
+   "ok": true,
+   "ms": 1535,
+   "width": 181,
+   "height": 91,
+   "bytes": 1830
+  },
+  "wmf PixelWidth 378 x 189 (32x16mm at 300 dpi)": {
+   "ok": true,
+   "ms": 1481,
+   "width": 378,
+   "height": 189,
+   "bytes": 3768
+  },
+  "tif default": {
+   "ok": true,
+   "ms": 1473,
+   "width": 181,
+   "height": 91,
+   "bytes": 2896
+  },
+  "tif PixelWidth 378 x 189 (32x16mm at 300 dpi)": {
+   "ok": true,
+   "ms": 1579,
+   "width": 378,
+   "height": 189,
+   "bytes": 7925
+  }
+ },
+ "fallbackPng": {
+  "legacy-images.fodt": [
+   "ALT-EMF: image/x-emf + png 90x42",
+   "ALT-WMF: image/x-wmf + png 90x42",
+   "ALT-TIFF: image/tiff",
+   "ALT-SVG: image/svg+xml"
+  ],
+  "legacy-images.docx": [
+   "ALT-EMF: image/x-emf + png 90x42",
+   "ALT-WMF: image/x-wmf + png 90x42",
+   "ALT-TIFF: image/tiff",
+   "ALT-SVG: image/svg+xml"
+  ]
+ },
+ "packaged": {
+  "legacy-images.docx": [
+   "word/media/image4.tif",
+   "word/media/image3.wmf",
+   "word/media/image1.emf",
+   "word/media/image7.png",
+   "word/media/image2.wmf",
+   "word/media/image6.svg",
+   "word/media/image5.png"
+  ],
+  "legacy-images.odt": [
+   "Pictures/100005A800000635000002E7257A39A5.emf",
+   "Pictures/10000001000000600000003064FD0049.tif",
+   "Pictures/100000010000005A0000002AEAC7FBED.png",
+   "Pictures/100008D800000635000002E770BE2C3A.wmf",
+   "Pictures/100000F00000069D0000034FEE9694FD.svg"
+  ]
+ }
+}

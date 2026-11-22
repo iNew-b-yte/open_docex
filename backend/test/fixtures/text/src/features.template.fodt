@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Spike S2 fixture: every V1 text feature (HLD §8.1), shaped like the planned FodtMapper export writer (LLD §14.5).
+     Hand-written for open_docex (MIT). @@IMG:x@@ placeholders are filled with base64 by spikes/S2/build-fixtures.mjs. -->
+<office:document xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0" xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0" office:version="1.3" office:mimetype="application/vnd.oasis.opendocument.text">
+ <office:font-face-decls>
+  <style:font-face style:name="Liberation Sans" svg:font-family="'Liberation Sans'" style:font-family-generic="swiss"/>
+  <style:font-face style:name="DejaVu Sans" svg:font-family="'DejaVu Sans'" style:font-family-generic="swiss"/>
+ </office:font-face-decls>
+ <office:styles>
+  <style:default-style style:family="paragraph">
+   <style:text-properties style:font-name="Liberation Sans" fo:font-size="11pt" fo:color="#333333"/>
+  </style:default-style>
+  <style:style style:name="Standard" style:family="paragraph" style:class="text"/>
+  <style:style style:name="Header" style:family="paragraph" style:parent-style-name="Standard"/>
+  <style:style style:name="Footer" style:family="paragraph" style:parent-style-name="Standard"/>
+  <style:style style:name="Heading" style:family="paragraph" style:parent-style-name="Standard"><style:text-properties fo:font-weight="bold"/></style:style>
+  <style:style style:name="Heading_20_1" style:display-name="Heading 1" style:family="paragraph" style:parent-style-name="Heading" style:default-outline-level="1"><style:text-properties fo:font-size="20pt"/></style:style>
+  <style:style style:name="Heading_20_2" style:display-name="Heading 2" style:family="paragraph" style:parent-style-name="Heading" style:default-outline-level="2"><style:text-properties fo:font-size="17pt"/></style:style>
+  <style:style style:name="Heading_20_3" style:display-name="Heading 3" style:family="paragraph" style:parent-style-name="Heading" style:default-outline-level="3"><style:text-properties fo:font-size="15pt"/></style:style>
+  <style:style style:name="Heading_20_4" style:display-name="Heading 4" style:family="paragraph" style:parent-style-name="Heading" style:default-outline-level="4"><style:text-properties fo:font-size="13pt"/></style:style>
+  <style:style style:name="Heading_20_5" style:display-name="Heading 5" style:family="paragraph" style:parent-style-name="Heading" style:default-outline-level="5"><style:text-properties fo:font-size="12pt"/></style:style>
+  <style:style style:name="Heading_20_6" style:display-name="Heading 6" style:family="paragraph" style:parent-style-name="Heading" style:default-outline-level="6"><style:text-properties fo:font-size="11pt"/></style:style>
+ </office:styles>
+ <office:automatic-styles>
+  <style:page-layout style:name="pm1">
+   <style:page-layout-properties fo:page-width="210mm" fo:page-height="148mm" style:print-orientation="landscape" fo:margin-top="15mm" fo:margin-bottom="20mm" fo:margin-left="25mm" fo:margin-right="30mm"/>
+   <style:header-style><style:header-footer-properties fo:min-height="0mm" fo:margin-bottom="2mm"/></style:header-style>
+   <style:footer-style><style:header-footer-properties fo:min-height="0mm" fo:margin-top="2mm"/></style:footer-style>
+  </style:page-layout>
+  <style:style style:name="P1" style:family="paragraph" style:parent-style-name="Standard"><style:paragraph-properties fo:text-align="start"/></style:style>
+  <style:style style:name="P2" style:family="paragraph" style:parent-style-name="Standard"><style:paragraph-properties fo:text-align="center"/></style:style>
+  <style:style style:name="P3" style:family="paragraph" style:parent-style-name="Standard"><style:paragraph-properties fo:text-align="end"/></style:style>
+  <style:style style:name="P4" style:family="paragraph" style:parent-style-name="Standard"><style:paragraph-properties fo:text-align="justify"/></style:style>
+  <style:style style:name="P5" style:family="paragraph" style:parent-style-name="Standard"><style:paragraph-properties fo:margin-top="4mm" fo:margin-bottom="6mm"/></style:style>
+  <style:style style:name="P6" style:family="paragraph" style:parent-style-name="Standard"><style:paragraph-properties fo:line-height="150%"/></style:style>
+  <style:style style:name="P7" style:family="paragraph" style:parent-style-name="Standard"><style:paragraph-properties fo:margin-left="10mm" fo:margin-right="15mm" fo:text-indent="5mm"/></style:style>
+  <style:style style:name="P8" style:family="paragraph" style:parent-style-name="Standard"><style:paragraph-properties fo:margin-left="20mm" fo:text-indent="-5mm"/></style:style>
+  <style:style style:name="P9" style:family="paragraph" style:parent-style-name="Standard"><style:paragraph-properties fo:break-before="page"/></style:style>
+  <style:style style:name="P10" style:family="paragraph" style:parent-style-name="Standard"><style:paragraph-properties fo:break-after="page"/></style:style>
+  <style:style style:name="P11" style:family="paragraph" style:parent-style-name="Heading_20_2"><style:paragraph-properties fo:text-align="center"/></style:style>
+  <style:style style:name="P12" style:family="paragraph" style:parent-style-name="Heading_20_3"><style:paragraph-properties fo:margin-top="3mm" fo:margin-left="8mm"/></style:style>
+  <style:style style:name="T1" style:family="text"><style:text-properties fo:font-weight="bold"/></style:style>
+  <style:style style:name="T2" style:family="text"><style:text-properties fo:font-style="italic"/></style:style>
+  <style:style style:name="T3" style:family="text"><style:text-properties style:text-underline-style="solid" style:text-underline-width="auto" style:text-underline-color="font-color"/></style:style>
+  <style:style style:name="T4" style:family="text"><style:text-properties style:text-line-through-style="solid" style:text-line-through-type="single"/></style:style>
+  <style:style style:name="T5" style:family="text"><style:text-properties style:font-name="DejaVu Sans"/></style:style>
+  <style:style style:name="T6" style:family="text"><style:text-properties fo:font-size="18pt"/></style:style>
+  <style:style style:name="T7" style:family="text"><style:text-properties fo:color="#c00000"/></style:style>
+  <style:style style:name="T8" style:family="text"><style:text-properties fo:font-weight="bold" fo:font-style="italic" fo:color="#0070c0"/></style:style>
+  <style:style style:name="Tbl1" style:family="table"><style:table-properties style:width="150mm" table:align="left"/></style:style>
+  <style:style style:name="Tbl1.A" style:family="table-column"><style:table-column-properties style:column-width="30mm"/></style:style>
+  <style:style style:name="Tbl1.B" style:family="table-column"><style:table-column-properties style:column-width="50mm"/></style:style>
+  <style:style style:name="Tbl1.C" style:family="table-column"><style:table-column-properties style:column-width="70mm"/></style:style>
+  <style:style style:name="fr1" style:family="graphic"><style:graphic-properties style:wrap="none" style:vertical-pos="top" style:vertical-rel="baseline"/></style:style>
+  <text:list-style style:name="L_bullet">
+   <text:list-level-style-bullet text:level="1" text:bullet-char="•"><style:list-level-properties text:list-level-position-and-space-mode="label-alignment"><style:list-level-label-alignment text:label-followed-by="listtab" fo:text-indent="-6.35mm" fo:margin-left="12.7mm"/></style:list-level-properties></text:list-level-style-bullet>
+   <text:list-level-style-bullet text:level="2" text:bullet-char="◦"><style:list-level-properties text:list-level-position-and-space-mode="label-alignment"><style:list-level-label-alignment text:label-followed-by="listtab" fo:text-indent="-6.35mm" fo:margin-left="19.05mm"/></style:list-level-properties></text:list-level-style-bullet>
+  </text:list-style>
+  <text:list-style style:name="L_number">
+   <text:list-level-style-number text:level="1" style:num-format="1" style:num-suffix="."><style:list-level-properties text:list-level-position-and-space-mode="label-alignment"><style:list-level-label-alignment text:label-followed-by="listtab" fo:text-indent="-6.35mm" fo:margin-left="12.7mm"/></style:list-level-properties></text:list-level-style-number>
+   <text:list-level-style-number text:level="2" style:num-format="a" style:num-suffix=")"><style:list-level-properties text:list-level-position-and-space-mode="label-alignment"><style:list-level-label-alignment text:label-followed-by="listtab" fo:text-indent="-6.35mm" fo:margin-left="19.05mm"/></style:list-level-properties></text:list-level-style-number>
+  </text:list-style>
+ </office:automatic-styles>
+ <office:master-styles>
+  <style:master-page style:name="Standard" style:page-layout-name="pm1">
+   <style:header><text:p text:style-name="Header">HDR Page <text:page-number text:select-page="current">1</text:page-number> of <text:page-count>2</text:page-count></text:p></style:header>
+   <style:footer><text:p text:style-name="Footer">FTR <text:page-number text:select-page="current">1</text:page-number>/<text:page-count>2</text:page-count></text:p></style:footer>
+  </style:master-page>
+ </office:master-styles>
+ <office:body>
+  <office:text>
+   <text:h text:style-name="Heading_20_1" text:outline-level="1">H1 Heading one</text:h>
+   <text:h text:style-name="Heading_20_2" text:outline-level="2">H2 Heading two</text:h>
+   <text:h text:style-name="Heading_20_3" text:outline-level="3">H3 Heading three</text:h>
+   <text:h text:style-name="Heading_20_4" text:outline-level="4">H4 Heading four</text:h>
+   <text:h text:style-name="Heading_20_5" text:outline-level="5">H5 Heading five</text:h>
+   <text:h text:style-name="Heading_20_6" text:outline-level="6">H6 Heading six</text:h>
+   <text:h text:style-name="P11" text:outline-level="2">H2C centered heading</text:h>
+   <text:h text:style-name="P12" text:outline-level="3">H3S spaced heading</text:h>
+   <text:p text:style-name="P1">ALIGN-LEFT paragraph</text:p>
+   <text:p text:style-name="P2">ALIGN-CENTER paragraph</text:p>
+   <text:p text:style-name="P3">ALIGN-RIGHT paragraph</text:p>
+   <text:p text:style-name="P4">ALIGN-JUSTIFY paragraph with enough words to wrap across more than one line so that justification is visible on the page.</text:p>
+   <text:p text:style-name="P5">SPACING before 4mm after 6mm</text:p>
+   <text:p text:style-name="P6">LINEHEIGHT 150 percent</text:p>
+   <text:p text:style-name="P7">INDENT left 10mm right 15mm first 5mm</text:p>
+   <text:p text:style-name="P8">INDENT-HANG left 20mm first -5mm</text:p>
+   <text:p text:style-name="Standard">Marks: <text:span text:style-name="T1">BOLD</text:span> <text:span text:style-name="T2">ITALIC</text:span> <text:span text:style-name="T3">UNDER</text:span> <text:span text:style-name="T4">STRIKE</text:span> <text:span text:style-name="T5">FONTFAM</text:span> <text:span text:style-name="T6">FONTSIZE</text:span> <text:span text:style-name="T7">COLOR</text:span> <text:span text:style-name="T8">COMBO</text:span> PLAIN</text:p>
+   <text:p text:style-name="Standard">Links: <text:a xlink:type="simple" xlink:href="https://example.com/a?b=1&amp;c=2">LINK-HTTP</text:a> and <text:a xlink:type="simple" xlink:href="mailto:test@example.com">LINK-MAIL</text:a></text:p>
+   <text:p text:style-name="Standard">BREAK-A<text:line-break/>BREAK-B</text:p>
+   <text:p text:style-name="Standard">TAB-A<text:tab/>TAB-B</text:p>
+   <text:p text:style-name="Standard">SPACE-A <text:s text:c="3"/>SPACE-B</text:p>
+   <text:p text:style-name="Standard"><text:s/>LEAD-SPACE</text:p>
+   <text:list text:style-name="L_bullet">
+    <text:list-item><text:p text:style-name="Standard">BUL-1</text:p>
+     <text:list><text:list-item><text:p text:style-name="Standard">BUL-1-1</text:p></text:list-item></text:list>
+    </text:list-item>
+    <text:list-item><text:p text:style-name="Standard">BUL-2</text:p></text:list-item>
+   </text:list>
+   <text:list text:style-name="L_number">
+    <text:list-item><text:p text:style-name="Standard">NUM-1</text:p></text:list-item>
+    <text:list-item><text:p text:style-name="Standard">NUM-2</text:p>
+     <text:list><text:list-item><text:p text:style-name="Standard">NUM-2-1</text:p></text:list-item></text:list>
+    </text:list-item>
+   </text:list>
+   <table:table table:name="Table1" table:style-name="Tbl1">
+    <table:table-column table:style-name="Tbl1.A"/>
+    <table:table-column table:style-name="Tbl1.B"/>
+    <table:table-column table:style-name="Tbl1.C"/>
+    <table:table-header-rows>
+     <table:table-row>
+      <table:table-cell office:value-type="string"><text:p text:style-name="Standard">TH-A</text:p></table:table-cell>
+      <table:table-cell office:value-type="string"><text:p text:style-name="Standard">TH-B</text:p></table:table-cell>
+      <table:table-cell office:value-type="string"><text:p text:style-name="Standard">TH-C</text:p></table:table-cell>
+     </table:table-row>
+    </table:table-header-rows>
+    <table:table-row>
+     <table:table-cell table:number-columns-spanned="2" office:value-type="string"><text:p text:style-name="Standard">MERGE-COL</text:p></table:table-cell>
+     <table:covered-table-cell/>
+     <table:table-cell office:value-type="string"><text:p text:style-name="Standard">R2C3</text:p></table:table-cell>
+    </table:table-row>
+    <table:table-row>
+     <table:table-cell table:number-rows-spanned="2" office:value-type="string"><text:p text:style-name="Standard">MERGE-ROW</text:p></table:table-cell>
+     <table:table-cell office:value-type="string"><text:p text:style-name="Standard">R3C2</text:p></table:table-cell>
+     <table:table-cell office:value-type="string"><text:p text:style-name="Standard">R3C3</text:p></table:table-cell>
+    </table:table-row>
+    <table:table-row>
+     <table:covered-table-cell/>
+     <table:table-cell office:value-type="string"><text:p text:style-name="Standard">R4C2</text:p></table:table-cell>
+     <table:table-cell office:value-type="string"><text:p text:style-name="Standard">R4C3</text:p></table:table-cell>
+    </table:table-row>
+   </table:table>
+   <text:p text:style-name="P10">PB2-PREV break after</text:p>
+   <text:p text:style-name="Standard">PB2-NEXT</text:p>
+   <text:p text:style-name="P9">PB-NEXT break before</text:p>
+   <text:p text:style-name="Standard"><draw:frame draw:style-name="fr1" draw:name="ImgPng" text:anchor-type="as-char" svg:width="40mm" svg:height="20mm" draw:z-index="0"><draw:image draw:mime-type="image/png"><office:binary-data>@@IMG:png@@</office:binary-data></draw:image><svg:title>ALT-PNG</svg:title><svg:desc>ALT-PNG desc</svg:desc></draw:frame></text:p>
+   <text:p text:style-name="Standard"><draw:frame draw:style-name="fr1" draw:name="ImgJpeg" text:anchor-type="as-char" svg:width="30mm" svg:height="15mm" draw:z-index="1"><draw:image draw:mime-type="image/jpeg"><office:binary-data>@@IMG:jpg@@</office:binary-data></draw:image><svg:title>ALT-JPEG</svg:title><svg:desc>ALT-JPEG desc</svg:desc></draw:frame></text:p>
+   <text:p text:style-name="Standard"><draw:frame draw:style-name="fr1" draw:name="ImgGif" text:anchor-type="as-char" svg:width="20mm" svg:height="10mm" draw:z-index="2"><draw:image draw:mime-type="image/gif"><office:binary-data>@@IMG:gif@@</office:binary-data></draw:image><svg:title>ALT-GIF</svg:title><svg:desc>ALT-GIF desc</svg:desc></draw:frame></text:p>
+   <text:p text:style-name="Standard">END-OF-DOC</text:p>
+  </office:text>
+ </office:body>
+</office:document>

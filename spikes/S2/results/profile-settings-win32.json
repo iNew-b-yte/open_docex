@@ -1,0 +1,66 @@
+{
+ "meta": {
+  "platform": "win32",
+  "date": "2026-11-22T11:24:34.196Z"
+ },
+ "externalImage": {
+  "seeded linked.fodt->docx": {
+   "ok": true,
+   "httpRequests": [],
+   "output": "none"
+  },
+  "seeded linked.docx->fodt": {
+   "ok": true,
+   "httpRequests": [],
+   "output": "binary-data:2 hrefs:xlink:href=\"https://example.com/a?b=1&amp;c=2\",xlink:href=\"http://127.0.0.1:54784/docx.png\""
+  },
+  "seeded linked.fodt->odt": {
+   "ok": true,
+   "httpRequests": [],
+   "output": "none"
+  },
+  "empty linked.fodt->docx": {
+   "ok": true,
+   "httpRequests": [],
+   "output": "none"
+  },
+  "empty linked.docx->fodt": {
+   "ok": true,
+   "httpRequests": [],
+   "output": "binary-data:2 hrefs:xlink:href=\"https://example.com/a?b=1&amp;c=2\",xlink:href=\"http://127.0.0.1:54784/docx.png\""
+  },
+  "empty linked.fodt->odt": {
+   "ok": true,
+   "httpRequests": [],
+   "output": "none"
+  }
+ },
+ "recalc": {
+  "seeded fods(LO generator)->xlsx": {
+   "ok": true,
+   "cell": "<c r=\"A1\" s=\"0\" t=\"n\"><f aca=\"false\">1+1</f><v>2</v></c>"
+  },
+  "seeded fods->xlsx": {
+   "ok": true,
+   "cell": "<c r=\"A1\" s=\"0\" t=\"n\"><f aca=\"false\">1+1</f><v>2</v></c>"
+  },
+  "seeded profile xcu still has DisableMacrosExecution=true": true,
+  "seeded xlsx->fods": {
+   "ok": true,
+   "cell": "<table:table-cell table:formula=\"of:=1+1\" office:value-type=\"float\" office:value=\"99\" calcext:value-type=\"float\">"
+  },
+  "empty fods(LO generator)->xlsx": {
+   "ok": true,
+   "cell": "<c r=\"A1\" s=\"0\" t=\"n\"><f aca=\"false\">1+1</f><v>2</v></c>"
+  },
+  "empty fods->xlsx": {
+   "ok": true,
+   "cell": "<c r=\"A1\" s=\"0\" t=\"n\"><f aca=\"false\">1+1</f><v>2</v></c>"
+  },
+  "empty profile xcu still has DisableMacrosExecution=true": false,
+  "empty xlsx->fods": {
+   "ok": true,
+   "cell": "<table:table-cell table:formula=\"of:=1+1\" office:value-type=\"float\" office:value=\"99\" calcext:value-type=\"float\">"
+  }
+ }
+}
