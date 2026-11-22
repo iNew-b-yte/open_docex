@@ -1,0 +1,50 @@
+{
+  "name": "@open-docex/client",
+  "version": "0.0.0",
+  "description": "open_docex browser client: mount() a collaborative document editor into any page.",
+  "license": "MIT",
+  "type": "module",
+  "sideEffects": false,
+  "exports": {
+    ".": {
+      "@open-docex/source": "./src/index.ts",
+      "types": "./dist/types/index.d.ts",
+      "import": "./dist/lib/index.js"
+    },
+    "./style.css": "./dist/lib/style.css"
+  },
+  "files": [
+    "dist"
+  ],
+  "engines": {
+    "node": ">=22.12"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build:lib": "vite build",
+    "typecheck": "tsc -p tsconfig.test.json",
+    "prepack": "node -e \"require('fs').copyFileSync('../LICENSE', 'LICENSE')\""
+  },
+  "dependencies": {
+    "@open-docex/shared": "0.0.0",
+    "prosemirror-commands": "^1.7.2",
+    "prosemirror-dropcursor": "^1.8.4",
+    "prosemirror-gapcursor": "^1.4.1",
+    "prosemirror-keymap": "^1.2.3",
+    "prosemirror-model": "^1.25.13",
+    "prosemirror-schema-list": "^1.6.1",
+    "prosemirror-state": "^1.4.4",
+    "prosemirror-tables": "^1.8.5",
+    "prosemirror-transform": "^1.12.7",
+    "prosemirror-view": "^1.43.0"
+  },
+  "peerDependencies": {
+    "react": "^18.2.0 || ^19.0.0",
+    "react-dom": "^18.2.0 || ^19.0.0"
+  },
+  "devDependencies": {
+    "vite": "^8.3.8"
+  }
+}

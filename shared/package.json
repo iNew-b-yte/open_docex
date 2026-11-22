@@ -1,0 +1,63 @@
+{
+  "name": "@open-docex/shared",
+  "version": "0.0.0",
+  "description": "Isomorphic contracts shared by @open-docex/server and @open-docex/client: protocol, errors, ids, OT, text and sheet models.",
+  "license": "MIT",
+  "type": "module",
+  "sideEffects": false,
+  "exports": {
+    ".": {
+      "@open-docex/source": "./src/index.ts",
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./protocol": {
+      "@open-docex/source": "./src/protocol/index.ts",
+      "types": "./dist/protocol/index.d.ts",
+      "import": "./dist/protocol/index.js"
+    },
+    "./errors": {
+      "@open-docex/source": "./src/errors/index.ts",
+      "types": "./dist/errors/index.d.ts",
+      "import": "./dist/errors/index.js"
+    },
+    "./ids": {
+      "@open-docex/source": "./src/ids/index.ts",
+      "types": "./dist/ids/index.d.ts",
+      "import": "./dist/ids/index.js"
+    },
+    "./ot": {
+      "@open-docex/source": "./src/ot/index.ts",
+      "types": "./dist/ot/index.d.ts",
+      "import": "./dist/ot/index.js"
+    },
+    "./text": {
+      "@open-docex/source": "./src/text/index.ts",
+      "types": "./dist/text/index.d.ts",
+      "import": "./dist/text/index.js"
+    },
+    "./sheet": {
+      "@open-docex/source": "./src/sheet/index.ts",
+      "types": "./dist/sheet/index.d.ts",
+      "import": "./dist/sheet/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "engines": {
+    "node": ">=22.12"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "typecheck": "tsc -p tsconfig.test.json",
+    "prepack": "node -e \"require('fs').copyFileSync('../LICENSE', 'LICENSE')\""
+  },
+  "dependencies": {
+    "prosemirror-model": "^1.25.13",
+    "prosemirror-tables": "^1.8.5",
+    "prosemirror-transform": "^1.12.6"
+  }
+}
