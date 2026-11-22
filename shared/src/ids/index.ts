@@ -82,9 +82,8 @@ export function isAssetId(x: unknown): x is string {
 export async function computeAssetId(bytes: Uint8Array): Promise<string> {
   // The cast satisfies the DOM lib's BufferSource type when the client type-checks shared's source.
   // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion -- needed under the DOM lib only
-  const digest = new Uint8Array(
-    await globalThis.crypto.subtle.digest('SHA-256', bytes as Uint8Array<ArrayBuffer>),
-  );
+  const data = bytes as Uint8Array<ArrayBuffer>;
+  const digest = new Uint8Array(await globalThis.crypto.subtle.digest('SHA-256', data));
   let hex = '';
   for (const b of digest) hex += b.toString(16).padStart(2, '0');
   return hex;
