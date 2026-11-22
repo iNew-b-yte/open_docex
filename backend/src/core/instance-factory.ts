@@ -23,7 +23,7 @@ export class DocumentInstanceFactory {
       { textBlocks: c.textBlocks, sheetRows: c.sheetRows, maxBytes: c.maxBytes },
       deps.config.blankDocument.page,
     );
-    this.#text = text as unknown as KindPolicy<unknown, unknown>;
+    this.#text = text;
   }
 
   /**

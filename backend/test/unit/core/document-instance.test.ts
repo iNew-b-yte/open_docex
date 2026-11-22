@@ -1,5 +1,5 @@
 import { createHash } from 'node:crypto';
-import { asDocumentId } from '@open-docex/shared/ids';
+import { asDocumentId, type DocumentId } from '@open-docex/shared/ids';
 import { CloseCode } from '@open-docex/shared/protocol';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { docKeyOf } from '../../../src/persistence/layout.js';
@@ -11,6 +11,11 @@ async function harness(...a: Parameters<typeof makeHarness>): Promise<Harness> {
   const h = await makeHarness(...a);
   harnesses.push(h);
   return h;
+}
+
+/** The model of a loaded document as JSON text. */
+function modelJson(h: Harness, id: DocumentId): string {
+  return JSON.stringify((h.registry.get(id)?.model as { toJSON(): unknown } | undefined)?.toJSON());
 }
 
 afterEach(async () => {
@@ -219,7 +224,7 @@ describe('DocumentInstance: FIFO loop', () => {
     const h = await harness();
     const id = h.file('a.docx', 'ab');
     const sid = h.join(id);
-    h.send(sid, { type: 'hello', protocol: 99, clientId: cid('c') as never });
+    h.send(sid, { type: 'hello', protocol: 99, clientId: cid('c') });
     await vi.waitFor(() => expect(h.sink.closes(sid)).toEqual([CloseCode.PROTOCOL_ERROR]));
     expect(h.sink.of(sid, 'error')[0]?.code).toBe('PROTOCOL_VERSION_UNSUPPORTED');
   });
@@ -287,7 +292,7 @@ describe('DocumentInstance: load source and replay', () => {
     h.submit(a.sid, 'cA', 1, a.epoch, 0, [ins(2, 'X')]);
     h.submit(b.sid, 'cB', 1, b.epoch, 0, [ins(4, 'Y')]);
     await vi.waitFor(() => expect(h.sink.of(b.sid, 'ack')).toHaveLength(1));
-    const model = JSON.stringify(h.registry.get(id)?.model.toJSON());
+    const model = modelJson(h, id);
     await h.closeAll();
     return { id, a, b, model };
   }
@@ -297,9 +302,8 @@ describe('DocumentInstance: load source and replay', () => {
     const { id, model } = await edited(h);
     h.storage.setFile('a.docx', new TextEncoder().encode('changed'), 'v2'); // storage changed too: local still wins
     const c = await h.open(id, 'cC');
-    const inst = h.registry.get(id);
     expect(c.rev).toBe(2);
-    expect(JSON.stringify(inst?.model.toJSON())).toBe(model);
+    expect(modelJson(h, id)).toBe(model);
     expect(h.codec.imports).toBe(1);
     expect(h.sink.events.some((e) => e.kind === 'document' && e.ev.state === 'loaded' && e.ev.source === 'local')).toBe(true);
     // Dedupe survived: a resend is acked with its original rev.

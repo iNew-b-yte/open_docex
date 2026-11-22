@@ -73,7 +73,7 @@ export function textOf(model: unknown): string {
  */
 export class FakeCodec implements CodecSeam {
   imports = 0;
-  probeError: unknown = null;
+  probeError: Error | null = null;
 
   import(i: { bytes: Uint8Array; format: FileFormat; assetDir: string }): Promise<CodecImportResult> {
     this.imports++;
@@ -83,7 +83,7 @@ export class FakeCodec implements CodecSeam {
   }
 
   probe(): Promise<void> {
-    return this.probeError === null ? Promise.resolve() : Promise.reject(this.probeError as Error);
+    return this.probeError === null ? Promise.resolve() : Promise.reject(this.probeError);
   }
 
   close(): Promise<void> {
@@ -314,6 +314,7 @@ export type Harness = Awaited<ReturnType<typeof makeHarness>>;
 
 /** Spies on `Journal.prototype.append`, recording `journal` in `order` once a write resolves. */
 export function spyJournal(order: string[]) {
+  // eslint-disable-next-line @typescript-eslint/unbound-method -- called with .call(this)
   const real = Journal.prototype.append;
   let failNext = false;
   const spy = vi.spyOn(Journal.prototype, 'append').mockImplementation(async function (this: Journal, e) {

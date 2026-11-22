@@ -46,7 +46,7 @@ import type { QueueAdapter, QueueConsumer, QueueDelivery } from '../queue/queue-
 import { STORAGE_CALL_TIMEOUT_MS, type StorageAdapter, type StorageRef } from '../storage/storage-adapter.js';
 import { DedupeTable } from './dedupe-table.js';
 import type { KindPolicy } from './kind-policy.js';
-import { LoadStreamer, type LoadSource } from './load-streamer.js';
+import { LoadStreamer } from './load-streamer.js';
 import { historyMaxOps, OpHistory } from './op-history.js';
 import type { AuditSink, Clock, CodecSeam, CoreSink, FlushSeam, FlushTarget } from './seams.js';
 import { sendError, sendTo, type SessionHost, type SessionRecord } from './session-record.js';
@@ -138,7 +138,7 @@ export class DocumentInstance<S = unknown, O = unknown> implements FlushTarget, 
     this.format = doc.format;
     this.policy = policy;
     this.history = new OpHistory(historyMaxOps(deps.config.snapshot.everyOps), 0);
-    this.#streamer = new LoadStreamer<S>(this as unknown as LoadSource<S>, deps.sink);
+    this.#streamer = new LoadStreamer<S>(this, deps.sink);
   }
 
   /** The document kind. */
