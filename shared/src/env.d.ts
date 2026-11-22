@@ -6,8 +6,13 @@
  * global below exists in every supported browser and in Node.js >= 22.
  */
 
+interface SubtleCrypto {
+  /** Used only by `computeAssetId` (SHA-256, LLD §0 R-12). */
+  digest(algorithm: 'SHA-256', data: Uint8Array): Promise<ArrayBuffer>;
+}
 interface Crypto {
   getRandomValues<T extends ArrayBufferView | null>(array: T): T;
+  readonly subtle: SubtleCrypto;
 }
 declare var crypto: Crypto;
 

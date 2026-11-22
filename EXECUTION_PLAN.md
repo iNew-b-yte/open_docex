@@ -136,6 +136,12 @@ The orchestrator records questions here and asks the project owner. None are ope
 - `@types/ws`, `@types/yauzl`, `@types/react` and `@types/react-dom` were added as devDependencies (LLD P1 §1.3 updated).
 - LLD P1 §1.7 (`*.lo.test.ts` use `describe.skipIf`) and §1.9 (packages flagged dev, including peers of dev tools, are report-only per L-1) were updated to match the implementation.
 
+**Resolved 2026-11-22 during V1-01 (project owner):**
+- Catalogue entries for the three `CLIENT_*` codes and a new `ErrorCategory` value, `'client'` (LLD P1 §4; the catalogue now has 30 codes).
+- The five codes marked "never sent" get the client message "The editing service hit a server problem." (LLD P1 §4).
+- shared's root index re-exports every public module. The server re-exports `OpenDocexError` from `@open-docex/shared/errors` (LLD P1 §2, P2 §2.1).
+- `env.d.ts` also declares `crypto.subtle.digest`. ids depends on errors. P3 §13 AssetCache uses the `CLIENT_*` codes (LLD P1 §1.4, §2; P3 §13).
+
 **Notes for later tasks (from the V1-00 review):**
 - V1-30: `frontend/package.json` has `"sideEffects": false`. Because `./style.css` is exported, V1-30 must check that bundlers keep the CSS import, and raise it if not.
 - V1-43: `dist/tsconfig.tsbuildinfo` is included in the npm tarballs. Decide whether to exclude it.

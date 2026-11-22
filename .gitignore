@@ -8,3 +8,5 @@ coverage/
 /shared/LICENSE
 /backend/LICENSE
 /frontend/LICENSE
+# Claude Code agent worktrees
+.claude/worktrees/

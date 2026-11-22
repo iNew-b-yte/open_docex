@@ -60,7 +60,7 @@ const FRONTEND_FORBIDDEN = [SERVER, NODE_PREFIXED];
 const restrict = (patterns) => ({ 'no-restricted-imports': ['error', { patterns }] });
 
 export default defineConfig(
-  { ignores: ['**/dist/**', 'coverage/**'] },
+  { ignores: ['**/dist/**', 'coverage/**', '.claude/**'] },
   tseslint.configs.recommendedTypeChecked,
   {
     languageOptions: {

@@ -210,7 +210,7 @@ Example entry in shared's `exports`. The other subpaths have the same shape.
 | File | Purpose | Overrides |
 |---|---|---|
 | `tsconfig.json` (root) | Solution file for `tsc -b` | `"files": []`, `references: shared, backend, frontend` |
-| `shared/tsconfig.json` | Build | `rootDir: src`, `outDir: dist`. No DOM lib and no `@types/node`, so isomorphism (HLD §5) is enforced at compile time. `src/env.d.ts` declares only `crypto.getRandomValues`, `TextEncoder` and `URL` (constructor + `protocol`). |
+| `shared/tsconfig.json` | Build | `rootDir: src`, `outDir: dist`. No DOM lib and no `@types/node`, so isomorphism (HLD §5) is enforced at compile time. `src/env.d.ts` declares only `crypto.getRandomValues`, `crypto.subtle.digest` (for `computeAssetId`, R-12), `TextEncoder` and `URL` (constructor + `protocol`). |
 | `backend/tsconfig.json` | Build | `types: ["node"]`, references shared |
 | `frontend/tsconfig.json` | Declarations only | `lib: [ES2023, DOM, DOM.Iterable]`, `jsx: react-jsx`, `emitDeclarationOnly`, `declarationDir: dist/types`, references shared |
 | `<pkg>/tsconfig.test.json` | Type-check `src` + `test` | `composite: false`, `noEmit`, `customConditions: ["@open-docex/source"]`. This condition is never set in a build config: in a composite build it would pull shared's sources into another project (TS6307). |
@@ -318,7 +318,7 @@ frontend/ src/{index.ts, …Part 3}   test/{unit/, component/}
 | Module | Files (`shared/src/…`) | Version | Depends on |
 |---|---|---|---|
 | util | `util/canonical-json.ts`, `util/utf8.ts`, `util/random.ts` | V1 | — |
-| ids | `ids/index.ts` | V1 | util |
+| ids | `ids/index.ts` | V1 | util, errors |
 | errors | `errors/catalogue.ts`, `errors/open-docex-error.ts`, `errors/index.ts` | V1 | — |
 | protocol | `protocol/messages.ts`, `protocol/validate.ts`, `protocol/frames.ts`, `protocol/codec.ts`, `protocol/close-codes.ts`, `protocol/index.ts` | V1 (upload V4, annotation V5) | ids, errors |
 | ot | `ot/types.ts`, `ot/index.ts` | V1 | — |
@@ -326,7 +326,8 @@ frontend/ src/{index.ts, …Part 3}   test/{unit/, component/}
 | sheet | `sheet/model.ts`, `sheet/ops.ts`, `sheet/validate.ts`, `sheet/a1.ts`, `sheet/shift.ts`, `sheet/order-key.ts`, `sheet/transform.ts`, `sheet/apply.ts`, `sheet/chunk.ts`, `sheet/ot-type.ts`, `sheet/index.ts` | V2 | ot, errors, util |
 
 **Rules for every module:**
-- Pure functions, with no I/O, timers or host globals other than the three declared in `env.d.ts`.
+- Pure functions, with no I/O, timers or host globals other than those declared in `env.d.ts`.
+- **Root export:** `shared/src/index.ts` re-exports every public module. Main-process code still imports only the `/protocol`, `/errors` and `/ids` subpaths (N4). Approved 2026-11-22.
 - Inputs are never mutated.
 - Objects built from untrusted JSON use null-prototype dictionaries, and only known fields are copied (prototype-pollution safe).
 
@@ -380,8 +381,9 @@ export type ErrorCode = 'CONFIG_INVALID' | 'CONFIG_LIBREOFFICE_NOT_FOUND' | 'CON
   | 'QUEUE_FULL' | 'QUEUE_UNAVAILABLE' | 'ENGINE_RESTARTING' | 'ENGINE_UNAVAILABLE' | 'ENGINE_FAILED'
   | 'DOCUMENT_FAULTED' | 'DOCUMENT_UNSUPPORTED_CONTENT' | 'DOCUMENT_READ_ONLY' | 'DOCUMENT_NOT_FOUND' | 'DOCUMENT_TOO_LARGE'
   | 'CONVERSION_FAILED' | 'CONVERSION_TIMEOUT' | 'SESSION_SLOW_CONSUMER' | 'SESSION_CLOSED' | 'SESSION_RESYNC_REQUIRED'
-  | 'ACCESS_DENIED' | 'PROTOCOL_INVALID_MESSAGE' | 'PROTOCOL_VERSION_UNSUPPORTED' | 'PROTOCOL_OP_REJECTED';
-export type ErrorCategory = 'config'|'storage'|'queue'|'engine'|'session'|'access'|'protocol'|'document'|'conversion'|'recovery';
+  | 'ACCESS_DENIED' | 'PROTOCOL_INVALID_MESSAGE' | 'PROTOCOL_VERSION_UNSUPPORTED' | 'PROTOCOL_OP_REJECTED'
+  | 'CLIENT_CONNECT_FAILED' | 'CLIENT_ASSET_TOO_LARGE' | 'CLIENT_IMAGE_TYPE_UNSUPPORTED';   // CLIENT_*: browser only (L-16)
+export type ErrorCategory = 'config'|'storage'|'queue'|'engine'|'session'|'access'|'protocol'|'document'|'conversion'|'recovery'|'client';
 export type ErrorSeverity = 'info'|'warning'|'error'|'fatal';
 export interface OpenDocexErrorShape {               // HLD §11.1, verbatim
   code: ErrorCode; category: ErrorCategory; retryable: boolean; severity: ErrorSeverity;
@@ -413,11 +415,11 @@ export function toClientError(err: unknown, ctx?: { clientSeq?: number; reqId?: 
 
 | Code | Category | Retry | Severity | Client message | Remediation (adopter) |
 |---|---|---|---|---|---|
-| CONFIG_INVALID | config | no | fatal | — (never sent) | Fix the option named in `message` (see the configuration reference) and restart. |
-| CONFIG_LIBREOFFICE_NOT_FOUND | config | no | fatal | — | Install LibreOffice on the server, or set `libreoffice.path` to the `soffice` executable. |
-| CONFIG_DATA_DIR_UNWRITABLE | config | no | fatal | — | Create `dataDir` and make it writable by the Node.js process user, or point `dataDir` elsewhere. |
+| CONFIG_INVALID | config | no | fatal | The editing service hit a server problem. | Fix the option named in `message` (see the configuration reference) and restart. |
+| CONFIG_LIBREOFFICE_NOT_FOUND | config | no | fatal | The editing service hit a server problem. | Install LibreOffice on the server, or set `libreoffice.path` to the `soffice` executable. |
+| CONFIG_DATA_DIR_UNWRITABLE | config | no | fatal | The editing service hit a server problem. | Create `dataDir` and make it writable by the Node.js process user, or point `dataDir` elsewhere. |
 | STORAGE_READ_FAILED | storage | yes | error | The document could not be loaded. Retrying. | Check that the storage adapter can reach its backend and that `ref` exists; see `cause`. |
-| STORAGE_WRITE_FAILED | storage | yes | warning | — | The engine kept a local copy and retries after 1, 5 and 15 min. Check storage availability and credentials. |
+| STORAGE_WRITE_FAILED | storage | yes | warning | The editing service hit a server problem. | The engine kept a local copy and retries after 1, 5 and 15 min. Check storage availability and credentials. |
 | STORAGE_LOCAL_MODE | storage | no | warning | Changes are saved on the server and will be copied to storage later. | No action needed while retries run. Watch the `storage` events. |
 | STORAGE_PENDING | recovery | no | error | Changes are saved on the server; storage sync is pending. | Retries are exhausted. Fix storage, then call the recovery `retry()` for this document, or `resolve()` it. |
 | STORAGE_CONFLICT | recovery | no | error | Changes are saved on the server; storage sync is pending. | The storage file changed while a newer local copy existed. Compare both and call `resolve()` with your choice. The engine never overwrites it on its own. |
@@ -425,7 +427,7 @@ export function toClientError(err: unknown, ctx?: { clientSeq?: number; reqId?: 
 | QUEUE_UNAVAILABLE | queue | yes | error | The server is busy. Your change will be retried. | Check connectivity and credentials for the configured Redis/Valkey or Kafka [V3]. |
 | ENGINE_RESTARTING | engine | yes | warning | Reconnecting… | Clients reconnect automatically. Inspect the preceding `error` event for the crash cause. |
 | ENGINE_UNAVAILABLE | engine | no | error | The editing service is unavailable. | The engine is FAILED. Fix the cause in the `fatal` event and restart the application. |
-| ENGINE_FAILED | engine | no | fatal | — | The restart limit was exceeded. Inspect the preceding `error` events and logs, fix, and restart. |
+| ENGINE_FAILED | engine | no | fatal | The editing service hit a server problem. | The restart limit was exceeded. Inspect the preceding `error` events and logs, fix, and restart. |
 | DOCUMENT_FAULTED | document | no | error | This document hit an internal error. Reload to continue. | Inspect the `error` event's `cause`. Other documents keep running. Reopening reloads from the journal. |
 | DOCUMENT_UNSUPPORTED_CONTENT | document | no | warning | Parts of this file can't be edited here, so it opened read-only. | See `unsupported`. Call `documents.allowUnsupportedEdit(documentId)` to allow editing; those parts are removed on save. |
 | DOCUMENT_READ_ONLY | document | no | warning | This document is read-only. | The session is view-only or the document is read-only. The change was discarded. |
@@ -440,10 +442,15 @@ export function toClientError(err: unknown, ctx?: { clientSeq?: number; reqId?: 
 | PROTOCOL_INVALID_MESSAGE | protocol | no | error | Client and server are out of sync. Reload the page. | Make sure `@open-docex/client` and `@open-docex/server` are the same release. Otherwise a client sent a malformed frame. |
 | PROTOCOL_VERSION_UNSUPPORTED | protocol | no | error | Please reload the page to update the editor. | Deploy the same release of client and server. |
 | PROTOCOL_OP_REJECTED | protocol | no | error | A change could not be applied. Reloading. | The change failed validation and was discarded. If this is frequent, report a bug with the `error` event. |
+| CLIENT_CONNECT_FAILED | client | yes | error | Can't connect. | Check the server is running and that proxies allow WebSocket upgrades on the engine path. |
+| CLIENT_ASSET_TOO_LARGE | client | no | warning | This image is too large. | Raise limits.maxAssetBytes or use a smaller image. |
+| CLIENT_IMAGE_TYPE_UNSUPPORTED | client | no | warning | Only PNG, JPEG and GIF images can be added. | Only PNG, JPEG and GIF are supported (PO-24). |
+
+Codes whose client message is "The editing service hit a server problem." (the three `CONFIG_*`, `STORAGE_WRITE_FAILED`, `ENGINE_FAILED`) are not meant to reach a client; the generic text is what `toClientError` sends if one does. The `CLIENT_*` rows and these messages were approved by the project owner on 2026-11-22.
 
 - **Concurrency:** none.
 - **Tests (unit):**
-  - every `ErrorCode` has an entry with non-empty remediation (a runtime count of 27 plus a compile-time `Record` check);
+  - every `ErrorCode` has an entry with non-empty remediation (a runtime count of 30 plus a compile-time `Record` check);
   - catalogue values are frozen;
   - `toShape` → `v8.serialize` → `deserialize` → `fromShape` round trip (in a Node-only test);
   - `toClientError` never leaks `message`, `cause` or `stack`, including for non-`OpenDocexError` values, strings and `null`;
@@ -1367,7 +1374,7 @@ backend/test-kit/  fakes and the storage conformance suite (§21)
 
 ```ts
 export { createEngine, defineWorkerConfig, LocalFsStorage };
-export { OpenDocexError } from '@open-docex/shared';          // re-export: adopters need one import
+export { OpenDocexError } from '@open-docex/shared/errors';   // re-export: adopters need one import; the subpath keeps ProseMirror out of the main process (N4)
 export type {
   EngineOptions, WorkerConfig, Engine, AuthorizeContext, AuthorizeResult, Session, Logger, LogLevel,
   StorageAdapter, StorageRef, StorageVersion, StorageStat, StorageReadResult, StorageWriteResult, StorageCreateInput,
@@ -4011,8 +4018,8 @@ export declare class AssetCache {
 ```
 ```
 put(bytes, mime):
-  if mime ∉ IMAGE_TYPES: reject(local DOCUMENT_UNSUPPORTED_CONTENT)              // OQ-4 for the list
-  if limits.maxAssetBytes known and bytes.length > it: reject(DOCUMENT_TOO_LARGE) // optional LoadStartMsg.limits (§20)
+  if mime ∉ IMAGE_TYPES: reject(local CLIENT_IMAGE_TYPE_UNSUPPORTED)             // PO-24 list; L-16
+  if limits.maxAssetBytes known and bytes.length > it: reject(CLIENT_ASSET_TOO_LARGE) // optional LoadStartMsg.limits (§20); L-16
   id ← await computeAssetId(bytes)                                                // shared, SHA-256 hex (§20)
   if urls.has(id): return id                                                      // already stored and cached
   urls.set(id, URL.createObjectURL(new Blob([bytes], { type: mime })))            // the inserting client sees it at once
