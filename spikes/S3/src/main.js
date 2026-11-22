@@ -111,7 +111,7 @@ const S3 = {
     const tView = performance.now();
     const e = await first;
     const tPass = performance.now();
-    container.offsetHeight; // flush layout of the paginated result
+    void container.offsetHeight; // flush layout of the paginated result
     const tLayout = performance.now();
     await S3.idle();
     window.view = view;
@@ -148,7 +148,7 @@ const S3 = {
     const tDispatch = performance.now();
     const e = await pass;
     const tPassEnd = performance.now();
-    view.dom.offsetHeight; // the layout the browser would do for the frame after pagination
+    void view.dom.offsetHeight; // the layout the browser would do for the frame after pagination
     const tLayout = performance.now();
     await afterFrame();
     const tFrame = performance.now();
@@ -298,7 +298,7 @@ S3.eventDurations = () => eventDurations.splice(0);
 S3.keyTiming = async () => {
   const e = await keyPass;
   const passEnd = performance.now();
-  view.dom.offsetHeight;
+  void view.dom.offsetHeight;
   const tLayout = performance.now();
   await afterFrame();
   const r = {

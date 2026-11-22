@@ -20,7 +20,7 @@ export class HeaderFooterRegions {
   }
 
   nodeViews() {
-    const make = (kind) => (node) => {
+    const make = (kind) => () => {
       const dom = document.createElement(kind);
       dom.className = 'odx-' + kind;
       const contentDOM = document.createElement('div');

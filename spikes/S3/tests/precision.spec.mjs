@@ -18,7 +18,10 @@ test('height read precision', async ({ page, browserName }) => {
       const ro = new ResizeObserver((entries) => {
         for (const e of entries) ref.set(e.target, e.borderBoxSize[0].blockSize);
         left -= entries.length;
-        if (left <= 0) (ro.disconnect(), res());
+        if (left <= 0) {
+          ro.disconnect();
+          res();
+        }
       });
       for (const e of els) ro.observe(e);
     });
