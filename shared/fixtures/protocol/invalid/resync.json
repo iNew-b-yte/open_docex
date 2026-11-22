@@ -1,0 +1,11 @@
+[
+  {
+    "name": "unknown reason",
+    "direction": "server",
+    "frame": "text",
+    "message": {
+      "type": "resync",
+      "reason": "bored"
+    }
+  }
+]

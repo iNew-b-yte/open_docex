@@ -1,0 +1,37 @@
+[
+  {
+    "name": "plain",
+    "direction": "server",
+    "frame": "text",
+    "message": {
+      "type": "error",
+      "code": "QUEUE_FULL",
+      "retryable": true,
+      "message": "The server is busy. Your change will be retried."
+    }
+  },
+  {
+    "name": "with clientSeq",
+    "direction": "server",
+    "frame": "text",
+    "message": {
+      "type": "error",
+      "code": "DOCUMENT_READ_ONLY",
+      "retryable": false,
+      "message": "This document is read-only.",
+      "clientSeq": 4
+    }
+  },
+  {
+    "name": "asset error with reqId",
+    "direction": "server",
+    "frame": "text",
+    "message": {
+      "type": "error",
+      "code": "PROTOCOL_OP_REJECTED",
+      "retryable": false,
+      "message": "A change could not be applied. Reloading.",
+      "reqId": 9
+    }
+  }
+]

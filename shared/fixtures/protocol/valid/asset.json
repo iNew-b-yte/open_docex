@@ -1,0 +1,31 @@
+[
+  {
+    "name": "asset-put confirmation (text, no bytes)",
+    "direction": "server",
+    "frame": "text",
+    "message": {
+      "type": "asset",
+      "reqId": 1,
+      "assetId": "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef",
+      "mime": "image/png",
+      "size": 4
+    }
+  },
+  {
+    "name": "asset-get answer (binary, bytes)",
+    "direction": "server",
+    "frame": "binary",
+    "message": {
+      "type": "asset",
+      "reqId": 3,
+      "assetId": "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef",
+      "mime": "image/jpeg",
+      "size": 3
+    },
+    "payload": [
+      255,
+      216,
+      255
+    ]
+  }
+]

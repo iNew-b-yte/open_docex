@@ -1,0 +1,70 @@
+[
+  {
+    "name": "missing clientId",
+    "direction": "client",
+    "frame": "text",
+    "message": {
+      "type": "hello",
+      "protocol": 1
+    }
+  },
+  {
+    "name": "bad clientId",
+    "direction": "client",
+    "frame": "text",
+    "message": {
+      "type": "hello",
+      "protocol": 1,
+      "clientId": "short"
+    }
+  },
+  {
+    "name": "protocol not an integer",
+    "direction": "client",
+    "frame": "text",
+    "message": {
+      "type": "hello",
+      "protocol": "1",
+      "clientId": "cLiEnT0123456789abcdef"
+    }
+  },
+  {
+    "name": "resume with bad epoch",
+    "direction": "client",
+    "frame": "text",
+    "message": {
+      "type": "hello",
+      "protocol": 1,
+      "clientId": "cLiEnT0123456789abcdef",
+      "resume": {
+        "epoch": "x",
+        "rev": 0
+      }
+    }
+  },
+  {
+    "name": "resume with negative rev",
+    "direction": "client",
+    "frame": "text",
+    "message": {
+      "type": "hello",
+      "protocol": 1,
+      "clientId": "cLiEnT0123456789abcdef",
+      "resume": {
+        "epoch": "ePoCh_0123456789-abcde",
+        "rev": -1
+      }
+    }
+  },
+  {
+    "name": "resume null",
+    "direction": "client",
+    "frame": "text",
+    "message": {
+      "type": "hello",
+      "protocol": 1,
+      "clientId": "cLiEnT0123456789abcdef",
+      "resume": null
+    }
+  }
+]

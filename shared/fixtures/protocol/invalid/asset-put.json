@@ -1,0 +1,38 @@
+[
+  {
+    "name": "in a text frame",
+    "direction": "client",
+    "frame": "text",
+    "message": {
+      "type": "asset-put",
+      "reqId": 1,
+      "mime": "image/png"
+    }
+  },
+  {
+    "name": "svg mime",
+    "direction": "client",
+    "frame": "binary",
+    "message": {
+      "type": "asset-put",
+      "reqId": 1,
+      "mime": "image/svg+xml"
+    },
+    "payload": [
+      60
+    ]
+  },
+  {
+    "name": "negative reqId",
+    "direction": "client",
+    "frame": "binary",
+    "message": {
+      "type": "asset-put",
+      "reqId": -1,
+      "mime": "image/png"
+    },
+    "payload": [
+      1
+    ]
+  }
+]

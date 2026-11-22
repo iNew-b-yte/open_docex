@@ -1,0 +1,42 @@
+[
+  {
+    "name": "empty",
+    "direction": "server",
+    "frame": "text",
+    "message": {
+      "type": "annotation-result",
+      "reqId": 4,
+      "annotations": []
+    }
+  },
+  {
+    "name": "two",
+    "direction": "server",
+    "frame": "text",
+    "message": {
+      "type": "annotation-result",
+      "reqId": 4,
+      "annotations": [
+        {
+          "id": "aNnOt0123456789abcdefg",
+          "kind": "note",
+          "body": "Check this",
+          "authorId": "user-1",
+          "createdAt": "2026-11-22T10:00:00.000Z",
+          "updatedAt": "2026-11-22T10:05:00.000Z",
+          "resolved": false
+        },
+        {
+          "id": "rEpLy0123456789abcdefg",
+          "kind": "note",
+          "body": "Check this",
+          "authorId": "user-1",
+          "createdAt": "2026-11-22T10:00:00.000Z",
+          "updatedAt": "2026-11-22T10:05:00.000Z",
+          "resolved": true,
+          "replyTo": "aNnOt0123456789abcdefg"
+        }
+      ]
+    }
+  }
+]

@@ -1,0 +1,52 @@
+[
+  {
+    "name": "minimal",
+    "direction": "client",
+    "frame": "text",
+    "message": {
+      "type": "hello",
+      "protocol": 1,
+      "clientId": "cLiEnT0123456789abcdef"
+    }
+  },
+  {
+    "name": "with resume",
+    "direction": "client",
+    "frame": "text",
+    "message": {
+      "type": "hello",
+      "protocol": 1,
+      "clientId": "cLiEnT0123456789abcdef",
+      "resume": {
+        "epoch": "ePoCh_0123456789-abcde",
+        "rev": 42
+      }
+    }
+  },
+  {
+    "name": "other protocol version decodes (the server answers PROTOCOL_VERSION_UNSUPPORTED)",
+    "direction": "client",
+    "frame": "text",
+    "message": {
+      "type": "hello",
+      "protocol": 2,
+      "clientId": "cLiEnT0123456789abcdef"
+    }
+  },
+  {
+    "name": "unknown fields are dropped",
+    "direction": "client",
+    "frame": "text",
+    "message": {
+      "type": "hello",
+      "protocol": 1,
+      "clientId": "cLiEnT0123456789abcdef",
+      "extra": true
+    },
+    "expected": {
+      "type": "hello",
+      "protocol": 1,
+      "clientId": "cLiEnT0123456789abcdef"
+    }
+  }
+]

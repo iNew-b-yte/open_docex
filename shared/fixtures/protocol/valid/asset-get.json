@@ -1,0 +1,12 @@
+[
+  {
+    "name": "by asset id",
+    "direction": "client",
+    "frame": "text",
+    "message": {
+      "type": "asset-get",
+      "reqId": 3,
+      "assetId": "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef"
+    }
+  }
+]

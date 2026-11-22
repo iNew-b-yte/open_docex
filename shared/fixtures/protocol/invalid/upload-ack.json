@@ -1,0 +1,11 @@
+[
+  {
+    "name": "missing receivedBytes",
+    "direction": "server",
+    "frame": "text",
+    "message": {
+      "type": "upload-ack",
+      "reqId": 1
+    }
+  }
+]

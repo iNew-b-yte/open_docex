@@ -1,0 +1,11 @@
+[
+  {
+    "name": "n",
+    "direction": "client",
+    "frame": "text",
+    "message": {
+      "type": "ping",
+      "n": 5
+    }
+  }
+]

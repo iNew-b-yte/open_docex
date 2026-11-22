@@ -1,0 +1,26 @@
+[
+  {
+    "name": "docx",
+    "direction": "client",
+    "frame": "text",
+    "message": {
+      "type": "upload-start",
+      "reqId": 1,
+      "name": "Report.docx",
+      "format": "docx",
+      "size": 1048576
+    }
+  },
+  {
+    "name": "name of 255 characters",
+    "direction": "client",
+    "frame": "text",
+    "message": {
+      "type": "upload-start",
+      "reqId": 1,
+      "name": "nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn.xlsx",
+      "format": "xlsx",
+      "size": 0
+    }
+  }
+]

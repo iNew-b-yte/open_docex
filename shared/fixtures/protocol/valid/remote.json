@@ -1,0 +1,19 @@
+[
+  {
+    "name": "remote",
+    "direction": "server",
+    "frame": "text",
+    "message": {
+      "type": "remote",
+      "fromRev": 5,
+      "ops": [
+        {
+          "stepType": "replace",
+          "from": 1,
+          "to": 1
+        }
+      ],
+      "clientId": "oThEr_0123456789abcdef"
+    }
+  }
+]

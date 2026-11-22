@@ -5,8 +5,9 @@
  *
  * The root re-exports every public module (LLD Part 1 §2). Main-process code imports only
  * the `/protocol`, `/errors` and `/ids` subpaths (N4). Modules not yet implemented
- * (`/protocol`, `/ot`, `/text`, `/sheet`) are added by later tasks.
+ * (`/ot`, `/text`, `/sheet`) are added by later tasks.
  */
 export * from './util/index.js';
 export * from './ids/index.js';
 export * from './errors/index.js';
+export * from './protocol/index.js';

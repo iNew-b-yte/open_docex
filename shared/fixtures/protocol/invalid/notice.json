@@ -1,0 +1,32 @@
+[
+  {
+    "name": "Part 2 kind instead of notice",
+    "direction": "server",
+    "frame": "text",
+    "message": {
+      "type": "notice",
+      "kind": "storage",
+      "state": "local"
+    }
+  },
+  {
+    "name": "unknown storage state",
+    "direction": "server",
+    "frame": "text",
+    "message": {
+      "type": "notice",
+      "notice": "storage",
+      "state": "conflict"
+    }
+  },
+  {
+    "name": "read-only without reason",
+    "direction": "server",
+    "frame": "text",
+    "message": {
+      "type": "notice",
+      "notice": "read-only",
+      "readOnly": false
+    }
+  }
+]

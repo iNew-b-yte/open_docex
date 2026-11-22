@@ -1,0 +1,29 @@
+[
+  {
+    "name": "png bytes",
+    "direction": "client",
+    "frame": "binary",
+    "message": {
+      "type": "asset-put",
+      "reqId": 1,
+      "mime": "image/png"
+    },
+    "payload": [
+      137,
+      80,
+      78,
+      71
+    ]
+  },
+  {
+    "name": "empty payload decodes (the server rejects bad bytes)",
+    "direction": "client",
+    "frame": "binary",
+    "message": {
+      "type": "asset-put",
+      "reqId": 2,
+      "mime": "image/gif"
+    },
+    "payload": []
+  }
+]

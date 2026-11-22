@@ -1,0 +1,12 @@
+[
+  {
+    "name": "done",
+    "direction": "server",
+    "frame": "text",
+    "message": {
+      "type": "upload-done",
+      "reqId": 1,
+      "documentId": "reports/2026/q3.docx"
+    }
+  }
+]

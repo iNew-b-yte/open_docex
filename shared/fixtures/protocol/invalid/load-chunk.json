@@ -1,0 +1,21 @@
+[
+  {
+    "name": "data not an object",
+    "direction": "server",
+    "frame": "text",
+    "message": {
+      "type": "load-chunk",
+      "seq": 0,
+      "data": "x"
+    }
+  },
+  {
+    "name": "missing seq",
+    "direction": "server",
+    "frame": "text",
+    "message": {
+      "type": "load-chunk",
+      "data": {}
+    }
+  }
+]

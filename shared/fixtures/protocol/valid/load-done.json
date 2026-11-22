@@ -1,0 +1,11 @@
+[
+  {
+    "name": "done",
+    "direction": "server",
+    "frame": "text",
+    "message": {
+      "type": "load-done",
+      "rev": 17
+    }
+  }
+]
