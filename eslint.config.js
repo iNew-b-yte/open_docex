@@ -46,11 +46,13 @@ const BACKEND_FORBIDDEN = [
 // Main-process modules (LLD Part 2 §1: api/, gateway/, supervisor/, channel/) may import only
 // the protocol, errors and ids subpaths of shared, so ProseMirror stays out of the adopter's
 // main process (N4).
-const MAIN_PROCESS_FORBIDDEN = [
-  ...BACKEND_FORBIDDEN,
+// Type-only imports are allowed: `import type` is erased at build time, so ProseMirror still never
+// loads in the main process (LLD §0.5 S-23).
+const MAIN_PROCESS_SHARED = [
   {
     regex: '^@open-docex/shared(?!/(protocol|errors|ids)$)',
     message: 'Main-process modules import only @open-docex/shared/{protocol,errors,ids} (N4).',
+    allowTypeImports: true,
   },
 ];
 
@@ -88,7 +90,9 @@ export default defineConfig(
   { files: ['backend/src/**'], rules: restrict(BACKEND_FORBIDDEN) },
   {
     files: ['backend/src/{api,gateway,supervisor,channel}/**'],
-    rules: restrict(MAIN_PROCESS_FORBIDDEN),
+    rules: {
+      '@typescript-eslint/no-restricted-imports': ['error', { patterns: MAIN_PROCESS_SHARED }],
+    },
   },
   { files: ['frontend/src/**'], rules: restrict(FRONTEND_FORBIDDEN) },
 );
