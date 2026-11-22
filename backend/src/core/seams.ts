@@ -6,7 +6,7 @@
  * - {@link FlushSeam}: `FlushScheduler` (V1-16, §12)
  * - {@link RecoverySeam}: `RecoveryManager` (V1-16, §13)
  * - {@link AuditSink}: `AuditEmitter` (V1-17, §15)
- * - {@link CoreSink} and {@link CoreChannelPort}: the Core side of the `EngineChannel` (V1-18, §6)
+ * - {@link CoreSink}: what instances send; `CoreRuntime` maps it onto the V1-18 channel (§6)
  *
  * Tests fake every one of them.
  *
@@ -16,7 +16,7 @@ import type { OpenDocexError } from '@open-docex/shared/errors';
 import type { DocumentId } from '@open-docex/shared/ids';
 import type { ConversionNotice, DocKind, FileFormat, UnsupportedFinding } from '@open-docex/shared/protocol';
 import type { AuditEvent, DocumentEvent } from '../api/events.js';
-import type { LogFields, LogLevel } from '../log/logger.js';
+import type { CoreRequest, OutFrame } from '../channel/messages.js';
 import type { TimerClock } from '../persistence/journal.js';
 import type { StorageRef } from '../storage/storage-adapter.js';
 
@@ -98,83 +98,20 @@ export interface AuditSink {
 
 // --- channel (V1-18) -------------------------------------------------------------------------
 
-/** One outgoing frame for one or more sessions (LLD Part 2 §6.2 `OutFrame`). */
-export interface OutFrame {
-  sessionIds: string[];
-  data: string | Uint8Array;
-  binary: boolean;
-  /** Set on paced load chunks; the main side answers with a `written` request (§8.5). */
-  token?: number;
-}
+/** The session-level `CoreRequest`s the Core's dispatcher handles (LLD Part 2 §6.2, §8.1). */
+export type CoreSessionRequest = Extract<CoreRequest, { type: 'join' | 'frame' | 'leave' | 'written' }>;
 
 /**
- * Everything the Core sends towards the main process, as typed calls. The channel task (V1-18)
- * maps these to `CoreEvent`s (`send`, `close`, `emit`, `log`) and turns errors into `WireError`s.
+ * Everything a document instance sends towards the main process, as typed calls. `CoreRuntime`
+ * maps these onto the channel's `CoreEvent`s (`send`, `close`, `emit`) and turns errors into
+ * `WireError`s with `toWire` (§0.5 S-34).
  */
 export interface CoreSink {
   send(frames: OutFrame[]): void;
   close(sessionIds: string[], code: number, reason: string): void;
+  /** An error that belongs to a document. One without a `documentId` is only logged (S-34). */
   error(err: OpenDocexError): void;
   document(ev: DocumentEvent): void;
   /** IPC backpressure (§6.4). Resolves when the Core may send more. */
-  whenWritable(): Promise<void>;
-}
-
-/** The session-level `CoreRequest`s the Core handles (LLD Part 2 §6.2). */
-export type CoreSessionRequest =
-  | {
-      type: 'join';
-      sessionId: string;
-      documentId: DocumentId;
-      userId: string;
-      access: 'edit' | 'view';
-      document: { ref: StorageRef; format: FileFormat };
-    }
-  | { type: 'frame'; sessionId: string; data: Uint8Array; binary: boolean }
-  | { type: 'leave'; sessionId: string; reason: 'client-closed' | 'slow-consumer' | 'admin' | 'shutdown' }
-  | { type: 'written'; sessionId: string; token: number };
-
-/** The boot counters in `ready` (LLD Part 2 §6.2 `BootReport`). */
-export interface BootReport {
-  documents: number;
-  recovering: number;
-  dirty: number;
-  queueBacklog: number;
-}
-
-/** The minimal `WireError` shape (LLD Part 2 §6.2). V1-18 owns the real type and `toWire`. */
-export interface WireErrorLike {
-  code: string;
-  message: string;
-  documentId?: string;
-  instanceId?: string;
-  causeMessage?: string;
-}
-
-/** The `CoreRequest`s {@link CoreRuntime} reads (a subset of LLD Part 2 §6.2). */
-export type CoreRequestLike =
-  | CoreSessionRequest
-  | { type: 'init'; id: number; workerConfigModule: string; logLevel: LogLevel }
-  | { type: 'ping'; seq: number }
-  | { type: 'shutdown'; id: number; timeoutMs: number };
-
-/** The `CoreEvent`s {@link CoreRuntime} writes (a subset of LLD Part 2 §6.2). */
-export type CoreEventLike =
-  | { type: 'ready'; id: number; pid: number; boot: BootReport }
-  | { type: 'pong'; seq: number }
-  | { type: 'result'; id: number; ok: true; value: unknown }
-  | { type: 'result'; id: number; ok: false; error: WireErrorLike }
-  | { type: 'send'; frames: OutFrame[] }
-  | { type: 'close'; sessionIds: string[]; code: number; reason: string }
-  | { type: 'emit'; event: 'error' | 'audit' | 'storage' | 'document'; payload: unknown }
-  | { type: 'log'; level: LogLevel; msg: string; fields?: LogFields };
-
-/**
- * The Core side of the `EngineChannel` (LLD Part 2 §6.1 `CoreChannelSide`), reduced to what the
- * runtime uses. V1-18's `CoreChannelSide` is structurally compatible.
- */
-export interface CoreChannelPort {
-  onRequest(handler: (msg: CoreRequestLike) => void): void;
-  emit(ev: CoreEventLike): void;
   whenWritable(): Promise<void>;
 }

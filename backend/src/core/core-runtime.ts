@@ -41,19 +41,17 @@ import type { QueueAdapter } from '../queue/queue-adapter.js';
 import { StorageRouter } from '../storage/storage-router.js';
 import { DocumentInstanceFactory } from './instance-factory.js';
 import { DocumentRegistry } from './registry.js';
+import type { CoreChannelSide } from '../channel/engine-channel.js';
+import type { BootReport, CoreEvent, CoreRequest } from '../channel/messages.js';
+import { toWire } from '../channel/wire-error.js';
 import {
   realClock,
   type AuditSink,
-  type BootReport,
   type Clock,
   type CodecSeam,
-  type CoreChannelPort,
-  type CoreEventLike,
-  type CoreRequestLike,
   type CoreSink,
   type FlushSeam,
   type RecoverySeam,
-  type WireErrorLike,
 } from './seams.js';
 import { SessionDispatcher } from './session-record.js';
 
@@ -81,17 +79,6 @@ export interface CoreServices {
   importModule?(url: string): Promise<unknown>;
 }
 
-/** Turns an error into the `WireError` shape (LLD Part 2 §6.2). V1-18 owns the real `toWire`. */
-export function wireErrorOf(err: OpenDocexError): WireErrorLike {
-  const w: WireErrorLike = { code: err.code, message: err.message };
-  if (err.documentId !== undefined) w.documentId = err.documentId;
-  if (err.instanceId !== undefined) w.instanceId = err.instanceId;
-  const cause = err.cause;
-  if (cause instanceof Error) w.causeMessage = cause.message;
-  else if (typeof cause === 'string') w.causeMessage = cause;
-  return w;
-}
-
 interface Booted {
   config: ResolvedWorkerConfig;
   lock: DataDirLock;
@@ -105,7 +92,7 @@ interface Booted {
 
 /** The Core's top level (LLD Part 2 §7). */
 export class CoreRuntime {
-  readonly #side: CoreChannelPort;
+  readonly #side: CoreChannelSide;
   readonly #clock: Clock;
   readonly #services: CoreServices;
   readonly sink: CoreSink;
@@ -114,7 +101,13 @@ export class CoreRuntime {
   #booted: Booted | null = null;
   #shuttingDown = false;
 
-  constructor(side: CoreChannelPort, o: { services: CoreServices; clock?: Clock }) {
+  /**
+   * @param side the Core end of the channel: `IpcCoreChannelSide.fromProcess()` in worker mode,
+   *   or the second element of `InProcessEngineChannel.pair()` in main mode.
+   * @param o.services factories for the modules built by other tasks (LLD §7 has only
+   *   `(side, clock?)`; the factories are how they are wired in).
+   */
+  constructor(side: CoreChannelSide, o: { services: CoreServices; clock?: Clock }) {
     this.#side = side;
     this.#clock = o.clock ?? realClock;
     this.#services = o.services;
@@ -237,7 +230,7 @@ export class CoreRuntime {
     await Promise.all([...b.registry.all()].map((i) => i.close().catch((e: unknown) => this.#report(e))));
     await b.flush.flushAll(deadline).catch((e: unknown) => this.#report(e));
     b.syncTimer.stop();
-    await b.syncTimer.syncAll();
+    await b.syncTimer.syncAll().catch((e: unknown) => this.#report(e));
     await b.queue.close().catch((e: unknown) => this.#report(e));
     await b.codec.close().catch((e: unknown) => this.#report(e));
     await b.lock.release().catch(() => undefined);
@@ -257,24 +250,35 @@ export class CoreRuntime {
     return resolveWorkerConfig(def);
   }
 
-  #onRequest(msg: CoreRequestLike): void {
+  #onRequest(msg: CoreRequest): void {
     try {
       switch (msg.type) {
         case 'init':
           void this.boot({ workerConfigModule: msg.workerConfigModule, logLevel: msg.logLevel }).then(
-            (boot) => this.#side.emit({ type: 'ready', id: msg.id, pid: process.pid, boot }),
-            (err: unknown) => this.#side.emit({ type: 'result', id: msg.id, ok: false, error: wireErrorOf(toEngineError(err)) }),
+            (boot) => this.#emit({ type: 'ready', id: msg.id, pid: process.pid, boot }),
+            (err: unknown) => this.#emit({ type: 'result', id: msg.id, ok: false, error: toWire(err, { where: 'boot' }) }),
           );
           return;
         case 'ping':
-          this.#side.emit({ type: 'pong', seq: msg.seq });
+          this.#emit({ type: 'pong', seq: msg.seq });
           return;
         case 'shutdown':
-          void this.shutdown(msg.timeoutMs).then(
-            () => this.#side.emit({ type: 'result', id: msg.id, ok: true, value: undefined }),
-            (err: unknown) => this.#side.emit({ type: 'result', id: msg.id, ok: false, error: wireErrorOf(toEngineError(err)) }),
-          );
+          // shutdown() reports its own failures and never rejects.
+          void this.shutdown(msg.timeoutMs).then(() => this.#emit({ type: 'result', id: msg.id, ok: true, value: undefined }));
           return;
+        case 'call':
+          // The engine API (documents.*, recovery.*, audit.enable) is wired by V1-19.
+          this.#emit({
+            type: 'result',
+            id: msg.id,
+            ok: false,
+            error: toWire(engineError('ENGINE_UNAVAILABLE', { message: `${msg.method} is not available in the Core yet.` }), {
+              where: 'boot',
+            }),
+          });
+          return;
+        case 'hook-result':
+          return; // consumed by the channel (V4 hooks)
         default: {
           const d = this.#booted?.dispatcher;
           if (d === undefined || this.#shuttingDown) {
@@ -289,14 +293,19 @@ export class CoreRuntime {
     }
   }
 
-  /** Logs an error that belongs to no instance and emits it as `error`. */
+  /**
+   * An error that belongs to no instance: logged, and emitted as `error` only when it names a
+   * document (§0.5 S-34).
+   */
   #report(err: unknown): void {
-    const e = toEngineError(err);
-    this.logger.error('Core error.', { code: e.code });
-    this.sink.error(e);
+    const code = OpenDocexError.is(err) ? err.code : 'UNKNOWN';
+    this.logger.error('Core error.', { code });
+    if (OpenDocexError.is(err) && typeof err.documentId === 'string') {
+      this.#emit({ type: 'emit', event: 'error', payload: toWire(err, { where: 'document', documentId: err.documentId }) });
+    }
   }
 
-  #emit(ev: CoreEventLike): void {
+  #emit(ev: CoreEvent): void {
     this.#side.emit(ev);
   }
 
@@ -315,18 +324,14 @@ export class CoreRuntime {
     return {
       send: (frames) => this.#emit({ type: 'send', frames }),
       close: (sessionIds, code, reason) => this.#emit({ type: 'close', sessionIds, code, reason }),
-      error: (err) => this.#emit({ type: 'emit', event: 'error', payload: wireErrorOf(err) }),
+      error: (err) => this.#report(err),
       document: (ev: DocumentEvent) => {
         const { error, ...rest } = ev;
-        this.#emit({ type: 'emit', event: 'document', payload: error === undefined ? rest : { ...rest, error: wireErrorOf(error) } });
+        const payload =
+          error === undefined ? rest : { ...rest, error: toWire(error, { where: 'instance', documentId: ev.documentId }) };
+        this.#emit({ type: 'emit', event: 'document', payload });
       },
       whenWritable: () => this.#side.whenWritable(),
     };
   }
-}
-
-function toEngineError(err: unknown): OpenDocexError {
-  if (err instanceof OpenDocexError) return err;
-  if (OpenDocexError.is(err)) return OpenDocexError.fromShape(err);
-  return engineError('DOCUMENT_FAULTED', { message: 'An internal Core error.', cause: err });
 }
