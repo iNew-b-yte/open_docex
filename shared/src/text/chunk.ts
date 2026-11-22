@@ -9,6 +9,7 @@ import { Node as PMNode } from 'prosemirror-model';
 import { OpenDocexError } from '../errors/index.js';
 import type { Chunk, ChunkLimits } from '../ot/index.js';
 import { utf8Length } from '../util/index.js';
+import { colwidthFits } from './apply.js';
 import { getPageSettings, pageSettingsFit } from './page.js';
 import type { PageSettings } from './page.js';
 import { textSchema } from './schema.js';
@@ -92,8 +93,9 @@ function isRecord(v: unknown): v is Record<string, unknown> {
 
 /**
  * Rebuilds a text document from its chunks, which come from the network and are
- * untrusted. Checks the sequence, the region order and the document's content and
- * attributes. Throws `PROTOCOL_INVALID_MESSAGE` on any failure.
+ * untrusted. Checks the sequence, the region order, the document's content and
+ * attributes, the margin fit and that each cell's `colwidth` length equals its `colspan`
+ * (§0 S-27). Throws `PROTOCOL_INVALID_MESSAGE` on any failure.
  */
 export function assembleText(chunks: readonly Chunk<TextChunkData>[]): TextSnapshot {
   if (!Array.isArray(chunks) || chunks.length === 0) invalid('no chunks');
@@ -143,5 +145,13 @@ export function assembleText(chunks: readonly Chunk<TextChunkData>[]): TextSnaps
     invalid('document');
   }
   if (!pageSettingsFit(getPageSettings(doc))) invalid('margins');
+  // §0 S-27(1): each cell's colwidth has colspan entries.
+  let cellsFit = true;
+  doc.descendants((node) => {
+    if (!cellsFit) return false;
+    if ((node.type.name === 'table_cell' || node.type.name === 'table_header') && !colwidthFits(node)) cellsFit = false;
+    return cellsFit;
+  });
+  if (!cellsFit) invalid('colwidth');
   return doc;
 }
