@@ -95,4 +95,24 @@ export default defineConfig(
     },
   },
   { files: ['frontend/src/**'], rules: restrict(FRONTEND_FORBIDDEN) },
+  // Client-side security (LLD Part 3 §15; §0.5 S-33): never build HTML from strings.
+  {
+    files: ['frontend/src/**'],
+    rules: {
+      'no-restricted-properties': [
+        'error',
+        ...['innerHTML', 'outerHTML', 'insertAdjacentHTML'].map((property) => ({
+          property,
+          message: 'Build DOM nodes instead of HTML strings (HLD §14).',
+        })),
+      ],
+      'no-restricted-syntax': [
+        'error',
+        {
+          selector: "JSXAttribute[name.name='dangerouslySetInnerHTML']",
+          message: 'dangerouslySetInnerHTML is not allowed (HLD §14).',
+        },
+      ],
+    },
+  },
 );

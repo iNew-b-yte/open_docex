@@ -4,7 +4,9 @@
   "description": "open_docex browser client: mount() a collaborative document editor into any page.",
   "license": "MIT",
   "type": "module",
-  "sideEffects": false,
+  "sideEffects": [
+    "**/*.css"
+  ],
   "exports": {
     ".": {
       "@open-docex/source": "./src/index.ts",
