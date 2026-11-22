@@ -1,0 +1,32 @@
+# Temporary workflow for spike S2 on Linux (LLD §0.5 S-16). Remove after the results are in docs/spikes/S2.md.
+name: spike-s2-linux
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  s2-linux:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+      - name: Install LibreOffice
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends libreoffice-writer libreoffice-draw libreoffice-calc fonts-liberation fonts-dejavu-core
+          soffice --version
+      - name: Run S2 scripts
+        env:
+          SOFFICE: /usr/bin/soffice
+        run: |
+          node spikes/S2/roundtrip.mjs
+          node spikes/S2/bench.mjs
+          node spikes/S2/images.mjs
+          node spikes/S2/profile-settings.mjs
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: s2-linux-results
+          path: spikes/S2/results/

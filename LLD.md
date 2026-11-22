@@ -87,6 +87,30 @@ Part 1 owns the shared contracts. Where Parts 2 and 3 assumed something differen
 | R-19 | `AuditEvent.replayed: boolean` (PO-17). `MetaStore` records `auditEmittedRev` per document. On boot, the Core re-emits journal entries with `rev > auditEmittedRev`. | P2 §10, §15 |
 | R-20 | `WorkerConfig.blankDocument.page` defaults to A4 portrait with 2.54 cm margins (PO-26). | P2 §2 |
 
+### 0.5 Spike outcomes (approved by the project owner, 2026-11-22)
+
+These come from `docs/spikes/S2.md`, `docs/spikes/S3.md` and the V1-01 review. Like all of §0, they win over Parts 1–3.
+
+| ID | Decision | Affects |
+|---|---|---|
+| S-1 | **Height reads (S3 C1).** Block heights are `Math.round(parseFloat(getComputedStyle(el).height) * 64) / 64` on `box-sizing: border-box` blocks, including in `measuredHeight()`. Never `offsetHeight` or `getBoundingClientRect()`. The jsdom unit tests stub this read. | P3 §10–§11; V1-34 |
+| S-2 | **Geometry snapping (S3 C2).** All `pageGeometry` values are snapped to 1/64 px. | P3 §10; V1-34 |
+| S-3 | **A block taller than a page (S3 C3, PO-23).** Frames stay page-sized, and the block runs past its frame. Each page records `overflow = max(0, y − cap)`, which is added to the spacer. Frames are positioned cumulatively (`pageExtra` in `PaginationState`), so later frames move down by the overflow. The frame is never stretched. | P3 §10; V1-34 |
+| S-4 | **Resume state (S3 C4).** The pass stores the state before each block's break decision (`yPre[i]`, `pagePre[i]`, `posOf[i]`), and on resume keeps only breaks with `index < s`. Breaks carry an `index`. | P3 §10; V1-34 |
+| S-5 | **Spacer key and copies (S3 C5).** The spacer key includes `bodyTop` and `footBox`. A copy generation (header node id, footer node id, `pageCount`) re-fills visible header/footer copies and clears hidden ones when it changes. The real header's and footer's page fields are updated in place. | P3 §10–§11; V1-34 |
+| S-6 | **Budget.** At 300 pages, typing work (transaction, pagination pass and layout) has p95 ≤ 8 ms in Chromium. | P3 §10 tests; V1-34, V1-41 |
+| S-7 | **Late-loading images.** Image node views observe their own size with `ResizeObserver` and invalidate that block's cached height. | P3 §9–§10; V1-33, V1-34 |
+| S-8 | **Coverage S3 did not measure.** V1-34's tests cover tables and lists. V1-40 covers Firefox and WebKit. | V1-34, V1-40 |
+| S-9 | **Page margins (S2 Q1, CL-9).** A margin in our model is the distance from the page edge to the body text, as Word shows it. The FodtMapper converts to and from ODF's page margin plus header/footer height and spacing, in both directions. | P2 §14.5; V1-14b |
+| S-10 | **Image alt text (S2 Q2).** Alt text is `svg:desc`. `svg:title` is ignored on import and not written on export. | P2 §14.5; V1-14b |
+| S-11 | **EMF/WMF/TIFF → PNG (S2 Q3, PO-22).** Wrap the image in a generated SVG, then export with LibreOffice's `draw_png_Export` filter, with `PixelWidth`/`PixelHeight` set to twice the displayed size in px. One LibreOffice call per image, run through the codec pool and its concurrency cap. SVG uses plain `--convert-to png`. | P2 §14.2, §14.5; V1-14a, V1-14b |
+| S-12 | **Linked external images (S2 Q4).** An image that is a link without embedded data is unsupported content (an `UnsupportedFinding`, so the file opens read-only). It is never fetched. | P2 §14.7; V1-14b |
+| S-13 | **Profile settings (S2 Q5).** `BlockUntrustedRefererLinks` stays set, even though S2 saw no effect. | P2 §14.3; V1-14a |
+| S-14 | **Sheet recalculation (S2 Q6).** S2 saw a stale cached value recalculated on ODF → xlsx export, even with `ODFRecalcMode=1`. Handling is deferred to V2-S1 and V2-02. | V2-S1, V2-02 |
+| S-15 | **Flat XML cap (S2 Q7).** `maxFlatXmlBytes` defaults to 64 × `maxFileBytes`, not 4 ×. Recheck in the V1-41 benchmark. | P2 §14; V1-14a, V1-41 |
+| S-16 | **Linux S2 run (S2 Q8).** A temporary manual CI workflow, `.github/workflows/spike-s2-linux.yml`, runs the S2 scripts on ubuntu-24.04. Its results go into `docs/spikes/S2.md`. | V1-S2 |
+| S-17 | **`OpenDocexError.is` (V1-01).** `is(x)` returns true for an `OpenDocexError` instance, and also for a plain object with a known catalogue `code` and the `OpenDocexErrorShape` field types, such as the output of `toShape()` after IPC or a structured clone. A value accepted this way may be a plain shape with no methods. Call `fromShape` before using methods. | P1 §4 |
+
 ### 0.4 How to read Parts 1–3
 
 - Each part's "Open questions" table is **resolved by §0.1 and §0.2**. Each part's "New contract names" and "Cross-part assumptions" tables are **resolved by §0.3**.
