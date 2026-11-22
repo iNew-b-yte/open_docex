@@ -165,6 +165,22 @@ describe('chunkText / assembleText', () => {
       expectInvalid(c);
     });
 
+    it('a table cell whose colwidth length is not its colspan (§0 S-27)', () => {
+      const c = good();
+      const d = c[2]?.data;
+      if (d?.part !== 'blocks') throw new Error('fixture');
+      const table = (cell: Record<string, unknown>): unknown => ({
+        type: 'table',
+        content: [{ type: 'table_row', content: [{ type: 'table_cell', attrs: cell, content: [para('c')] }] }],
+      });
+      d.blocks = [table({ colspan: 2, colwidth: [100, 120] })];
+      expect(assembleText(c).type.name).toBe('doc');
+      d.blocks = [table({ colspan: 2, colwidth: [100] })];
+      expectInvalid(c);
+      d.blocks = [table({ colspan: 1, colwidth: [100, 120] })];
+      expectInvalid(c);
+    });
+
     it('an unknown part or region', () => {
       const c = good();
       (c[1] as unknown as { data: { region: string } }).data.region = 'aside';
