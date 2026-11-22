@@ -1,4 +1,4 @@
-﻿import { describe, expect, it } from 'vitest';
+import { describe, expect, it } from 'vitest';
 import * as root from '../../src/index.js';
 import { OpenDocexError } from '../../src/errors/index.js';
 import { DEFAULT_CHUNK_LIMITS } from '../../src/ot/index.js';
@@ -33,7 +33,7 @@ function codeOf(f: () => unknown): string | undefined {
   return undefined;
 }
 
-describe('TextOtType laws (LLD Part 1 Â§7)', () => {
+describe('TextOtType laws (LLD Part 1 §7)', () => {
   runOtLaws(TextOtType, {
     snapshots: [
       everything,
@@ -46,7 +46,7 @@ describe('TextOtType laws (LLD Part 1 Â§7)', () => {
     applyCases: [
       { snapshot: bodyDoc('ab'), ops: [ins(3, 'x'), ins(4, 'y')] },
       { snapshot: bodyDoc('ab'), ops: [ins(1000, 'x'), ins(3, 'y')] },
-      // A page_field in the body is dropped (Â§0 S-20), and so is typing inside it.
+      // A page_field in the body is dropped (§0 S-20), and so is typing inside it.
       {
         snapshot: bodyDoc('ab'),
         ops: [
@@ -118,7 +118,7 @@ describe('TextOtType', () => {
     expect(r.dropped).toBe(1);
   });
 
-  it('rebase maps ops over ops (BRD Â§3 "cat": the later insert goes after)', () => {
+  it('rebase maps ops over ops (BRD §3 "cat": the later insert goes after)', () => {
     expect(TextOtType.rebase([ins(3, 'o')], [ins(3, 'h')])).toEqual([ins(4, 'o')]);
   });
 
@@ -138,10 +138,10 @@ describe('TextOtType', () => {
     expect(codeOf(() => TextOtType.deserializeSnapshot(badHref))).toBe('DOCUMENT_FAULTED');
   });
 
-  it('deserializeSnapshot enforces Â§0 S-27 with PROTOCOL_OP_REJECTED', () => {
+  it('deserializeSnapshot enforces §0 S-27 with DOCUMENT_FAULTED', () => {
     const margins = { ...A4, margins: { top: 72, right: 300, bottom: 72, left: 300 } };
     expect(codeOf(() => TextOtType.deserializeSnapshot({ type: 'doc', attrs: margins, content: [{ type: 'body', content: [para('x')] }] }))).toBe(
-      'PROTOCOL_OP_REJECTED',
+      'DOCUMENT_FAULTED',
     );
     const cell = {
       type: 'doc',
@@ -153,7 +153,7 @@ describe('TextOtType', () => {
         },
       ],
     };
-    expect(codeOf(() => TextOtType.deserializeSnapshot(cell))).toBe('PROTOCOL_OP_REJECTED');
+    expect(codeOf(() => TextOtType.deserializeSnapshot(cell))).toBe('DOCUMENT_FAULTED');
   });
 });
 

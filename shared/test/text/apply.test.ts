@@ -1,4 +1,4 @@
-﻿import { Fragment, Slice } from 'prosemirror-model';
+import { Fragment, Slice } from 'prosemirror-model';
 import type { Node as PMNode } from 'prosemirror-model';
 import { AttrStep, DocAttrStep, ReplaceStep, Step, Transform } from 'prosemirror-transform';
 import { describe, expect, it } from 'vitest';
@@ -21,7 +21,7 @@ function run(doc: PMNode, steps: Step[]): { doc: PMNode; applied: Step[]; droppe
 
 const field = (kind: 'number' | 'count' = 'number'): PMNode => textSchema.nodes.page_field.create({ kind });
 
-/** header "h", body "b" + a 1Ã—1 table with cell "c", footer "f". */
+/** header "h", body "b" + a 1×1 table with cell "c", footer "f". */
 function regionsDoc(): PMNode {
   return fromJson({
     type: 'doc',
@@ -40,7 +40,7 @@ function regionsDoc(): PMNode {
   });
 }
 // header 0, para 1, "h" 2..3, header end 5. body 5, para 6, "b" 7..8, para end 9,
-// table 9, row 10, cell 11, para 12, "c" 13..14, â€¦ body end 19. footer 19, para 20, "f" 21..22.
+// table 9, row 10, cell 11, para 12, "c" 13..14, … body end 19. footer 19, para 20, "f" 21..22.
 
 describe('applyStepsWithDrop', () => {
   it('applies valid steps through tr.step, so the transform tracks them', () => {
@@ -106,7 +106,7 @@ describe('applyStepsWithDrop', () => {
 
   it('drops the dependents of a dropped insert and keeps independent steps', () => {
     const doc = bodyDoc('ab', 'cd');
-    // s1 inserts "xy" + a page_field into the body (rejected, Â§0 S-20); s2 types inside
+    // s1 inserts "xy" + a page_field into the body (rejected, §0 S-20); s2 types inside
     // s1's content; s3 types in the second paragraph, positioned after s1 and s2.
     const s1 = insert(3, [T('xy'), field()]);
     const s2 = insert(4, [T('Z')]);
@@ -117,12 +117,12 @@ describe('applyStepsWithDrop', () => {
     expect(json(r.applied)).toEqual(json([insert(7, [T('Y')])]));
   });
 
-  it('keeps ReplaceStep.MAP_BIAS at 1 (Â§8.3)', () => {
+  it('keeps ReplaceStep.MAP_BIAS at 1 (§8.3)', () => {
     expect(ReplaceStep.MAP_BIAS).toBe(1);
   });
 });
 
-describe('applyStepsWithDrop: page_field only in header/footer (Â§0 S-20)', () => {
+describe('applyStepsWithDrop: page_field only in header/footer (§0 S-20)', () => {
   it('accepts a page_field in the header and the footer', () => {
     const doc = regionsDoc();
     const r = run(doc, [insert(3, [field('number')]), insert(23, [field('count')])]);
@@ -144,7 +144,7 @@ describe('applyStepsWithDrop: page_field only in header/footer (Â§0 S-20)', ()
   });
 });
 
-describe('applyStepsWithDrop: cross-attribute rules (Â§0 S-27)', () => {
+describe('applyStepsWithDrop: cross-attribute rules (§0 S-27)', () => {
   const tableDoc = (cell: Record<string, unknown>): PMNode =>
     fromJson({
       type: 'doc',
@@ -158,7 +158,7 @@ describe('applyStepsWithDrop: cross-attribute rules (Â§0 S-27)', () => {
     });
   // body 0, table 1, row 2, cell 3.
 
-  it('drops an attr step that leaves colwidth length â‰  colspan', () => {
+  it('drops an attr step that leaves colwidth length ≠ colspan', () => {
     const doc = tableDoc({ colspan: 1, colwidth: [100] });
     const r = run(doc, [new AttrStep(3, 'colspan', 2), new AttrStep(3, 'colwidth', [100, 120, 140])]);
     expect(r.dropped).toBe(2);
@@ -182,7 +182,7 @@ describe('applyStepsWithDrop: cross-attribute rules (Â§0 S-27)', () => {
 
   it('drops a docAttr step whose margins do not fit the page, and keeps one that fits', () => {
     const doc = bodyDoc('ab');
-    const tooWide = { top: 72, right: 300, bottom: 72, left: 300 }; // 600 > 595.28 âˆ’ 36
+    const tooWide = { top: 72, right: 300, bottom: 72, left: 300 }; // 600 > 595.28 − 36
     const ok = { top: 72, right: 200, bottom: 72, left: 200 };
     const r = run(doc, [new DocAttrStep('margins', tooWide), new DocAttrStep('margins', ok)]);
     expect(r.dropped).toBe(1);

@@ -1,4 +1,4 @@
-﻿import { Fragment, Slice } from 'prosemirror-model';
+import { Fragment, Slice } from 'prosemirror-model';
 import type { Node as PMNode } from 'prosemirror-model';
 import { ReplaceStep, Transform } from 'prosemirror-transform';
 import type { Step } from 'prosemirror-transform';
@@ -23,7 +23,7 @@ function expectConverged(r: PairResult): void {
 const bold = textSchema.marks.bold.create();
 
 describe('rebaseSteps: fixed concurrency scenarios', () => {
-  it('BRD Â§3 "cat": both inserts after "c" are kept, FIFO-earlier first', () => {
+  it('BRD §3 "cat": both inserts after "c" are kept, FIFO-earlier first', () => {
     const base = bodyDoc('cat');
     const r = runPair(
       base,
@@ -185,7 +185,7 @@ describe('rebaseSteps: fixed concurrency scenarios', () => {
 
   it('a step dropped on apply takes its dependents with it, and the echo converges', () => {
     const base = bodyDoc('ab', 'cd');
-    // s1 puts a page_field in the body (Â§0 S-20: rejected by apply), s2 types inside
+    // s1 puts a page_field in the body (§0 S-20: rejected by apply), s2 types inside
     // s1's insert (a dependent), s3 types in the other paragraph (independent).
     const field = textSchema.nodes.page_field.create({ kind: 'number' });
     const s1 = new ReplaceStep(3, 3, new Slice(Fragment.from([textSchema.text('xy'), field]), 0, 0));

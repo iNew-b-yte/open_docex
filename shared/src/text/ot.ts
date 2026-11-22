@@ -100,10 +100,9 @@ function applyTextOps(doc: TextSnapshot, ops: TextOp[]): { snapshot: TextSnapsho
 }
 
 /**
- * Rebuilds a snapshot from JSON. A corrupt snapshot (bad JSON, content, attributes or a
- * root that is not `doc`) throws `DOCUMENT_FAULTED`. The cross-attribute rules of
- * §0 S-27 (`colwidth` length = `colspan`, margins fit the page) throw
- * `PROTOCOL_OP_REJECTED`, as §0 S-27 states.
+ * Rebuilds a snapshot from JSON. Every failure throws `DOCUMENT_FAULTED` (a corrupt
+ * local snapshot): bad JSON, content or attributes, a root that is not `doc`, and the
+ * cross-attribute rules of §0 S-27 (`colwidth` length = `colspan`, margins fit the page).
  */
 function deserializeText(j: unknown): TextSnapshot {
   let doc: PMNode;
@@ -115,7 +114,7 @@ function deserializeText(j: unknown): TextSnapshot {
   }
   if (doc.type !== textSchema.topNodeType) throw new OpenDocexError('DOCUMENT_FAULTED', 'Text snapshot root is not doc');
   if (!pageSettingsFit(getPageSettings(doc))) {
-    throw new OpenDocexError('PROTOCOL_OP_REJECTED', 'Text snapshot margins do not fit the page');
+    throw new OpenDocexError('DOCUMENT_FAULTED', 'Text snapshot margins do not fit the page');
   }
   let cellsFit = true;
   doc.descendants((node) => {
@@ -123,7 +122,7 @@ function deserializeText(j: unknown): TextSnapshot {
     if ((node.type.name === 'table_cell' || node.type.name === 'table_header') && !colwidthFits(node)) cellsFit = false;
     return cellsFit;
   });
-  if (!cellsFit) throw new OpenDocexError('PROTOCOL_OP_REJECTED', 'Text snapshot colwidth does not match colspan');
+  if (!cellsFit) throw new OpenDocexError('DOCUMENT_FAULTED', 'Text snapshot colwidth does not match colspan');
   return doc;
 }
 
