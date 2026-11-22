@@ -19,10 +19,11 @@ export class DocumentInstanceFactory {
   constructor(deps: CoreDeps) {
     this.deps = deps;
     const c = deps.config.load.chunk;
-    this.#text = textKindPolicy({ textBlocks: c.textBlocks, sheetRows: c.sheetRows, maxBytes: c.maxBytes }) as unknown as KindPolicy<
-      unknown,
-      unknown
-    >;
+    const text = textKindPolicy(
+      { textBlocks: c.textBlocks, sheetRows: c.sheetRows, maxBytes: c.maxBytes },
+      deps.config.blankDocument.page,
+    );
+    this.#text = text as unknown as KindPolicy<unknown, unknown>;
   }
 
   /**

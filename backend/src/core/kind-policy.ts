@@ -7,7 +7,7 @@
 import type { ChunkLimits, OtType } from '@open-docex/shared/ot';
 import type { DocKind } from '@open-docex/shared/protocol';
 import { parseTextOps, rebaseStepsOnDoc, TextOtType, textSchema } from '@open-docex/shared/text';
-import type { TextOp, TextSnapshot } from '@open-docex/shared/text';
+import type { PageSettings, TextOp, TextSnapshot } from '@open-docex/shared/text';
 
 /** The result of {@link KindPolicy.rebaseApply}. */
 export interface RebaseApplyResult<S, O> {
@@ -68,14 +68,18 @@ export function textAssetRefs(ops: readonly TextOp[]): string[] {
   return [...out];
 }
 
-/** Builds the text policy with the configured chunk limits. */
-export function textKindPolicy(chunkLimits: ChunkLimits): KindPolicy<TextSnapshot, TextOp> {
+/**
+ * Builds the text policy with the configured chunk limits and the blank-document page
+ * settings (`WorkerConfig.blankDocument.page`, PO-26).
+ */
+export function textKindPolicy(chunkLimits: ChunkLimits, blankPage: PageSettings): KindPolicy<TextSnapshot, TextOp> {
   return {
     kind: 'text',
     ot: TextOtType,
     chunkLimits,
     emptySnapshot(): TextSnapshot {
-      const doc = textSchema.topNodeType.createAndFill();
+      const { size, orientation, margins } = blankPage;
+      const doc = textSchema.topNodeType.createAndFill({ size, orientation, margins });
       if (doc === null) throw new Error('The text schema cannot create an empty document.');
       return doc;
     },
