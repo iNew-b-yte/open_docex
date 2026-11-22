@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Spike S3: pagination</title>
+    <style>
+      body { margin: 0; background: #8a8f98; }
+      #container { position: relative; width: fit-content; margin: 24px auto; }
+      .odx-page-frames { position: absolute; left: 0; top: 0; width: 100%; z-index: 0; }
+      .odx-page { position: absolute; left: 0; background: #fff; box-shadow: 0 1px 4px rgba(0, 0, 0, 0.4); }
+      .ProseMirror {
+        position: relative; z-index: 1; box-sizing: border-box; outline: none;
+        font: 16px/1.15 Arial, Helvetica, sans-serif; color: #111;
+        white-space: pre-wrap; word-wrap: break-word;
+      }
+      /* LLD P3 §10: direct children of body get margin 0, spacing comes from padding. */
+      .odx-body > * { margin: 0; }
+      .ProseMirror p { margin: 0; padding-bottom: 8px; }
+      .ProseMirror h2 { margin: 0; font-size: 20px; padding: 12px 0 6px; }
+      .odx-header, .odx-footer { display: flex; flex-direction: column; box-sizing: border-box; }
+      .odx-header { justify-content: flex-end; }
+      .odx-footer { justify-content: flex-start; }
+      .odx-header p, .odx-footer p, .odx-copy p { padding: 0; margin: 0; color: #555; font-size: 12px; }
+      .odx-spacer { display: flex; flex-direction: column; user-select: none; }
+      .odx-spacer-fill { flex: 1 1 auto; }
+      .odx-slot-footer, .odx-slot-header { flex: none; display: flex; flex-direction: column; }
+      .odx-slot-header { justify-content: flex-end; }
+      .odx-image { background: repeating-linear-gradient(45deg, #dde, #dde 10px, #ccd 10px, #ccd 20px); }
+      .odx-page-break { height: 0; border-top: 1px dashed transparent; }
+    </style>
+  </head>
+  <body>
+    <div id="container"></div>
+    <script src="dist/bundle.js"></script>
+  </body>
+</html>
