@@ -2,7 +2,7 @@
  "meta": {
   "platform": "win32",
   "node": "v24.18.0",
-  "date": "2026-11-22T11:15:42.667Z"
+  "date": "2026-11-22T11:28:16.285Z"
  },
  "columns": {
   "source features.fodt": {
@@ -4568,115 +4568,115 @@
   {
    "label": "import docx",
    "target": "fodt",
-   "ms": 5372,
+   "ms": 7382,
    "ok": true
   },
   {
    "label": "export docx",
    "target": "docx",
-   "ms": 2570,
+   "ms": 2495,
    "ok": true
   },
   {
    "label": "import docx",
    "target": "fodt",
-   "ms": 2164,
+   "ms": 2202,
    "ok": true
   },
   {
    "label": "export docx",
    "target": "docx",
-   "ms": 2533,
+   "ms": 2555,
    "ok": true
   },
   {
    "label": "import docx",
    "target": "fodt",
-   "ms": 2198,
+   "ms": 2235,
    "ok": true
   },
   {
    "label": "import docx",
    "target": "fodt",
-   "ms": 2180,
+   "ms": 2168,
    "ok": true
   },
   {
    "label": "export docx",
    "target": "docx",
-   "ms": 2569,
+   "ms": 2556,
    "ok": true
   },
   {
    "label": "import docx",
    "target": "fodt",
-   "ms": 2178,
+   "ms": 2206,
    "ok": true
   },
   {
    "label": "export docx",
    "target": "docx",
-   "ms": 2581,
+   "ms": 2564,
    "ok": true
   },
   {
    "label": "import docx",
    "target": "fodt",
-   "ms": 2186,
+   "ms": 2285,
    "ok": true
   },
   {
    "label": "import odt",
    "target": "fodt",
-   "ms": 1764,
+   "ms": 1720,
    "ok": true
   },
   {
    "label": "export odt",
    "target": "odt",
-   "ms": 1830,
+   "ms": 1910,
    "ok": true
   },
   {
    "label": "import odt",
    "target": "fodt",
-   "ms": 1782,
+   "ms": 1759,
    "ok": true
   },
   {
    "label": "export odt",
    "target": "odt",
-   "ms": 1787,
+   "ms": 1820,
    "ok": true
   },
   {
    "label": "import odt",
    "target": "fodt",
-   "ms": 1774,
+   "ms": 1726,
    "ok": true
   },
   {
    "label": "export docx",
    "target": "docx",
-   "ms": 1826,
+   "ms": 1746,
    "ok": true
   },
   {
    "label": "import docx",
    "target": "fodt",
-   "ms": 2221,
+   "ms": 2192,
    "ok": true
   },
   {
    "label": "export odt",
    "target": "odt",
-   "ms": 1794,
+   "ms": 1777,
    "ok": true
   },
   {
    "label": "import odt",
    "target": "fodt",
-   "ms": 1806,
+   "ms": 1736,
    "ok": true
   }
  ]

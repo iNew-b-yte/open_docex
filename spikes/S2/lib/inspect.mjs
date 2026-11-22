@@ -131,7 +131,7 @@ export function inspect(src) {
           runs.push({ text: s, href, ...runInfo(textProps(sname, spans)) });
           continue;
         }
-        if (!MAPPED.has(c.name)) (IGNORABLE.has(c.name) ? note(ignored, c.name) : note(unknown, c.name));
+        if (!MAPPED.has(c.name)) note(IGNORABLE.has(c.name) ? ignored : unknown, c.name);
         if (c.name === 'text:span') walk(c, [...spans, c.attrs['text:style-name']].filter(Boolean), href);
         else if (c.name === 'text:a') walk(c, [...spans, c.attrs['text:style-name']].filter(Boolean), c.attrs['xlink:href']);
         else if (c.name === 'text:line-break') text += '\n';
@@ -179,7 +179,7 @@ export function inspect(src) {
   function container(el, ctx) {
     for (const c of el.children) {
       if (typeof c === 'string') continue;
-      if (!MAPPED.has(c.name)) (IGNORABLE.has(c.name) ? note(ignored, c.name) : note(unknown, c.name));
+      if (!MAPPED.has(c.name)) note(IGNORABLE.has(c.name) ? ignored : unknown, c.name);
       if (c.name === 'text:p' || c.name === 'text:h') para(c, ctx);
       else if (c.name === 'text:list') {
         const depth = (ctx.list?.depth ?? 0) + 1;
