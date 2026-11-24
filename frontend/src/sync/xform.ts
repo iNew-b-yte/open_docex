@@ -44,10 +44,10 @@ export function rebuild(state: EditorState, keep: readonly PendingStep[], over: 
   const tr = state.tr;
   const n = keep.length;
   for (let i = n - 1; i >= 0; i--) {
-    if (tr.maybeStep((keep[i] as PendingStep).inverted).failed !== null) throw new Divergence('A local inverse does not apply.');
+    if (!tryStep(tr, (keep[i] as PendingStep).inverted)) throw new Divergence('A local inverse does not apply.');
   }
   for (const s of over) {
-    if (tr.maybeStep(s).failed !== null) throw new Divergence();
+    if (!tryStep(tr, s)) throw new Divergence();
   }
   const r = rebaseStepsOnDoc(
     keep.map((k) => k.step),
@@ -63,7 +63,7 @@ export function rebuild(state: EditorState, keep: readonly PendingStep[], over: 
     const step = r.steps[j] as Step;
     const before = tr.doc;
     // Cannot fail: rebaseStepsOnDoc applied the same steps to the same document.
-    if (tr.maybeStep(step).failed !== null) throw new Divergence('A rebased step does not apply.');
+    if (!tryStep(tr, step)) throw new Divergence('A rebased step does not apply.');
     newKeep.push({ step, inverted: step.invert(before) });
     // The mirror of its own inverse, so positions inside earlier local content are recovered.
     sel.appendMap(step.getMap(), n - 1 - (r.kept[j] as number));
@@ -71,6 +71,15 @@ export function rebuild(state: EditorState, keep: readonly PendingStep[], over: 
   tr.setSelection(state.selection.map(tr.doc, sel));
   tr.setMeta('addToHistory', false);
   return { tr, newKeep, kept: r.kept };
+}
+
+/** Adds `step` to `tr` if it applies. `Step.apply` throws for positions out of range. */
+function tryStep(tr: Transaction, step: Step): boolean {
+  try {
+    return tr.maybeStep(step).failed === null;
+  } catch {
+    return false;
+  }
 }
 
 /**
