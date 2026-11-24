@@ -6,11 +6,7 @@
  *
  * @module
  */
-// The client has no `vite/client` types, so TypeScript can't resolve a side-effect CSS import
-// (TS2882). Vite bundles both files into `style.css`.
-// @ts-expect-error TS2882
 import './text/editor.css';
-// @ts-expect-error TS2882
 import './ui/shell.css';
 
 export { mount, type MountHandle } from './mount.js';

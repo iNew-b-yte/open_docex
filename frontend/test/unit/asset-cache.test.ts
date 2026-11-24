@@ -5,6 +5,23 @@ import type { AssetGetMsg, AssetPutMsg } from '@open-docex/shared/protocol';
 import { AssetCache, PUT_TIMEOUT_MS } from '../../src/assets/AssetCache.js';
 import { installDomStubs } from './text-fixtures.js';
 
+// The real SHA-256 (`crypto.subtle.digest`) finishes on another thread, so the tests' one-tick
+// `flush()` could end before `put` had registered its request (a flaky race under load). An
+// ID computed synchronously settles within microtasks, which makes the flush deterministic. The
+// fake is a deterministic 64-hex-digit hash (eight FNV-1a variants), not SHA-256.
+vi.mock('@open-docex/shared/ids', async (importActual) => ({
+  ...(await importActual<typeof import('@open-docex/shared/ids')>()),
+  computeAssetId: (bytes: Uint8Array): Promise<string> => {
+    let out = '';
+    for (let seed = 0; seed < 8; seed++) {
+      let h = (0x811c9dc5 ^ (seed * 0x9e3779b1)) >>> 0;
+      for (const b of bytes) h = Math.imul(h ^ b, 0x01000193) >>> 0;
+      out += h.toString(16).padStart(8, '0');
+    }
+    return Promise.resolve(out);
+  },
+}));
+
 const id = (c: string): string => c.repeat(64);
 const PNG = new Uint8Array([0x89, 0x50, 0x4e, 0x47, 1, 2, 3]);
 
@@ -163,9 +180,12 @@ describe('AssetCache.put', () => {
   it('rejects after the 60 s timeout', async () => {
     const { cache, timers } = harness();
     const p = cache.put(PNG, 'image/png');
-    await flush();
-    const t = timers.find((x) => x.ms === PUT_TIMEOUT_MS);
-    expect(t).toBeDefined();
+    // `put` awaits a real SHA-256 digest, so a fixed one-tick flush can end before the timer exists.
+    const t = await vi.waitFor(() => {
+      const found = timers.find((x) => x.ms === PUT_TIMEOUT_MS);
+      expect(found).toBeDefined();
+      return found;
+    });
     t?.fn();
     await expect(p).rejects.toThrow(/not confirmed/);
   });

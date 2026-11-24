@@ -41,6 +41,8 @@ export interface Labels {
     editAnyway: string;
     editAnywayFailed: string;
     editingAnyway: string;
+    /** The dismiss button of the restore notice banner. */
+    dismiss: string;
     /** `{n}` is the number of converted images (PO-22). */
     imagesConverted: string;
     /** `{n}` is the number of findings of one kind. */
@@ -172,6 +174,7 @@ export const DEFAULT_LABELS: Readonly<Labels> = deepFreeze({
     editAnyway: 'Edit anyway',
     editAnywayFailed: 'Editing could not be enabled.',
     editingAnyway: 'Unsupported parts will be removed when the document is saved.',
+    dismiss: 'Dismiss',
     imagesConverted: '{n} images were converted and will be saved as PNG.',
     findingCount: '{n}',
   },
