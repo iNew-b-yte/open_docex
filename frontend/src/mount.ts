@@ -191,11 +191,14 @@ export interface DefaultSeamOptions {
   createSocket?: WebSocketFactory;
   random?: RandomSource;
   onlineTarget?: OnlineTarget | null;
+  /** Called each time the editor shows a document. For tests. */
+  onEditor?: (editor: TextEditorView) => void;
 }
 
 /** The text editor, shared between the binding (which creates it) and the shell (which reads it). */
 interface EditorRef {
   current: TextEditorView | null;
+  onShow?: (editor: TextEditorView) => void;
 }
 
 /**
@@ -269,6 +272,7 @@ function createTextBinding(
     show: (snapshot, load) => {
       editor.load(snapshot, { readOnly: load.readOnly || load.access === 'view' });
       ref.current = editor;
+      ref.onShow?.(editor);
     },
     onLoadStart: (m: LoadStartMsg) => assets.setMaxAssetBytes(m.limits?.maxAssetBytes),
     attach: (el) => {
@@ -294,7 +298,7 @@ function createTextBinding(
  */
 export function createDefaultSeams(extra: DefaultSeamOptions = {}): MountSeams {
   const bus = createDialogBus();
-  const ref: EditorRef = { current: null };
+  const ref: EditorRef = { current: null, ...(extra.onEditor !== undefined ? { onShow: extra.onEditor } : {}) };
   let session: DocumentSession | undefined;
   return {
     createSession: (ctx) => {
