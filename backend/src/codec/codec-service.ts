@@ -47,6 +47,25 @@ function defaultValidate(kind: DocKind, snapshot: unknown): void {
   TextOtType.deserializeSnapshot(snapshot);
 }
 
+/**
+ * Merges findings with the same `feature` and `detail` into one, summing the counts (for example
+ * `macros` from the zip guard and from the mapper). `where` is joined, at most 20 entries.
+ */
+export function mergeFindings(list: readonly UnsupportedFinding[]): UnsupportedFinding[] {
+  const out = new Map<string, UnsupportedFinding>();
+  for (const f of list) {
+    const key = `${f.feature}|${f.detail ?? ''}`;
+    const cur = out.get(key);
+    if (cur === undefined) {
+      out.set(key, { ...f, ...(f.where === undefined ? {} : { where: [...f.where] }) });
+      continue;
+    }
+    cur.count += f.count;
+    if (f.where !== undefined) cur.where = [...(cur.where ?? []), ...f.where].slice(0, 20);
+  }
+  return [...out.values()];
+}
+
 /** A counting semaphore where each permit is a LibreOffice profile slot index. */
 class SlotSemaphore {
   readonly #free: number[];
@@ -160,8 +179,9 @@ export class CodecService implements CodecSeam {
       if (e instanceof OpenDocexError && e.code === 'CONVERSION_FAILED') throw e;
       throw engineError('CONVERSION_FAILED', { message: 'The mapper produced an invalid snapshot', cause: e });
     }
-    const findings: UnsupportedFinding[] = [...r.findings];
-    if (guard.macros) findings.push({ feature: 'other', count: 1, detail: 'macros' });
+    const raw: UnsupportedFinding[] = [...r.findings];
+    if (guard.macros) raw.push({ feature: 'other', count: 1, detail: 'macros' });
+    const findings = mergeFindings(raw);
     const out: CodecImportResult = { kind: r.kind, snapshot: r.snapshot, findings, assetIds: r.assetIds };
     if (r.conversions !== undefined) out.conversions = r.conversions;
     return out;
