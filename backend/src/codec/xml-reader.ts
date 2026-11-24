@@ -116,9 +116,10 @@ export async function parseXmlFile(path: string, opts: XmlReadOptions, h: XmlHan
   const scopes: Scope[] = [new Map()];
   const names: string[] = [];
   let attrCount = 0;
+  let ending = false;
   let tree: { root: XmlNode; stack: XmlNode[] } | undefined;
   let binary: Base64Decoder | undefined;
-  const pending: Array<void | Promise<void>> = [];
+  const pending: Array<Promise<void>> = [];
 
   const parser = new Parser(
     {
@@ -170,6 +171,7 @@ export async function parseXmlFile(path: string, opts: XmlReadOptions, h: XmlHan
         else h.text?.(text);
       },
       onclosetag() {
+        if (ending) throw failed('Unbalanced XML'); // the input ended inside an element
         const name = names.pop();
         scopes.pop();
         if (name === undefined) throw failed('Unbalanced XML');
@@ -184,7 +186,7 @@ export async function parseXmlFile(path: string, opts: XmlReadOptions, h: XmlHan
           const bytes = binary.finish();
           binary = undefined;
           const r = h.binary?.(bytes);
-          if (r !== undefined) pending.push(r);
+          if (r instanceof Promise) pending.push(r);
         } else {
           h.close?.(name, names.length);
         }
@@ -204,6 +206,7 @@ export async function parseXmlFile(path: string, opts: XmlReadOptions, h: XmlHan
       if (pending.length > 0) await Promise.all(pending.splice(0));
     }
     parser.write(decoder.end());
+    ending = true;
     parser.end();
     await Promise.all(pending.splice(0));
   } catch (e) {
