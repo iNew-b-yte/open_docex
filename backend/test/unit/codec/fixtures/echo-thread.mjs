@@ -1,7 +1,12 @@
 // Test worker for CodecPool: `probe` jobs echo the thread id after workDir-driven behaviour.
 import { parentPort, threadId } from 'node:worker_threads';
 
-parentPort.on('message', ({ id, job }) => {
+parentPort.on('message', ({ id, job, close }) => {
+  if (close) {
+    parentPort.postMessage({ closed: true });
+    return;
+  }
+  if (job.workDir === 'hang') return;
   const mode = job.workDir;
   if (mode === 'crash') {
     throw new Error('boom');

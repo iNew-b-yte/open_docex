@@ -99,6 +99,14 @@ export function buildImageSvgWrapper(dataUri: string, widthPx: number, heightPx:
   );
 }
 
+/** Every LibreOffice process this thread has started and not yet seen exit. */
+const live = new Set<ChildProcess>();
+
+/** Kills the process trees of every running conversion (pool shutdown). Resolves when done. */
+export async function killAllChildren(platform: NodeJS.Platform = process.platform): Promise<void> {
+  await Promise.all([...live].map((c) => killTree(c, platform)));
+}
+
 /** Creates the runner. */
 export function createRunner(o: RunnerOptions = {}): LibreOfficeRunner {
   const spawnFn: SpawnFn = o.spawnFn ?? spawn;
@@ -141,6 +149,9 @@ export function createRunner(o: RunnerOptions = {}): LibreOfficeRunner {
         reject(engineError('CONFIG_LIBREOFFICE_NOT_FOUND', { message: 'Cannot start LibreOffice', cause: e }));
         return;
       }
+      live.add(child);
+      child.once('exit', () => live.delete(child));
+      child.once('error', () => live.delete(child));
       let stderr = '';
       child.stdout?.resume();
       child.stderr?.on('data', (d: Buffer) => {

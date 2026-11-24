@@ -3,7 +3,7 @@ import { mkdtempSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { afterAll, describe, expect, it } from 'vitest';
-import { buildImageSvgWrapper, createRunner, type SpawnFn } from '../../../src/codec/libreoffice-runner.js';
+import { buildImageSvgWrapper, createRunner, killAllChildren, type SpawnFn } from '../../../src/codec/libreoffice-runner.js';
 
 const dir = mkdtempSync(join(tmpdir(), 'docex-run-'));
 afterAll(() => rmSync(dir, { recursive: true, force: true }));
@@ -95,6 +95,17 @@ describe('LibreOfficeRunner', () => {
     const r = createRunner({ spawnFn: stubSpawn('sleep', seen) });
     await expect(r.convert({ ...base(), target: 'fodt', timeoutMs: 600 })).rejects.toMatchObject({ code: 'CONVERSION_TIMEOUT' });
     expect(Date.now() - t0).toBeLessThan(10_000);
+    expect(alive(seen.pid as number)).toBe(false);
+  });
+  it('killAllChildren (pool shutdown) kills a running conversion and leaves no process', async () => {
+    const seen: { pid?: number } = {};
+    const r = createRunner({ spawnFn: stubSpawn('sleep', seen) });
+    const run = r.convert({ ...base(), target: 'fodt', timeoutMs: 60_000 });
+    const settled = run.catch((e: unknown) => e);
+    await new Promise((res) => setTimeout(res, 800));
+    expect(alive(seen.pid as number)).toBe(true);
+    await killAllChildren();
+    expect(await settled).toMatchObject({ code: 'CONVERSION_FAILED' });
     expect(alive(seen.pid as number)).toBe(false);
   });
   it('uses draw_png_Export with pixel sizes for images', async () => {

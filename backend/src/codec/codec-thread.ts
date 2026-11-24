@@ -14,7 +14,7 @@ import { OpenDocexError } from '@open-docex/shared/errors';
 import { engineError } from '../errors/engine-error.js';
 import type { Logger } from '../log/logger.js';
 import type { CodecJob, CodecLimits, ExportJobResult, ImportJobResult, ThreadMessage } from './codec-pool.js';
-import { createRunner, type LibreOfficeRunner, type LoTarget } from './libreoffice-runner.js';
+import { createRunner, killAllChildren, type LibreOfficeRunner, type LoTarget } from './libreoffice-runner.js';
 
 /** Lets the mapper convert images inside the job's permit and profile slot (S-11). */
 export interface MapperLo {
@@ -104,7 +104,12 @@ export function startCodecThread(mapper: CodecMapper): void {
   const post = (m: ThreadMessage, transfer: ArrayBuffer[] = []): void => port.postMessage(m, transfer);
   const logger: Pick<Logger, 'warn'> = { warn: (message) => post({ log: 'warn', message }) };
   const runner = createRunner({ onStderr: (tail) => logger.warn(`soffice stderr: ${tail}`) });
-  port.on('message', (msg: { id: number; job: CodecJob }) => {
+  port.on('message', (msg: { id: number; job: CodecJob } | { close: true }) => {
+    if ('close' in msg) {
+      // Pool shutdown: kill every soffice tree, then tell the pool it may terminate this thread.
+      void killAllChildren().finally(() => post({ closed: true }));
+      return;
+    }
     handleJob(msg.job, { mapper, runner }).then(
       (result) => post({ id: msg.id, ok: true, result }, result instanceof Object && 'bytes' in result && result.bytes instanceof ArrayBuffer ? [result.bytes] : []),
       (e: unknown) => {

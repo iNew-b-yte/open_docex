@@ -44,7 +44,8 @@ export interface ExportJobResult {
 export type ThreadMessage =
   | { id: number; ok: true; result: unknown }
   | { id: number; ok: false; code: ErrorCode; message: string }
-  | { log: 'debug' | 'info' | 'warn' | 'error'; message: string };
+  | { log: 'debug' | 'info' | 'warn' | 'error'; message: string }
+  | { closed: true };
 
 /** Thrown, as the `cause` of `CONVERSION_FAILED`, when a worker thread died. */
 export class ThreadCrashError extends Error {
@@ -68,6 +69,8 @@ interface Pending {
 interface Thread {
   worker: Worker;
   inflight: Map<number, Pending>;
+  /** Set while closing: resolves when the thread has killed its LibreOffice processes. */
+  onClosed?: () => void;
 }
 
 /** Options of {@link CodecPool}. */
@@ -96,6 +99,10 @@ export class CodecPool implements CodecPoolLike {
     worker.unref();
     const t: Thread = { worker, inflight: new Map() };
     worker.on('message', (m: ThreadMessage) => {
+      if ('closed' in m) {
+        t.onClosed?.();
+        return;
+      }
       if ('log' in m) {
         this.#o.logger[m.log](m.message);
         return;
@@ -130,7 +137,7 @@ export class CodecPool implements CodecPoolLike {
 
   /** Runs `job` on the least busy thread. `transfer` lists buffers to move into the thread. */
   run<R>(job: CodecJob, transfer: ArrayBuffer[] = []): Promise<R> {
-    if (this.#closed) return Promise.reject(engineError('CONVERSION_FAILED', { message: 'The codec pool is closed' }));
+    if (this.#closed) return Promise.reject(engineError('ENGINE_UNAVAILABLE', { message: 'The codec pool is closed' }));
     let best = this.#threads[0] as Thread;
     for (const t of this.#threads) if (t.inflight.size < best.inflight.size) best = t;
     const id = this.#nextId++;
@@ -140,16 +147,27 @@ export class CodecPool implements CodecPoolLike {
     });
   }
 
-  /** Terminates every thread; jobs in flight reject. */
+  /**
+   * Shuts down: jobs in flight reject with `ENGINE_UNAVAILABLE`, each thread kills its
+   * LibreOffice process trees (waiting up to 5 s for it), then the thread is terminated.
+   */
   async close(): Promise<void> {
     if (this.#closed) return;
     this.#closed = true;
     await Promise.all(
       this.#threads.map(async (t) => {
         for (const p of t.inflight.values()) {
-          p.reject(engineError('CONVERSION_FAILED', { message: 'The codec pool was closed' }));
+          p.reject(engineError('ENGINE_UNAVAILABLE', { message: 'The codec pool was closed' }));
         }
         t.inflight.clear();
+        await new Promise<void>((resolve) => {
+          const timer = setTimeout(resolve, 5000);
+          t.onClosed = () => {
+            clearTimeout(timer);
+            resolve();
+          };
+          t.worker.postMessage({ close: true });
+        });
         await t.worker.terminate();
       }),
     );

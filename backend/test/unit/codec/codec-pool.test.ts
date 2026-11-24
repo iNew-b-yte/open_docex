@@ -43,10 +43,13 @@ describe('CodecPool', () => {
     expect(lines.some((l) => l.startsWith('error:'))).toBe(true);
     await pool.close();
   });
-  it('close rejects further work', async () => {
+  it('close rejects further work and pending jobs with ENGINE_UNAVAILABLE', async () => {
     const pool = new CodecPool({ size: 1, entry, logger: logger([]) });
+    const pending = pool.run(job('hang'));
+    const assertion = expect(pending).rejects.toMatchObject({ code: 'ENGINE_UNAVAILABLE' });
     await pool.close();
-    await expect(pool.run(job('ok'))).rejects.toMatchObject({ code: 'CONVERSION_FAILED' });
+    await assertion;
+    await expect(pool.run(job('ok'))).rejects.toMatchObject({ code: 'ENGINE_UNAVAILABLE' });
   });
   it('rejects a bad size', () => {
     expect(() => new CodecPool({ size: 0, entry, logger: logger([]) })).toThrow(RangeError);
