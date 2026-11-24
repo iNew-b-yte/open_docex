@@ -9,19 +9,15 @@
  * `feature: 'other'` with `detail` set to the table's id (for example `'macros'`).
  * `detail` of a union member is the name of the first element seen (§14.7: "never document text").
  *
+ * Formatting outside the schema is dropped silently, except paragraph and heading borders and
+ * shading, which are findings (PO-20, HLD §8.1). Table-cell borders and backgrounds are dropped.
+ *
  * V2 sheet signals are out of scope here (V2).
  *
  * @module
  */
 import type { UnsupportedFeature, UnsupportedFinding } from '@open-docex/shared/protocol';
 import { isAllowedHref } from '@open-docex/shared/text';
-
-/**
- * §14.7 / Q4: whether formatting outside the schema (borders, shading, keep-with-next, tab stops,
- * and so on) is a finding. The project owner has not decided. `'drop'` ignores it silently; a
- * `'finding'` policy would make nearly every imported Word file read-only.
- */
-export const formattingPolicy: 'finding' | 'drop' = 'drop';
 
 /** The ids of the §14.7 table that apply to text. */
 export type TextFindingId =
@@ -48,7 +44,10 @@ export type TextFindingId =
   // Not in the §14.7 table. `linked-image` is S-12; `ole-object` is a `draw:object` that is
   // neither a formula nor a chart.
   | 'linked-image'
-  | 'ole-object';
+  | 'ole-object'
+  // PO-20: paragraph and heading borders and shading (table-cell ones are dropped silently).
+  | 'paragraph-border'
+  | 'paragraph-shading';
 
 /** The §14.7 id → shared union member. Ids that are missing here are reported as `'other'`. */
 const UNION_MEMBER: Readonly<Partial<Record<TextFindingId, UnsupportedFeature>>> = {

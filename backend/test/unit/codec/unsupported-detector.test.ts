@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import type { UnsupportedFinding } from '@open-docex/shared/protocol';
-import { formattingPolicy, UnsupportedDetector } from '../../../src/codec/unsupported-detector.js';
+import { UnsupportedDetector } from '../../../src/codec/unsupported-detector.js';
 import { bodyOf, importFodt, PNG_1x1, textOf, type Fodt, type Node } from './fodt-helpers.js';
 
 const other = (detail: string, count = 1): UnsupportedFinding => ({ feature: 'other', count, detail });
@@ -192,7 +192,24 @@ describe('UnsupportedDetector (§14.7), through the FodtMapper', () => {
     expect(d.finish()).toEqual([other('sections'), known('comments', 'office:annotation')]);
   });
 
-  it('formatting outside the schema is dropped, not a finding, until the project owner decides (Q4)', () => {
-    expect(formattingPolicy).toBe('drop');
+  it('PO-20: paragraph and heading borders and shading are findings, with counts', async () => {
+    const r = await importFodt({
+      styles: '<style:style style:name="Boxed" style:family="paragraph"><style:paragraph-properties fo:border="0.5pt solid #000000"/></style:style>',
+      auto:
+        '<style:style style:name="P1" style:family="paragraph" style:parent-style-name="Boxed"/>' +
+        '<style:style style:name="P2" style:family="paragraph"><style:paragraph-properties fo:border-bottom="1pt solid #ff0000" fo:background-color="#ffff00"/></style:style>' +
+        '<style:style style:name="P3" style:family="paragraph"><style:paragraph-properties fo:border="none" fo:background-color="transparent"/></style:style>',
+      body: '<text:p text:style-name="P1">a</text:p><text:h text:style-name="P2" text:outline-level="1">b</text:h><text:p text:style-name="P3">c</text:p>',
+    });
+    const sort = (f: UnsupportedFinding[]): UnsupportedFinding[] => [...f].sort((a, b) => (a.detail ?? '').localeCompare(b.detail ?? ''));
+    expect(sort(r.findings)).toEqual([other('paragraph-border', 2), other('paragraph-shading')]);
+  });
+
+  it('table-cell borders and backgrounds are dropped silently', async () => {
+    const r = await importFodt({
+      auto: '<style:style style:name="C1" style:family="table-cell"><style:table-cell-properties fo:border="1pt solid #000000" fo:background-color="#cccccc"/></style:style>',
+      body: '<table:table><table:table-row><table:table-cell table:style-name="C1"><text:p>x</text:p></table:table-cell></table:table-row></table:table>',
+    });
+    expect(r.findings).toEqual([]);
   });
 });

@@ -233,9 +233,12 @@ interface ParaProps {
   lineHeight: LineHeight | null;
   breakBefore: boolean;
   breakAfter: boolean;
+  /** Which sides have a border (PO-20: unsupported content). */
+  border: { top: boolean; bottom: boolean; left: boolean; right: boolean };
+  shading: boolean;
 }
 
-const NO_PARA: ParaProps = { align: 'left', before: null, after: null, left: null, right: null, first: null, lineHeight: null, breakBefore: false, breakAfter: false };
+const NO_PARA: ParaProps = { align: 'left', before: null, after: null, left: null, right: null, first: null, lineHeight: null, breakBefore: false, breakAfter: false, border: { top: false, bottom: false, left: false, right: false }, shading: false };
 
 function parseAlign(v: string): ParaProps['align'] | null {
   if (v === 'start' || v === 'left') return 'left';
@@ -277,6 +280,16 @@ function applyPara(pp: ParaProps, p: Attrs, indents: boolean): ParaProps {
     const pt = lengthPt(p['style:line-height-at-least']);
     o.lineHeight = pt === null ? null : { kind: 'atLeast', pt };
   }
+  const visible = (v: string): boolean => !/(^|\s)none(\s|$)/.test(v) && !/^0(\.0+)?[a-z]*(\s|$)/.test(v.trim());
+  o.border = { ...o.border };
+  const allB = p['fo:border'];
+  if (allB !== undefined) o.border = { top: visible(allB), bottom: visible(allB), left: visible(allB), right: visible(allB) };
+  for (const side of ['top', 'bottom', 'left', 'right'] as const) {
+    const v = p[`fo:border-${side}`];
+    if (v !== undefined) o.border[side] = visible(v);
+  }
+  const bg = p['fo:background-color'];
+  if (bg !== undefined) o.shading = bg !== 'transparent' && bg !== 'none';
   const bb = p['fo:break-before'];
   if (bb !== undefined) o.breakBefore = bb === 'page';
   const ba = p['fo:break-after'];
@@ -698,6 +711,9 @@ class Importer {
     if (ctx.region === 'body') {
       for (const s of chain) if (s.masterPage !== undefined) this.usedMasters.add(s.masterPage);
     }
+    // PO-20: paragraph borders and shading are unsupported content (the file opens read-only).
+    if (Object.values(pp.border).some(Boolean)) this.detector.report('paragraph-border');
+    if (pp.shading) this.detector.report('paragraph-shading');
     const paraText = this.#textOf(chain);
     const base = level === null ? this.#baseText : paraText;
     const inline: Inline = { nodes: [], frames: [] };

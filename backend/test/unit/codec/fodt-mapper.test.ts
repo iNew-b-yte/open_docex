@@ -3,6 +3,7 @@ import { join } from 'node:path';
 import { createHash } from 'node:crypto';
 import { describe, expect, it } from 'vitest';
 import { TextOtType } from '@open-docex/shared/text';
+import { mergeFindings } from '../../../src/codec/codec-service.js';
 import { FodtMapper } from '../../../src/codec/fodt-mapper.js';
 import { engineError } from '../../../src/errors/engine-error.js';
 import {
@@ -655,5 +656,22 @@ describe('FodtMapper own round trip (no LibreOffice): export then import gives t
 describe('fodt helper', () => {
   it('builds a document the reader accepts', () => {
     expect(fodt({ body: '<text:p/>' })).toContain('<office:text><text:p/></office:text>');
+  });
+});
+
+describe('mergeFindings (codec service)', () => {
+  it('merges findings with the same feature and detail and sums their counts', () => {
+    expect(
+      mergeFindings([
+        { feature: 'other', count: 1, detail: 'macros' },
+        { feature: 'comments', count: 2, detail: 'office:annotation' },
+        { feature: 'other', count: 3, detail: 'macros' },
+        { feature: 'other', count: 1, detail: 'columns' },
+      ]),
+    ).toEqual([
+      { feature: 'other', count: 4, detail: 'macros' },
+      { feature: 'comments', count: 2, detail: 'office:annotation' },
+      { feature: 'other', count: 1, detail: 'columns' },
+    ]);
   });
 });
