@@ -439,6 +439,7 @@ class Importer {
   readonly conversionWhere: string[] = [];
   conversionCount = 0;
   readonly #converted = new Map<string, Promise<string | null>>();
+  #convChain: Promise<void> = Promise.resolve();
   #imageSeq = 0;
 
   readonly #path: string[] = [];
@@ -578,7 +579,14 @@ class Importer {
     if (this.conversionWhere.length < 20) this.conversionWhere.push(`${kind.toUpperCase()} image ${String(seq)}`);
     let p = this.#converted.get(key);
     if (p === undefined) {
-      p = this.#convert(bytes, kind, frame, seq).catch((e: unknown) => {
+      // One LibreOffice process at a time: the job owns a single profile slot (§14.3), and two
+      // processes on one profile fail silently (S2 §7).
+      const run = this.#convChain.then(() => this.#convert(bytes, kind, frame, seq));
+      this.#convChain = run.then(
+        () => undefined,
+        () => undefined,
+      );
+      p = run.catch((e: unknown) => {
         if (e instanceof Error && 'code' in e && (e as { code?: unknown }).code === 'CONVERSION_FAILED') {
           this.detector.report('image-format');
           return null;
