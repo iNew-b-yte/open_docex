@@ -4,7 +4,7 @@
  * The real `header` and `footer` nodes are editable once, inside the single `EditorView`, so
  * their steps flow through the same OT stream. They are shown read-only on every other page
  * as copies, which the {@link PaginationPlugin} puts into its spacer widgets. A copy is built
- * with a `DOMSerializer` and never uses `innerHTML`.
+ * with a `DOMSerializer`, from DOM nodes only (no HTML strings).
  *
  * @module
  */
