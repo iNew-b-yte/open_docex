@@ -659,6 +659,65 @@ export class DocumentInstance<S = unknown, O = unknown> implements FlushTarget, 
   }
 
   /**
+   * ACTIVE → ACTIVE for `recovery.resolve('discard-local')` (LLD Part 2 §13): replaces the local
+   * copy with a fresh import of the storage file, then sends every session that has a load
+   * `resync` followed by a full load (R-9). Sessions still waiting for `hello` get the new
+   * content when it arrives.
+   *
+   * - The FIFO loop pauses first: stopping the consumer waits for the delivery in progress.
+   *   Items still queued are dropped (memory queue, S-29); their senders reload anyway.
+   * - The fresh import (§8.4) writes the new snapshot atomically before it rotates and trims
+   *   the journal and writes a NORMAL meta, so the old local copy goes only **after** the new
+   *   snapshot is durable. It resets `allowedEdit`, dedupe and lineage (S-36).
+   * - **`rev` becomes `rev + 1`** (V1-16 choice; the LLD does not say). The epoch stays the
+   *   same, so the jump is what makes the discarded content's revs stale: a later submit or
+   *   resume based on them gets `resync('history-unavailable')`, and no cached load chunks
+   *   of the old content are reused. `rev` still never decreases.
+   *
+   * @throws {OpenDocexError} the import's error (`DOCUMENT_NOT_FOUND`, `DOCUMENT_TOO_LARGE`,
+   *   `STORAGE_READ_FAILED`, `CONVERSION_*`) when nothing local was replaced; the instance keeps
+   *   running on the local copy. A failure after the snapshot was replaced faults the instance
+   *   (the next `join` reloads from local state) and throws `DOCUMENT_FAULTED`.
+   */
+  async reloadFromStorage(): Promise<void> {
+    if (this.state !== 'ACTIVE') {
+      throw engineError('DOCUMENT_FAULTED', { documentId: this.documentId, instanceId: this.epoch, message: 'The document is not active.' });
+    }
+    const consumer = this.#consumer;
+    this.#consumer = null;
+    await consumer?.stop();
+    const rev = this.rev + 1;
+    try {
+      await this.#freshImport(rev, this.#d.meta.get(this.docKey));
+      const meta = this.#d.meta.get(this.docKey);
+      if (meta === undefined) throw engineError('DOCUMENT_FAULTED', { message: 'Document meta is missing after reload.' });
+      meta.updatedAt = this.#d.clock.now();
+      meta.lineage = [{ epoch: this.epoch, fromRev: this.rev }];
+      await this.#d.meta.put(meta);
+      this.readOnly = this.findings.length > 0 && !meta.readOnly.allowedEdit;
+    } catch (err) {
+      let replaced = this.rev === rev;
+      if (!replaced) {
+        try {
+          replaced = (await this.#d.snapshots.read(this.docKey))?.rev === rev;
+        } catch {
+          replaced = true; // unknown: assume the local copy changed
+        }
+      }
+      if (replaced) {
+        await this.fault(err);
+        throw this.#faultError(err);
+      }
+      if (this.state === 'ACTIVE') this.#consumer = this.#d.queue.consume(this.documentId, (d) => this.#deliver(d));
+      throw this.#asEngineError(err, 'DOCUMENT_FAULTED');
+    }
+    for (const r of this.#sessions.values()) {
+      if (r.state === 'loading' || r.state === 'live') this.#resyncAndReload(r, 'history-unavailable');
+    }
+    if (this.state === 'ACTIVE') this.#consumer = this.#d.queue.consume(this.documentId, (d) => this.#deliver(d));
+  }
+
+  /**
    * Faults this instance (HLD §11.3, [A2]): stop consuming, sync the journal, flush best effort,
    * close every session with `DOCUMENT_FAULTED`, emit, then `CLOSED`. Idempotent. Other
    * instances are not affected; the next `join` reloads with a new epoch.
