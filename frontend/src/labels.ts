@@ -31,6 +31,9 @@ export interface Labels {
     storageConflict: string;
     reload: string;
     retry: string;
+    /** `{done}` of `{total}` chunks while loading. */
+    loadingProgress: string;
+    toolbarLabel: string;
   };
   banner: {
     unsupported: string;
@@ -40,7 +43,11 @@ export interface Labels {
     editingAnyway: string;
     /** `{n}` is the number of converted images (PO-22). */
     imagesConverted: string;
+    /** `{n}` is the number of findings of one kind. */
+    findingCount: string;
   };
+  /** Names in the paragraph-style select. `{n}` is the heading level. */
+  styles: { paragraph: string; heading: string };
   badge: Record<'view' | 'unsupported' | 'server' | 'restoring', string>;
   dialogs: {
     ok: string;
@@ -59,6 +66,28 @@ export interface Labels {
     tableTitle: string;
     /** `{rows}` × `{cols}`. */
     tableSize: string;
+    paragraphTitle: string;
+    spacingBefore: string;
+    spacingAfter: string;
+    lineHeight: string;
+    lineHeightNone: string;
+    lineHeightMultiple: string;
+    lineHeightExact: string;
+    lineHeightAtLeast: string;
+    indentLeft: string;
+    indentRight: string;
+    indentFirstLine: string;
+    /** Shown when a Paragraph dialog value is outside its range. */
+    invalidValue: string;
+    rows: string;
+    columns: string;
+    pageWidth: string;
+    pageHeight: string;
+    marginTop: string;
+    marginRight: string;
+    marginBottom: string;
+    marginLeft: string;
+    invalidPage: string;
   };
   errors: Record<ErrorCode, string>;
   findings: Record<UnsupportedFeature, string>;
@@ -115,6 +144,7 @@ export const DEFAULT_LABELS: Readonly<Labels> = deepFreeze({
     header: 'Header',
     footer: 'Footer',
     pageSetup: 'Page setup',
+    paragraph: 'Paragraph…',
     share: 'Share',
   },
   status: {
@@ -133,6 +163,8 @@ export const DEFAULT_LABELS: Readonly<Labels> = deepFreeze({
     storageConflict: 'Saved on the server; the stored file changed elsewhere',
     reload: 'Reload',
     retry: 'Retry',
+    loadingProgress: '{done} of {total}',
+    toolbarLabel: 'Formatting',
   },
   banner: {
     unsupported: "Parts of this file can't be edited here, so it opened read-only.",
@@ -141,7 +173,9 @@ export const DEFAULT_LABELS: Readonly<Labels> = deepFreeze({
     editAnywayFailed: 'Editing could not be enabled.',
     editingAnyway: 'Unsupported parts will be removed when the document is saved.',
     imagesConverted: '{n} images were converted and will be saved as PNG.',
+    findingCount: '{n}',
   },
+  styles: { paragraph: 'Paragraph', heading: 'Heading {n}' },
   badge: {
     view: 'View only',
     unsupported: 'Read-only: unsupported content',
@@ -164,6 +198,27 @@ export const DEFAULT_LABELS: Readonly<Labels> = deepFreeze({
     margins: 'Margins',
     tableTitle: 'Insert table',
     tableSize: '{rows} × {cols}',
+    paragraphTitle: 'Paragraph',
+    spacingBefore: 'Spacing before (pt)',
+    spacingAfter: 'Spacing after (pt)',
+    lineHeight: 'Line height',
+    lineHeightNone: 'Default',
+    lineHeightMultiple: 'Multiple',
+    lineHeightExact: 'Exactly (pt)',
+    lineHeightAtLeast: 'At least (pt)',
+    indentLeft: 'Left indent (pt)',
+    indentRight: 'Right indent (pt)',
+    indentFirstLine: 'First-line indent (pt, negative for hanging)',
+    invalidValue: 'A value is outside its allowed range.',
+    rows: 'Rows',
+    columns: 'Columns',
+    pageWidth: 'Width (pt)',
+    pageHeight: 'Height (pt)',
+    marginTop: 'Top (pt)',
+    marginRight: 'Right (pt)',
+    marginBottom: 'Bottom (pt)',
+    marginLeft: 'Left (pt)',
+    invalidPage: 'These page settings are not allowed.',
   },
   // User-facing behaviour column of LLD Part 3 §16.
   errors: {
