@@ -4,6 +4,7 @@
  *
  * @module
  */
+import { useState } from 'react';
 import { DialogHost } from './dialogs.js';
 import { EditorHost } from './EditorHost.js';
 import { ErrorScreen } from './ErrorScreen.js';
@@ -12,6 +13,21 @@ import { StatusBar } from './StatusBar.js';
 import { Toolbar } from './Toolbar.js';
 import { UnsupportedBanner } from './UnsupportedBanner.js';
 import { ShellContext, useSession, useShell, type ShellEnv } from './useSession.js';
+
+/** A restore notice from the sync client (LLD Part 3 §6.2, S-37). Dismissible. */
+function RestoreBanner({ notice }: { notice: 'discarded' | 'partialLoss' | 'lost' }) {
+  const { labels } = useShell();
+  const [dismissed, setDismissed] = useState<string | null>(null);
+  if (dismissed === notice) return null;
+  return (
+    <div className="odx-banner odx-banner-restore" role="alert">
+      <p>{labels.restore[notice]}</p>
+      <button type="button" className="odx-btn" onClick={() => setDismissed(notice)}>
+        {labels.banner.dismiss}
+      </button>
+    </div>
+  );
+}
 
 function Layout() {
   const env = useShell();
@@ -34,6 +50,7 @@ function Layout() {
         />
       )}
       {status.readOnlyReason !== null && <ReadOnlyBadge reason={status.readOnlyReason} />}
+      {snap.restoreNotice != null && <RestoreBanner notice={snap.restoreNotice} />}
       <UnsupportedBanner
         findings={unsupported}
         {...(snap.conversions ? { conversions: snap.conversions } : {})}

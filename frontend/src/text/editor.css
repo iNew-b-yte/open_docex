@@ -1,0 +1,173 @@
+/* The text editor: ProseMirror, prosemirror-tables and the page frames
+   (LLD Part 3 §9, §10, §0 S-41, S-42). Theme variables come from `.odx-root`. */
+
+.odx-editor-surface {
+  position: relative;
+  min-height: 100%;
+  padding: 24px 0;
+}
+
+.ProseMirror {
+  position: relative;
+  outline: none;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  font-variant-ligatures: none;
+  font-feature-settings: 'liga' 0;
+}
+
+.ProseMirror pre {
+  white-space: pre-wrap;
+}
+
+.ProseMirror-hideselection *::selection {
+  background: transparent;
+}
+
+.ProseMirror-selectednode {
+  outline: 2px solid var(--odx-color-accent);
+}
+
+.ProseMirror-gapcursor {
+  display: none;
+  pointer-events: none;
+  position: absolute;
+}
+
+.ProseMirror-gapcursor::after {
+  content: '';
+  display: block;
+  position: absolute;
+  top: -2px;
+  width: 20px;
+  border-top: 1px solid var(--odx-color-fg);
+  animation: odx-caret-blink 1.1s steps(2, start) infinite;
+}
+
+@keyframes odx-caret-blink {
+  to {
+    visibility: hidden;
+  }
+}
+
+.ProseMirror-focused .ProseMirror-gapcursor {
+  display: block;
+}
+
+.ProseMirror-dropcursor {
+  background: var(--odx-color-accent);
+}
+
+/* Page frames (S-42). The pagination plugin sets the remaining properties inline. */
+.odx-body > * {
+  margin: 0;
+  box-sizing: border-box;
+}
+
+.odx-page-frames {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  z-index: 0;
+}
+
+.odx-page {
+  position: absolute;
+  left: 0;
+  background: #fff;
+}
+
+.odx-text-editor[contenteditable='false'] {
+  cursor: default;
+}
+
+.odx-header,
+.odx-footer {
+  color: var(--odx-color-muted);
+}
+
+.odx-copy {
+  color: var(--odx-color-muted);
+  pointer-events: none;
+}
+
+/* Tables (prosemirror-tables). The wrapper must stay free of margins (S-42). */
+.ProseMirror .tableWrapper {
+  margin: 0;
+  overflow-x: auto;
+}
+
+.ProseMirror table {
+  border-collapse: collapse;
+  table-layout: fixed;
+  overflow: hidden;
+}
+
+.ProseMirror td,
+.ProseMirror th {
+  position: relative;
+  min-width: 1em;
+  padding: 3px 5px;
+  border: 1px solid var(--odx-color-border);
+  vertical-align: top;
+  box-sizing: border-box;
+}
+
+.ProseMirror th {
+  font-weight: bold;
+  text-align: left;
+}
+
+.ProseMirror .column-resize-handle {
+  position: absolute;
+  right: -2px;
+  top: 0;
+  bottom: -1px;
+  width: 4px;
+  background: var(--odx-color-accent);
+  pointer-events: none;
+}
+
+.ProseMirror.resize-cursor {
+  cursor: col-resize;
+}
+
+.ProseMirror .selectedCell::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  background: color-mix(in srgb, var(--odx-color-accent) 25%, transparent);
+  pointer-events: none;
+}
+
+/* Images. */
+.odx-image-frame {
+  position: relative;
+  display: inline-block;
+  max-width: 100%;
+}
+
+.odx-image-frame img {
+  max-width: 100%;
+  height: auto;
+}
+
+.odx-image-handle {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  border: 1px solid var(--odx-color-accent);
+  background: var(--odx-color-bg);
+}
+
+.odx-image-loading,
+.odx-image-placeholder,
+.odx-image-upload {
+  opacity: 0.6;
+}
+
+.odx-image-broken {
+  outline: 1px dashed var(--odx-color-error);
+}

@@ -17,6 +17,7 @@ import {
   type ErrorMsg,
   type HelloMsg,
   type LoadStartMsg,
+  type ConversionNotice,
   type NoticeMsg,
   type ServerMessage,
 } from '@open-docex/shared/protocol';
@@ -34,7 +35,7 @@ import { ChunkLoader } from '../load/ChunkLoader.js';
 import type { RandomSource } from '../net/backoff.js';
 import { classifyClose, toPolicyInput, type CloseDecision, type CloseInfo } from '../net/closeCodes.js';
 import { Connection, type ConnState, type OnlineTarget, type WebSocketFactory } from '../net/Connection.js';
-import type { CreateBinding, DocumentBinding, ReadOnlyReason } from './ports.js';
+import type { CreateBinding, DocumentBinding, ReadOnlyReason, RestoreNoticeKey } from './ports.js';
 
 /** What `DocumentSession` needs besides the mount context. */
 export interface SessionDeps {
@@ -58,6 +59,12 @@ export interface SessionSnapshot {
   readonly error: ClientError | null;
   /** The last `ready` payload, or null before the first load. */
   readonly ready: ReadyEvent | null;
+  /** Images converted on import (PO-22), from the last `load-start`. */
+  readonly conversions?: readonly ConversionNotice[];
+  /** Unconfirmed changes (the last `sync` event's `pendingCount`). */
+  readonly pendingCount?: number;
+  /** The last restore notice from the sync client (S-37), or null. */
+  readonly restoreNotice?: RestoreNoticeKey | null;
 }
 
 const INITIAL_STATUS: SessionStatus = Object.freeze({
@@ -86,6 +93,10 @@ export class DocumentSession implements MountSession {
   #progress: LoadProgress | null = null;
   #error: ClientError | null = null;
   #ready: ReadyEvent | null = null;
+  #conversions: readonly ConversionNotice[] = [];
+  #pendingCount = 0;
+  #activity: 'idle' | 'busy' | 'restoring' = 'idle';
+  #restoreNotice: RestoreNoticeKey | null = null;
   #snapshot: SessionSnapshot;
 
   #binding: DocumentBinding | null = null;
@@ -339,10 +350,22 @@ export class DocumentSession implements MountSession {
         clientId: this.#ctx.clientId,
         send: (m) => this.#connection.send(m),
         emitSync: (e) => this.#onSync(e),
+        connected: () => this.#connection.state === 'open',
+        notify: (n) => {
+          this.#restoreNotice = n;
+          this.#publish();
+        },
+        reportError: (code) => {
+          const input = catalogueInput(code);
+          this.#ctx.emitter.emit('error', toClientErrorEvent(input, policyFor(input, this.#phase)));
+        },
+        activity: (a) => this.#onActivity(a),
         reload: (_reason, discard) => this.#reloadNow(discard),
       });
       if (this.#editorEl !== null) this.#binding.attach?.(this.#editorEl);
     }
+    this.#conversions = msg.conversions ?? [];
+    this.#binding.onLoadStart?.(msg);
     this.#loader ??= new ChunkLoader(this.#binding.assembler, (p) => this.#onProgress(p));
     this.#setPhase('loading');
     this.#update({ load: 'loading', access: msg.access });
@@ -522,8 +545,23 @@ export class DocumentSession implements MountSession {
   // --- status ---------------------------------------------------------------------------------
 
   #onSync(e: SyncEvent): void {
-    this.#update({ sync: e.pendingCount > 0 ? 'pending' : 'synced' });
+    this.#pendingCount = e.pendingCount;
+    this.#update({ sync: this.#syncStatus() });
     this.#ctx.emitter.emit('sync', e);
+  }
+
+  #syncStatus(): SessionStatus['sync'] {
+    if (this.#activity !== 'idle') return this.#activity;
+    return this.#pendingCount > 0 ? 'pending' : 'synced';
+  }
+
+  /** The sync client's activity (S-37): `busy` and `restoring` show in the status. */
+  #onActivity(a: 'idle' | 'busy' | 'restoring'): void {
+    this.#activity = a;
+    const patch: Partial<SessionStatus> = { sync: this.#syncStatus() };
+    if (a === 'restoring' && this.#status.readOnlyReason === null) patch.readOnlyReason = 'restoring';
+    else if (a !== 'restoring' && this.#status.readOnlyReason === 'restoring') patch.readOnlyReason = null;
+    this.#update(patch);
   }
 
   #onProgress(p: LoadProgress): void {
@@ -556,6 +594,9 @@ export class DocumentSession implements MountSession {
       progress: this.#progress,
       error: this.#error,
       ready: this.#ready,
+      conversions: this.#conversions,
+      pendingCount: this.#pendingCount,
+      restoreNotice: this.#restoreNotice,
     });
   }
 
@@ -566,7 +607,10 @@ export class DocumentSession implements MountSession {
       s.status === this.#status &&
       s.progress === this.#progress &&
       s.error === this.#error &&
-      s.ready === this.#ready
+      s.ready === this.#ready &&
+      s.conversions === this.#conversions &&
+      s.pendingCount === this.#pendingCount &&
+      s.restoreNotice === this.#restoreNotice
     ) {
       return;
     }

@@ -126,7 +126,7 @@ export type DeepPartial<T> = T extends (...args: never[]) => unknown
 /** Every text toolbar item, in toolbar order (LLD Part 3 §9). */
 export const TEXT_TOOLBAR_ITEMS: readonly TextToolbarItemId[] = Object.freeze([
   'paragraphStyle', 'fontFamily', 'fontSize', 'bold', 'italic', 'underline', 'strike', 'textColor',
-  'link', 'alignLeft', 'alignCenter', 'alignRight', 'alignJustify', 'bulletList', 'orderedList',
+  'link', 'paragraph', 'alignLeft', 'alignCenter', 'alignRight', 'alignJustify', 'bulletList', 'orderedList',
   'indent', 'outdent', 'insertTable', 'tableAddRowBefore', 'tableAddRowAfter', 'tableAddColBefore',
   'tableAddColAfter', 'tableDeleteRow', 'tableDeleteCol', 'tableMerge', 'tableSplit',
   'tableToggleHeaderRow', 'tableDelete', 'insertImage', 'imageAlt', 'pageBreak', 'header', 'footer',

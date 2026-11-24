@@ -1,0 +1,227 @@
+/* The React shell (LLD Part 3 §14, §0 S-41). Colours, radius and font come from the --odx-* theme
+   variables that `mount` sets on `.odx-root`; the fallbacks apply when the adopter sets none. */
+.odx-root {
+  --odx-font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --odx-color-bg: #fff;
+  --odx-color-fg: #1f2328;
+  --odx-color-muted: #656d76;
+  --odx-color-accent: #0b57d0;
+  --odx-color-border: #d0d7de;
+  --odx-color-canvas: #eceff3;
+  --odx-color-page: #fff;
+  --odx-color-warning: #9a6700;
+  --odx-color-error: #b3261e;
+  --odx-radius: 6px;
+  --odx-toolbar-height: 40px;
+  box-sizing: border-box;
+  display: block;
+  width: 100%;
+  height: 100%;
+  font-family: var(--odx-font-family);
+  color: var(--odx-color-fg);
+}
+
+.odx-root *,
+.odx-root *::before,
+.odx-root *::after {
+  box-sizing: border-box;
+}
+
+.odx-shell {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  background: var(--odx-color-bg);
+  font-size: 14px;
+}
+
+.odx-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px;
+  min-height: var(--odx-toolbar-height);
+  padding: 4px 8px;
+  border-bottom: 1px solid var(--odx-color-border);
+  background: var(--odx-color-bg);
+}
+
+.odx-toolbar-item {
+  display: inline-flex;
+  align-items: center;
+  height: 28px;
+  padding: 0 6px;
+  border: 1px solid transparent;
+  border-radius: var(--odx-radius);
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+}
+
+.odx-toolbar-item:hover:not(:disabled) {
+  background: var(--odx-color-canvas);
+}
+
+.odx-toolbar-item[aria-pressed='true'] {
+  border-color: var(--odx-color-accent);
+  background: var(--odx-color-canvas);
+}
+
+.odx-toolbar-item:disabled {
+  color: var(--odx-color-muted);
+  cursor: default;
+  opacity: 0.6;
+}
+
+.odx-btn {
+  padding: 4px 12px;
+  border: 1px solid var(--odx-color-border);
+  border-radius: var(--odx-radius);
+  background: var(--odx-color-bg);
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+}
+
+.odx-btn:hover:not(:disabled) {
+  border-color: var(--odx-color-accent);
+}
+
+.odx-btn:disabled {
+  color: var(--odx-color-muted);
+  cursor: default;
+}
+
+.odx-toolbar-item:focus-visible,
+.odx-btn:focus-visible,
+.odx-field input:focus-visible,
+.odx-field select:focus-visible {
+  outline: 2px solid var(--odx-color-accent);
+  outline-offset: 1px;
+}
+
+.odx-badge {
+  align-self: flex-start;
+  margin: 6px 8px 0;
+  padding: 2px 8px;
+  border: 1px solid var(--odx-color-border);
+  border-radius: var(--odx-radius);
+  background: var(--odx-color-canvas);
+  color: var(--odx-color-muted);
+  font-size: 12px;
+}
+
+.odx-banner {
+  margin: 6px 8px 0;
+  padding: 8px 12px;
+  border: 1px solid var(--odx-color-warning);
+  border-radius: var(--odx-radius);
+  color: var(--odx-color-fg);
+}
+
+.odx-banner p {
+  margin: 0 0 4px;
+}
+
+.odx-banner ul {
+  margin: 0 0 4px;
+  padding-left: 20px;
+}
+
+.odx-banner-conversions {
+  color: var(--odx-color-muted);
+}
+
+.odx-banner-error {
+  color: var(--odx-color-error);
+}
+
+.odx-error {
+  flex: 1 1 auto;
+  padding: 24px;
+  color: var(--odx-color-error);
+}
+
+.odx-editor-host {
+  position: relative;
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: auto;
+  background: var(--odx-color-canvas);
+}
+
+.odx-progress {
+  position: absolute;
+  inset: var(--odx-toolbar-height) 0 28px 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: color-mix(in srgb, var(--odx-color-bg) 70%, transparent);
+  color: var(--odx-color-muted);
+}
+
+.odx-statusbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding: 4px 8px;
+  border-top: 1px solid var(--odx-color-border);
+  color: var(--odx-color-muted);
+  font-size: 12px;
+}
+
+.odx-dialog-backdrop {
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgb(0 0 0 / 35%);
+}
+
+.odx-dialog {
+  min-width: 280px;
+  max-width: calc(100% - 32px);
+  max-height: calc(100% - 32px);
+  overflow: auto;
+  padding: 16px;
+  border: 1px solid var(--odx-color-border);
+  border-radius: var(--odx-radius);
+  background: var(--odx-color-bg);
+  color: var(--odx-color-fg);
+  box-shadow: 0 8px 24px rgb(0 0 0 / 25%);
+}
+
+.odx-dialog-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.odx-dialog-error {
+  margin: 8px 0 0;
+  color: var(--odx-color-error);
+}
+
+.odx-field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin: 0 0 8px;
+}
+
+.odx-field input,
+.odx-field select {
+  padding: 4px 6px;
+  border: 1px solid var(--odx-color-border);
+  border-radius: var(--odx-radius);
+  background: var(--odx-color-bg);
+  color: inherit;
+  font: inherit;
+}

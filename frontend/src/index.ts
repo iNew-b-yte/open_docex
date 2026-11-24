@@ -6,6 +6,9 @@
  *
  * @module
  */
+import './text/editor.css';
+import './ui/shell.css';
+
 export { mount, type MountHandle } from './mount.js';
 export type {
   AuthOption,
