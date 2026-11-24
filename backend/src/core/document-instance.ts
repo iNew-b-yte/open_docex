@@ -120,6 +120,8 @@ export class DocumentInstance<S = unknown, O = unknown> implements FlushTarget, 
   #opsSinceSnapshot = 0;
   #source: 'storage' | 'local' = 'storage';
   #faulting: Promise<void> | null = null;
+  /** Serializes snapshot-and-rotate runs from the loop and from the flush scheduler. */
+  #compaction: Promise<void> = Promise.resolve();
   #closing: Promise<void> | null = null;
 
   constructor(
@@ -593,19 +595,55 @@ export class DocumentInstance<S = unknown, O = unknown> implements FlushTarget, 
   }
 
   /** `snapshotAndRotate()` (§10.3). */
-  async #snapshotAndRotate(): Promise<void> {
-    const j = this.#journal as Journal;
-    await j.rotate(this.rev);
-    await this.#d.snapshots.write(this.docKey, {
-      v: 1,
-      kind: this.kind,
-      rev: this.rev,
-      savedAt: this.#d.clock.now(),
-      model: this.policy.ot.serializeSnapshot(this.model),
-      dedupe: this.dedupe.toJSON(),
+  #snapshotAndRotate(): Promise<void> {
+    return this.#compact(null);
+  }
+
+  /**
+   * Post-flush compaction (§12, S-38): see {@link FlushTarget.compactAfterFlush}. Runs after any
+   * loop compaction in progress. A crash between the snapshot and the trim loses nothing: the
+   * snapshot is written atomically before any segment is deleted.
+   */
+  async compactAfterFlush(flushedRev: number): Promise<void> {
+    try {
+      await this.#compact(flushedRev);
+    } catch (err) {
+      void this.fault(err); // not awaited: fault() flushes, and the flush awaits this call
+    }
+  }
+
+  /**
+   * Snapshots and rotates at the current rev (always for the loop; for a flush only when ops
+   * arrived since the last snapshot), then trims the journal before
+   * `min(flushedRev, snapshotRev) − historyMaxOps`. The committed state is read synchronously,
+   * so an op committed meanwhile stays in the journal after the snapshot.
+   */
+  #compact(flushedRev: number | null): Promise<void> {
+    const run = this.#compaction.then(async () => {
+      const j = this.#journal;
+      if (j === null) return;
+      if (flushedRev === null || this.#opsSinceSnapshot > 0) {
+        const rev = this.rev;
+        const model = this.policy.ot.serializeSnapshot(this.model);
+        const dedupe = this.dedupe.toJSON();
+        await j.rotate(rev);
+        await this.#d.snapshots.write(this.docKey, { v: 1, kind: this.kind, rev, savedAt: this.#d.clock.now(), model, dedupe });
+        this.#opsSinceSnapshot = this.rev - rev;
+      }
+      const snapshotRev = this.rev - this.#opsSinceSnapshot;
+      const floor = flushedRev === null ? snapshotRev : Math.min(flushedRev, snapshotRev);
+      await j.trimBefore(floor - historyMaxOps(this.#d.config.snapshot.everyOps));
     });
-    await j.trimBefore(this.rev - historyMaxOps(this.#d.config.snapshot.everyOps));
-    this.#opsSinceSnapshot = 0;
+    this.#compaction = run.catch(() => undefined);
+    return run;
+  }
+
+  /** The storage notice for a session that just loaded (S-38): LOCAL/CHECK → local, PENDING/CONFLICT → pending. */
+  storageNotice(): 'local' | 'pending' | null {
+    const s = this.#d.meta.get(this.docKey)?.storageState;
+    if (s === 'LOCAL' || s === 'CHECK') return 'local';
+    if (s === 'PENDING' || s === 'CONFLICT') return 'pending';
+    return null;
   }
 
   #resyncAndReload(r: SessionRecord, reason: ResyncMsg['reason']): void {
@@ -656,6 +694,65 @@ export class DocumentInstance<S = unknown, O = unknown> implements FlushTarget, 
     if (ids.length === 0) return;
     const data = encodeMessage({ type: 'notice', notice: 'read-only', readOnly: false, reason: 'unsupported-content' });
     this.#d.sink.send([{ sessionIds: ids, data, binary: typeof data !== 'string' }]);
+  }
+
+  /**
+   * ACTIVE → ACTIVE for `recovery.resolve('discard-local')` (LLD Part 2 §13): replaces the local
+   * copy with a fresh import of the storage file, then sends every session that has a load
+   * `resync` followed by a full load (R-9). Sessions still waiting for `hello` get the new
+   * content when it arrives.
+   *
+   * - The FIFO loop pauses first: stopping the consumer waits for the delivery in progress.
+   *   Items still queued are dropped (memory queue, S-29); their senders reload anyway.
+   * - The fresh import (§8.4) writes the new snapshot atomically before it rotates and trims
+   *   the journal and writes a NORMAL meta, so the old local copy goes only **after** the new
+   *   snapshot is durable. It resets `allowedEdit`, dedupe and lineage (S-36).
+   * - **`rev` becomes `rev + 1`** (V1-16 choice; the LLD does not say). The epoch stays the
+   *   same, so the jump is what makes the discarded content's revs stale: a later submit or
+   *   resume based on them gets `resync('history-unavailable')`, and no cached load chunks
+   *   of the old content are reused. `rev` still never decreases.
+   *
+   * @throws {OpenDocexError} the import's error (`DOCUMENT_NOT_FOUND`, `DOCUMENT_TOO_LARGE`,
+   *   `STORAGE_READ_FAILED`, `CONVERSION_*`) when nothing local was replaced; the instance keeps
+   *   running on the local copy. A failure after the snapshot was replaced faults the instance
+   *   (the next `join` reloads from local state) and throws `DOCUMENT_FAULTED`.
+   */
+  async reloadFromStorage(): Promise<void> {
+    if (this.state !== 'ACTIVE') {
+      throw engineError('DOCUMENT_FAULTED', { documentId: this.documentId, instanceId: this.epoch, message: 'The document is not active.' });
+    }
+    const consumer = this.#consumer;
+    this.#consumer = null;
+    await consumer?.stop();
+    const rev = this.rev + 1;
+    try {
+      await this.#freshImport(rev, this.#d.meta.get(this.docKey));
+      const meta = this.#d.meta.get(this.docKey);
+      if (meta === undefined) throw engineError('DOCUMENT_FAULTED', { message: 'Document meta is missing after reload.' });
+      meta.updatedAt = this.#d.clock.now();
+      meta.lineage = [{ epoch: this.epoch, fromRev: this.rev }];
+      await this.#d.meta.put(meta);
+      this.readOnly = this.findings.length > 0 && !meta.readOnly.allowedEdit;
+    } catch (err) {
+      let replaced = this.rev === rev;
+      if (!replaced) {
+        try {
+          replaced = (await this.#d.snapshots.read(this.docKey))?.rev === rev;
+        } catch {
+          replaced = true; // unknown: assume the local copy changed
+        }
+      }
+      if (replaced) {
+        await this.fault(err);
+        throw this.#faultError(err);
+      }
+      if (this.state === 'ACTIVE') this.#consumer = this.#d.queue.consume(this.documentId, (d) => this.#deliver(d));
+      throw this.#asEngineError(err, 'DOCUMENT_FAULTED');
+    }
+    for (const r of this.#sessions.values()) {
+      if (r.state === 'loading' || r.state === 'live') this.#resyncAndReload(r, 'history-unavailable');
+    }
+    if (this.state === 'ACTIVE') this.#consumer = this.#d.queue.consume(this.documentId, (d) => this.#deliver(d));
   }
 
   /**
