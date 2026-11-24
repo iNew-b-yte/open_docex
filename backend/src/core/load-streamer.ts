@@ -38,6 +38,8 @@ export interface LoadSource<S> {
   readonly policy: KindPolicy<S, unknown>;
   readonly dedupe: DedupeTable;
   readonly history: OpHistory;
+  /** The storage notice for a session that just finished loading, or `null` in NORMAL (S-38). */
+  storageNotice?(): 'local' | 'pending' | null;
 }
 
 interface Stream {
@@ -160,6 +162,8 @@ export class LoadStreamer<S> {
       this.#streams.delete(s.record.sessionId);
       sendTo(this.#sink, s.record.sessionId, { type: 'load-done', rev: s.rev });
       if (s.record.state === 'loading') s.record.state = 'live';
+      const notice = this.#src.storageNotice?.() ?? null;
+      if (notice !== null) sendTo(this.#sink, s.record.sessionId, { type: 'notice', notice: 'storage', state: notice });
     }
   }
 }

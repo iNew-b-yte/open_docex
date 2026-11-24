@@ -79,6 +79,7 @@ describe('FlushScheduler: scheduling', () => {
     expect(decodeText(file?.bytes)).toBe('hello world');
     expect(s.m()).toMatchObject({ lastKnownVersion: file?.version, lastFlushedRev: 1, rev: 1, storageState: 'NORMAL' });
     expect(s.flush.size).toBe(0); // clean entries are dropped
+    expect(s.target.compactions).toEqual([1]); // compaction after the successful flush
     expect(s.clock.pending).toEqual([]);
   });
 
@@ -168,6 +169,7 @@ describe('FlushScheduler: failures', () => {
     expect(s.recovery.failed[0]).toMatchObject({ inst: s.target, err: { code: 'STORAGE_WRITE_FAILED', documentId: s.id } });
     expect(s.m().lastFlushedRev).toBe(0);
     expect(s.clock.pending).toEqual([]);
+    expect(s.target.compactions).toEqual([]); // no compaction without a successful flush
   });
 
   it('a write conflict goes to recovery.onConflict with the current version (L-11)', async () => {
@@ -177,6 +179,7 @@ describe('FlushScheduler: failures', () => {
     expect(await s.flush.flushNow(s.target)).toBe('failed');
     expect(s.recovery.conflicts).toEqual([{ inst: s.target, v: outside }]);
     expect(decodeText(s.storage.getFile(s.id)?.bytes)).toBe('edited elsewhere');
+    expect(s.target.compactions).toEqual([]);
   });
 
   it('skips outside NORMAL (recovery owns the writes) and flushes once NORMAL again', async () => {

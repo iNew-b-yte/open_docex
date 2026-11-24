@@ -73,6 +73,13 @@ export interface FlushTarget {
   readonly format: FileFormat;
   readonly epoch: string;
   currentSnapshot(): { rev: number; model: unknown };
+  /**
+   * Post-flush compaction (LLD Part 2 §12, §0.5 S-38), called after a successful flush of
+   * `flushedRev`: snapshot and rotate if ops arrived since the last snapshot, then
+   * `journal.trimBefore(min(flushedRev, snapshotRev) − historyMaxOps)`. Never rejects; a
+   * failure faults the instance.
+   */
+  compactAfterFlush(flushedRev: number): Promise<void>;
 }
 
 /** What the Core needs from `FlushScheduler` (LLD Part 2 §12). */

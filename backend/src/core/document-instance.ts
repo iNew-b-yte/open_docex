@@ -120,6 +120,8 @@ export class DocumentInstance<S = unknown, O = unknown> implements FlushTarget, 
   #opsSinceSnapshot = 0;
   #source: 'storage' | 'local' = 'storage';
   #faulting: Promise<void> | null = null;
+  /** Serializes snapshot-and-rotate runs from the loop and from the flush scheduler. */
+  #compaction: Promise<void> = Promise.resolve();
   #closing: Promise<void> | null = null;
 
   constructor(
@@ -593,19 +595,55 @@ export class DocumentInstance<S = unknown, O = unknown> implements FlushTarget, 
   }
 
   /** `snapshotAndRotate()` (§10.3). */
-  async #snapshotAndRotate(): Promise<void> {
-    const j = this.#journal as Journal;
-    await j.rotate(this.rev);
-    await this.#d.snapshots.write(this.docKey, {
-      v: 1,
-      kind: this.kind,
-      rev: this.rev,
-      savedAt: this.#d.clock.now(),
-      model: this.policy.ot.serializeSnapshot(this.model),
-      dedupe: this.dedupe.toJSON(),
+  #snapshotAndRotate(): Promise<void> {
+    return this.#compact(null);
+  }
+
+  /**
+   * Post-flush compaction (§12, S-38): see {@link FlushTarget.compactAfterFlush}. Runs after any
+   * loop compaction in progress. A crash between the snapshot and the trim loses nothing: the
+   * snapshot is written atomically before any segment is deleted.
+   */
+  async compactAfterFlush(flushedRev: number): Promise<void> {
+    try {
+      await this.#compact(flushedRev);
+    } catch (err) {
+      void this.fault(err); // not awaited: fault() flushes, and the flush awaits this call
+    }
+  }
+
+  /**
+   * Snapshots and rotates at the current rev (always for the loop; for a flush only when ops
+   * arrived since the last snapshot), then trims the journal before
+   * `min(flushedRev, snapshotRev) − historyMaxOps`. The committed state is read synchronously,
+   * so an op committed meanwhile stays in the journal after the snapshot.
+   */
+  #compact(flushedRev: number | null): Promise<void> {
+    const run = this.#compaction.then(async () => {
+      const j = this.#journal;
+      if (j === null) return;
+      if (flushedRev === null || this.#opsSinceSnapshot > 0) {
+        const rev = this.rev;
+        const model = this.policy.ot.serializeSnapshot(this.model);
+        const dedupe = this.dedupe.toJSON();
+        await j.rotate(rev);
+        await this.#d.snapshots.write(this.docKey, { v: 1, kind: this.kind, rev, savedAt: this.#d.clock.now(), model, dedupe });
+        this.#opsSinceSnapshot = this.rev - rev;
+      }
+      const snapshotRev = this.rev - this.#opsSinceSnapshot;
+      const floor = flushedRev === null ? snapshotRev : Math.min(flushedRev, snapshotRev);
+      await j.trimBefore(floor - historyMaxOps(this.#d.config.snapshot.everyOps));
     });
-    await j.trimBefore(this.rev - historyMaxOps(this.#d.config.snapshot.everyOps));
-    this.#opsSinceSnapshot = 0;
+    this.#compaction = run.catch(() => undefined);
+    return run;
+  }
+
+  /** The storage notice for a session that just loaded (S-38): LOCAL/CHECK → local, PENDING/CONFLICT → pending. */
+  storageNotice(): 'local' | 'pending' | null {
+    const s = this.#d.meta.get(this.docKey)?.storageState;
+    if (s === 'LOCAL' || s === 'CHECK') return 'local';
+    if (s === 'PENDING' || s === 'CONFLICT') return 'pending';
+    return null;
   }
 
   #resyncAndReload(r: SessionRecord, reason: ResyncMsg['reason']): void {

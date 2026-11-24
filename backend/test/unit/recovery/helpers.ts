@@ -120,6 +120,8 @@ export class FakeTarget implements RecoveryTarget {
   rev = 0;
   model: unknown;
   reloads = 0;
+  /** `flushedRev` of every `compactAfterFlush` call. */
+  compactions: number[] = [];
   /** What `reloadFromStorage` does; the default writes a NORMAL meta, as the instance does. */
   onReload: (() => Promise<void>) | null = null;
 
@@ -140,6 +142,11 @@ export class FakeTarget implements RecoveryTarget {
 
   currentSnapshot(): { rev: number; model: unknown } {
     return { rev: this.rev, model: this.model };
+  }
+
+  compactAfterFlush(flushedRev: number): Promise<void> {
+    this.compactions.push(flushedRev);
+    return Promise.resolve();
   }
 
   async reloadFromStorage(): Promise<void> {

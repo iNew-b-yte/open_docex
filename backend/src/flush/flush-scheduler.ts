@@ -16,15 +16,14 @@
  *    `recovery.onWriteFailed` (→ LOCAL); a conflict goes to `recovery.onConflict` (→ CONFLICT,
  *    §0 L-11).
  * 5. On success `meta.lastKnownVersion`, `lastFlushedRev` and `rev` move to the new version
- *    and `F`. The document stays dirty if ops arrived during the flush.
+ *    and `F`, then the instance compacts. The document stays dirty if ops arrived during the
+ *    flush.
  *
  * Flushes of one document never overlap. A timer that fires during a flush sets `again`;
  * `flushNow` waits for the running flush and then flushes again.
  *
- * **Not implemented: the §12 post-success trim** (`snapshotAndRotate` and
- * `journal.trimBefore(min(F, snapshotRev) − historyMaxOps)`). `FlushTarget` (core/seams.ts)
- * exposes neither the journal nor `opsSinceSnapshot`; the instance's own `snapshotAndRotate`
- * still compacts every `snapshot.everyOps` ops. Raised with the orchestrator (V1-16).
+ * After a successful flush the scheduler calls `inst.compactAfterFlush(F)` (§12, S-38):
+ * snapshot and rotate when ops arrived since the last snapshot, then trim the journal.
  *
  * **Wiring (V1-19).** The recovery manager is built after the scheduler (it needs the
  * registry), so `recovery` is usually a forwarding object filled in once both exist.
@@ -271,6 +270,7 @@ export class FlushScheduler implements FlushSeam {
     meta.rev = Math.max(meta.rev, f);
     meta.updatedAt = d.clock.now();
     await d.meta.put(meta);
+    await inst.compactAfterFlush(f); // only after success (§12); never rejects
     e.dirtySince = e.inst.currentSnapshot().rev > f ? d.clock.now() : null;
     return 'flushed';
   }
