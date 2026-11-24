@@ -496,7 +496,7 @@ function markCommand(id: TextToolbarItemId, type: MarkType): EditorCommand {
     label: id,
     isEnabled: (s) => isEditable(s) && toggleMark(type)(s),
     isActive: (s) => markActive(s, type),
-    run: run(toggleMark(type)),
+    run: (view) => isEditable(view.state) && run(toggleMark(type))(view),
   };
 }
 
