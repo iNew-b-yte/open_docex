@@ -1,7 +1,7 @@
 // RecoveryManager (LLD Part 2 §13, HLD §11.3; §0 L-8, L-11): every state-machine row with a
 // fake clock and FakeStorage, restart in each state, and the order of meta, notice and events.
 import { rm } from 'node:fs/promises';
-import { asDocumentId, type DocumentId } from '@open-docex/shared/ids';
+import { asDocumentId, type ClientId, type DocumentId } from '@open-docex/shared/ids';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { OpenDocexError } from '@open-docex/shared/errors';
 import { engineError } from '../../../src/errors/engine-error.js';
@@ -458,10 +458,10 @@ describe('RecoveryManager: restart (state persists in meta)', () => {
     const s = await setup({ meta: { lastFlushedRev: 1 } });
     await s.meta.put(makeMeta('doc-2', { lastFlushedRev: 4 }));
     const j1 = await Journal.open(journalDir(s.dataDir, docKeyOf(s.id)), { fsync: 'always' });
-    await j1.append({ f: 1, r: 2, c: 'c', q: 1, u: 'u', t: 0, x: false, o: [{}] });
+    await j1.append({ f: 1, r: 2, c: 'c' as ClientId, q: 1, u: 'u', t: 0, x: false, o: [{}] });
     await j1.close();
     const j2 = await Journal.open(journalDir(s.dataDir, docKeyOf(asDocumentId('doc-2'))), { fsync: 'always' });
-    await j2.append({ f: 3, r: 4, c: 'c', q: 1, u: 'u', t: 0, x: false, o: [{}] });
+    await j2.append({ f: 3, r: 4, c: 'c' as ClientId, q: 1, u: 'u', t: 0, x: false, o: [{}] });
     await j2.close();
     const r = await restart(s, 0);
     r.rm.resumeAfterBoot();

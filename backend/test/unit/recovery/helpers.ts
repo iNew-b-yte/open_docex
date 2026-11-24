@@ -81,7 +81,7 @@ export function tempDir(): Promise<string> {
 export class FakeExport implements CodecExport {
   calls = 0;
   /** Makes the next `export` calls throw this. */
-  failures: unknown[] = [];
+  failures: Error[] = [];
   /** When set, each export waits for this promise. */
   gate: Promise<void> | null = null;
   inFlight = 0;
