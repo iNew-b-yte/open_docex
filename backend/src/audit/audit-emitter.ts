@@ -31,7 +31,7 @@ export interface AuditEmitterOptions {
   dataDir: string;
   meta: MetaStore;
   /** Hands an event to the main process: `ctx.emit('audit', event)` from `CoreServiceContext`. */
-  emit(event: 'audit', payload: AuditEvent): void;
+  readonly emit: (event: 'audit', payload: AuditEvent) => void;
   logger?: Logger;
   /** Used only to open journals for replay. Default `'interval'`. */
   fsync?: FsyncPolicy;
