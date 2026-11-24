@@ -19,8 +19,8 @@ import { fill, useShell } from './useSession.js';
 interface DialogProps {
   title: string;
   /** Returns an error label to keep the dialog open, or null when applied. */
-  onSubmit(): string | null;
-  onClose(): void;
+  onSubmit: () => string | null;
+  onClose: () => void;
   children: ReactNode;
 }
 
@@ -69,7 +69,7 @@ function Field({ label, children }: { label: string; children: ReactNode }) {
 
 interface EditorDialogProps {
   editor: TextEditorView;
-  onClose(): void;
+  onClose: () => void;
 }
 
 function LinkDialog({ editor, onClose }: EditorDialogProps) {
@@ -261,13 +261,14 @@ function ParagraphDialog({ editor, onClose }: EditorDialogProps) {
   const attrs = editor.view.state.selection.$from.parent.attrs as Record<string, unknown>;
   const text = (k: string): string => (typeof attrs[k] === 'number' ? String(attrs[k]) : '');
   const lh = attrs.lineHeight as LineHeight | null | undefined;
+  const kind0: LhKind = lh ? lh.kind : "none";
   const [f, setF] = useState({
     spacingBefore: text('spacingBefore'),
     spacingAfter: text('spacingAfter'),
     indentLeft: text('indentLeft'),
     indentRight: text('indentRight'),
     indentFirstLine: text('indentFirstLine'),
-    lineKind: (lh ? lh.kind : 'none') as LhKind,
+    lineKind: kind0,
     lineValue: lh ? String(lh.kind === 'multiple' ? lh.value : lh.pt) : '',
   });
   const set = (k: keyof typeof f) => (e: { target: { value: string } }) => setF({ ...f, [k]: e.target.value });

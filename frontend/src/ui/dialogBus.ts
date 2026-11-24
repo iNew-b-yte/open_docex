@@ -9,8 +9,8 @@ export type DialogId = 'link' | 'imageAlt' | 'insertTable' | 'pageSetup' | 'para
 
 /** Posts and receives dialog requests. */
 export interface DialogBus {
-  request(id: DialogId): void;
-  subscribe(fn: (id: DialogId) => void): () => void;
+  request: (id: DialogId) => void;
+  subscribe: (fn: (id: DialogId) => void) => () => void;
 }
 
 /** Creates a bus. */

@@ -23,10 +23,10 @@ export interface ShellSnapshot extends SessionSnapshot {
 
 /** The part of `DocumentSession` the shell uses. */
 export interface ShellSession {
-  subscribe(fn: () => void): () => void;
-  getSnapshot(): ShellSnapshot;
-  retry(): void;
-  attachEditor(el: HTMLElement | null): void;
+  subscribe: (fn: () => void) => () => void;
+  getSnapshot: () => ShellSnapshot;
+  retry: () => void;
+  attachEditor: (el: HTMLElement | null) => void;
 }
 
 /** Everything the shell components read. Built by `mount`'s wiring (V1-36). */
@@ -39,7 +39,7 @@ export interface ShellEnv {
   /** The `.odx-root` element: dialogs render in a portal inside it. */
   container: HTMLElement;
   /** The text editor, or null before the first load and for sheets. */
-  getEditor(): TextEditorView | null;
+  getEditor: () => TextEditorView | null;
   dialogs: DialogBus;
 }
 
