@@ -8,7 +8,17 @@
  * @module
  */
 import type { ClientId } from '@open-docex/shared/ids';
-import type { AckMsg, AssetMsg, ErrorMsg, RemoteMsg, SubmitMsg } from '@open-docex/shared/protocol';
+import type { ErrorCode } from '@open-docex/shared/errors';
+import type {
+  AckMsg,
+  AssetGetMsg,
+  AssetMsg,
+  AssetPutMsg,
+  ErrorMsg,
+  LoadStartMsg,
+  RemoteMsg,
+  SubmitMsg,
+} from '@open-docex/shared/protocol';
 import type { SessionStatus, SyncEvent } from '../events.js';
 import type { Assembler, LoadInfo } from '../load/ChunkLoader.js';
 
@@ -37,11 +47,25 @@ export interface SessionSync<Orphans = unknown> {
   destroy(): void;
 }
 
+/** A key of `labels.restore`. */
+export type RestoreNoticeKey = 'discarded' | 'partialLoss' | 'lost';
+
 /** What the session gives a binding (and through it, the sync client). */
 export interface BindingContext {
   readonly clientId: ClientId;
-  /** Sends a submission. False when no socket is open; the sync client keeps its state. */
-  send(m: SubmitMsg): boolean;
+  /**
+   * Sends a submission, or an `asset-put` / `asset-get` for the `AssetCache` (S-39). False when
+   * no socket is open; the caller keeps its state.
+   */
+  send(m: SubmitMsg | AssetPutMsg | AssetGetMsg): boolean;
+  /** True while the socket is open (the `AssetCache`'s `connected`). */
+  connected(): boolean;
+  /** Shows a restore notice (a key of `labels.restore`, S-37). */
+  notify(n: RestoreNoticeKey): void;
+  /** Reports an error the sync client found itself (S-37), for example `SESSION_RESYNC_REQUIRED`. */
+  reportError(code: ErrorCode): void;
+  /** The sync client's activity: `busy` or `restoring` show in `SessionStatus.sync` (S-37). */
+  activity(a: 'idle' | 'busy' | 'restoring'): void;
   /** The sync client's `emit(SyncEvent)` (LLD Part 3 §7.1). */
   emitSync(e: SyncEvent): void;
   /** The sync client's `reload(reason, discard)`: reload the document, dropping pending changes when `discard`. */
@@ -57,6 +81,8 @@ export interface DocumentBinding<S = unknown> {
    * Called before `sync.start`.
    */
   show(snapshot: S, load: LoadInfo): void;
+  /** Called with every `load-start`, before its chunks (for limits such as `maxAssetBytes`). */
+  onLoadStart?(m: LoadStartMsg): void;
   /** The element `EditorHost` gives the session (§3), or null when it unmounts. */
   attach?(el: HTMLElement | null): void;
   /** `asset` messages, and `error`s that carry `reqId` (§0 R-10). */
