@@ -12,7 +12,7 @@
  *
  * @module
  */
-import { getPageSettings, isAllowedHref, textSchema, type LineHeight, type PageSettings, type TextAlign } from '@open-docex/shared/text';
+import { getPageSettings, isAllowedHref, pageSettingsFit, textSchema, type LineHeight, type PageSettings, type TextAlign } from '@open-docex/shared/text';
 import type { Attrs, Mark, MarkType, Node as PMNode, NodeType, ResolvedPos } from 'prosemirror-model';
 import { toggleMark } from 'prosemirror-commands';
 import { liftListItem, sinkListItem, wrapInList } from 'prosemirror-schema-list';
@@ -366,11 +366,6 @@ export function toggleRegion(kind: 'header' | 'footer'): Command {
     dispatch(tr);
     return true;
   };
-}
-
-/** True when the margins leave at least 36 pt of body each way. Mirrors shared `pageSettingsFit`. */
-function pageSettingsFit(p: PageSettings): boolean {
-  return p.margins.left + p.margins.right <= p.size.width - 36 && p.margins.top + p.margins.bottom <= p.size.height - 36;
 }
 
 /**
