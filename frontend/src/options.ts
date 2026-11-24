@@ -75,6 +75,8 @@ export interface ToolbarConfig {
 /** Text toolbar items (LLD Part 3 §9). */
 export type TextToolbarItemId =
   | 'paragraphStyle'
+  /** Opens the Paragraph dialog: spacing, line height and indents (PO-20, LLD §0 S-39). */
+  | 'paragraph'
   | 'bold'
   | 'italic'
   | 'underline'
