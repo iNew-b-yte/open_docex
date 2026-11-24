@@ -82,6 +82,10 @@ interface PassMemo {
   posOf: Float64Array;
   breaks: PageBreakMark[];
   pageExtra: number[];
+  /** The state after the last block: used when the next pass resumes past the end. */
+  yEnd: number;
+  pageEnd: number;
+  posEnd: number;
   geomKey: string;
 }
 
@@ -283,9 +287,12 @@ class PaginationView {
         pagePre[i] = last.pagePre[i] as number;
         posOf[i] = last.posOf[i] as number;
       }
-      y = last.yPre[s] as number;
-      page = last.pagePre[s] as number;
-      pos = last.posOf[s] as number;
+      // `s` can be one past the last pass's blocks (a block appended at the end). Then the state
+      // after that pass's last block is the resume state.
+      const atEnd = s >= last.nodes.length;
+      y = atEnd ? last.yEnd : (last.yPre[s] as number);
+      page = atEnd ? last.pageEnd : (last.pagePre[s] as number);
+      pos = atEnd ? last.posEnd : (last.posOf[s] as number);
       breaks = last.breaks.filter((b) => b.index < s);
       pageExtra = last.pageExtra.slice(0, page);
     }
@@ -329,7 +336,7 @@ class PaginationView {
     const pageCount = page + 1;
     const tailSpacerPx = cap - y + overflow;
 
-    this.#last = { nodes, yPre, pagePre, posOf, breaks, pageExtra, geomKey };
+    this.#last = { nodes, yPre, pagePre, posOf, yEnd: y, pageEnd: page, posEnd: pos, breaks, pageExtra, geomKey };
 
     const prev = paginationKey.getState(view.state) ?? EMPTY;
     const same =
