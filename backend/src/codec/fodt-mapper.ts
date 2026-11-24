@@ -60,7 +60,7 @@ const snap = (n: number): number => Math.round(n * 4) / 4;
 const clamp = (n: number, lo: number, hi: number): number => Math.min(hi, Math.max(lo, n));
 const A4_WIDTH_PT = 595.28;
 const A4_HEIGHT_PT = 841.89;
-/** PO-26: the margin a blank document gets, used here only when a file has no margins at all. */
+/** The `text_style` font-family rule of the schema (§8.1). */
 const FONT_FAMILY_RE = /^[\p{L}\p{N} _.\-()&+]{1,64}$/u;
 const MAX_REPEAT = 1000;
 const MAX_IMAGE_PX = 4096;
