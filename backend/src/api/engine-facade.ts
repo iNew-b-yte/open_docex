@@ -258,7 +258,7 @@ export class EngineFacade implements Engine {
     try {
       args = makeArgs();
     } catch (err) {
-      return Promise.reject(err as Error);
+      return Promise.reject(err instanceof Error ? err : engineError('CONFIG_INVALID'));
     }
     switch (this.#state) {
       case 'restarting':
