@@ -5,7 +5,7 @@
 export { textSchema } from './schema.js';
 export type { LineHeight, TextAlign, TextDefaults, TextMarkName, TextNodeName, TextSnapshot } from './schema.js';
 export { isAllowedHref } from './href.js';
-export { getPageSettings, pageSettingStep } from './page.js';
+export { getPageSettings, pageSettingStep, pageSettingsFit } from './page.js';
 export type { PageSettings } from './page.js';
 export { parseTextOps } from './steps.js';
 export type { TextOp, TextStepType } from './steps.js';
