@@ -51,12 +51,16 @@ describe('TextSyncClient: concurrency (§7.4)', () => {
     const [winner, loser] = first === 'A' ? [a, b] : [b, a];
     const [wl, ll] = first === 'A' ? ['h', 'o'] : ['o', 'h'];
     expect(texts(server.doc)).toEqual([`c${wl}${ll}at`]);
-    // The later letter is re-applied with a mirror: its caret is right after it.
+    // §0.5 S-37: each caret stays right after its own letter. The later letter is re-applied
+    // with a mirror; the earlier writer's caret stays before the remote letter inserted at it.
     expect(loser.caret).toBe(5);
-    // The earlier writer's caret is still after its own letter. The later letter was inserted
-    // exactly at that caret, and ProseMirror's default mapping (§7.2) moves the caret past it.
-    expect(winner.caret).toBeGreaterThanOrEqual(4);
-    expect(winner.caret).toBe(5);
+    expect(winner.caret).toBe(4);
+    const shown = (c: TestClient): string => {
+      const t = texts(c.doc)[0] ?? '';
+      return `${t.slice(0, c.caret - 2)}|${t.slice(c.caret - 2)}`;
+    };
+    expect(shown(winner)).toBe(`c${wl}|${ll}at`);
+    expect(shown(a)).toBe(first === 'A' ? 'ch|oat' : 'coh|at');
   });
 
   it('applies a remote in one transaction while typing is in flight and buffered, and keeps the caret', async () => {
@@ -83,6 +87,26 @@ describe('TextSyncClient: concurrency (§7.4)', () => {
     await settle(a);
     expectConverged(server, a);
     expect(texts(server.doc)).toEqual(['QhelloXYZ']);
+  });
+
+  it('a remote insert just before the caret still shifts the caret right', async () => {
+    const server = new FakeServer(bodyDoc('cat'));
+    const a = client(server);
+    a.view.dispatch(a.view.state.tr.setSelection(TextSelection.create(a.doc, 4))); // ca|t
+    otherTypes(server, 3, 'Q'); // before the caret, not at it
+    await a.deliver();
+    expect(texts(a.doc)).toEqual(['cQat']);
+    expect(a.caret).toBe(5); // cQa|t
+  });
+
+  it('a remote insert exactly at the caret stays after it', async () => {
+    const server = new FakeServer(bodyDoc('cat'));
+    const a = client(server);
+    a.view.dispatch(a.view.state.tr.setSelection(TextSelection.create(a.doc, 4)));
+    otherTypes(server, 4, 'Q');
+    await a.deliver();
+    expect(texts(a.doc)).toEqual(['caQt']);
+    expect(a.caret).toBe(4); // ca|Qt
   });
 
   it('keeps one batch in flight: later typing waits for the ack', async () => {

@@ -8,7 +8,7 @@
  * @module
  */
 import type { EditorState, Transaction } from 'prosemirror-state';
-import { Mapping, type Step } from 'prosemirror-transform';
+import { Mapping, type Mappable, type Step } from 'prosemirror-transform';
 import { parseTextOps, rebaseStepsOnDoc, type TextOp } from '@open-docex/shared/text';
 import type { PendingStep } from './types.js';
 
@@ -36,7 +36,8 @@ export interface Rebuild {
  * apply are dropped, with their dependents (`applyStepsWithDrop` semantics).
  *
  * The selection is mapped through the public `Mapping` API with mirrors, so a caret inside
- * re-applied local typing stays where it was. The transaction carries `addToHistory: false`.
+ * re-applied local typing stays where it was, and with assoc −1, so text inserted exactly at
+ * the caret appears after it (§0.5 S-37). The transaction carries `addToHistory: false`.
  *
  * @throws {Divergence} when an inverse or a step of `over` does not apply.
  */
@@ -68,7 +69,10 @@ export function rebuild(state: EditorState, keep: readonly PendingStep[], over: 
     // The mirror of its own inverse, so positions inside earlier local content are recovered.
     sel.appendMap(step.getMap(), n - 1 - (r.kept[j] as number));
   }
-  tr.setSelection(state.selection.map(tr.doc, sel));
+  // §0.5 S-37: a remote insert exactly at the caret lands after it (assoc −1). Positions
+  // strictly inside a change, and local typing, map as before.
+  const before: Mappable = { map: (pos) => sel.map(pos, -1), mapResult: (pos) => sel.mapResult(pos, -1) };
+  tr.setSelection(state.selection.map(tr.doc, before));
   tr.setMeta('addToHistory', false);
   return { tr, newKeep, kept: r.kept };
 }
