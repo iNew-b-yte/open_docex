@@ -292,6 +292,7 @@ export class FlushScheduler implements FlushSeam {
       case 'handed-to-recovery':
         // Now LOCAL or CONFLICT: stay dirty without a timer, as for 'skipped'.
         e.dirtySince = now;
+        this.#disarm(e);
         return;
     }
   }
