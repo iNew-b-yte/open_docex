@@ -3,8 +3,7 @@ import { computeAssetId } from '@open-docex/shared/ids';
 import type { AssetPutMsg, AssetGetMsg } from '@open-docex/shared/protocol';
 import type { Node as PMNode } from 'prosemirror-model';
 import { Slice } from 'prosemirror-model';
-import { __parseFromClipboard, type EditorView } from 'prosemirror-view';
-import type { AssetCache } from '../../src/assets/AssetCache.js';
+import type { EditorView } from 'prosemirror-view';
 import { findPlaceholder, imageUploadKey } from '../../src/text/imageUpload.js';
 import { BlockResizeSignal, type BlockResizeEvent } from '../../src/text/nodeviews/BlockResizeSignal.js';
 import { ImageView } from '../../src/text/nodeviews/ImageView.js';
@@ -69,7 +68,8 @@ describe('image insertion (PO-24)', () => {
     void editor.commands().get('insertImage')?.run(view, file());
     await flush();
     view.dispatch(view.state.tr.insertText('XYZ', 2));
-    const id = [...(imageUploadKey.getState(view.state)?.find() ?? [])][0]?.spec.id as string;
+    const spec = (imageUploadKey.getState(view.state)?.find() ?? [])[0]?.spec as { id: string } | undefined;
+    const id = spec?.id ?? '';
     expect(findPlaceholder(view.state, id)).toBe(10);
     await confirm();
     const body = view.state.doc.child(0);
@@ -166,15 +166,15 @@ describe('image insertion (PO-24)', () => {
   });
 
   it('pasted HTML cannot bring an external image or a script', () => {
-    const { view } = setup(doc(p('a')));
+    const { view, sent } = setup(doc(p('a')));
+    select(view, 3);
     const html = '<p>x</p><img src="http://evil.example/x.png"><script>alert(1)</script><img src="javascript:1" data-asset-id="nope">';
-    const slice = __parseFromClipboard(view, '', html, false, view.state.doc.resolve(2));
-    const names: string[] = [];
-    slice?.content.descendants((node) => {
-      names.push(node.type.name);
-    });
-    expect(names).not.toContain('image');
-    expect(slice?.content.textBetween(0, slice.content.size)).toBe('x');
+    // jsdom has no ClipboardEvent; a plain paste event without clipboard data stands in.
+    expect(view.pasteHTML(html, new Event('paste') as ClipboardEvent)).toBe(true);
+    expect(images(view)).toHaveLength(0);
+    expect(view.state.doc.textContent).toBe('ax');
+    expect(view.dom.querySelector('script')).toBeNull();
+    expect(sent).toHaveLength(0);
   });
 });
 
@@ -207,7 +207,7 @@ describe('ImageView', () => {
     const { view } = setup(doc(p('x')));
     const make = (load: () => Promise<string>) =>
       new ImageView(n.image.create({ assetId: ASSET_A }), view, () => 1, {
-        assets: { url: () => 'https://evil.example/x.png', load } as unknown as AssetCache,
+        assets: { url: () => 'https://evil.example/x.png', load },
         resize: new BlockResizeSignal(),
       });
     const a = make(() => Promise.resolve('https://evil.example/x.png'));
@@ -280,6 +280,6 @@ describe('ImageView', () => {
     expect(src).toMatch(/^blob:/);
     editor.destroy();
     assets.destroy();
-    expect(URL.revokeObjectURL).toHaveBeenCalledWith(src);
+    expect(vi.mocked(URL).revokeObjectURL).toHaveBeenCalledWith(src);
   });
 });

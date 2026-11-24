@@ -188,7 +188,7 @@ describe('marks and text style', () => {
   it('sets stored marks on an empty selection', () => {
     const { view, cmd } = setup(doc(p('abc')));
     select(view, 3);
-    cmd('fontSize').run(view, 18);
+    expect(cmd('fontSize').run(view, 18)).toBe(true);
     expect(m.text_style.isInSet(view.state.storedMarks ?? [])?.attrs.fontSize).toBe(18);
   });
 });
@@ -394,7 +394,7 @@ describe('tables', () => {
     view.state.doc.descendants((node, pos) => {
       if (node.type.spec.tableRole === 'cell' || node.type.spec.tableRole === 'header_cell') cells.push(pos);
     });
-    view.dispatch(view.state.tr.setSelection(CellSelection.create(view.state.doc, cells[0] as number, cells[1] as number)));
+    view.dispatch(view.state.tr.setSelection(CellSelection.create(view.state.doc, cells[0] ?? -1, cells[1] ?? -1)));
     expect(cmd('tableMerge').run(view)).toBe(true);
     expect(t().child(0).child(0).attrs.colspan).toBe(2);
     expect(cmd('tableSplit').run(view)).toBe(true);
@@ -409,7 +409,7 @@ describe('tables', () => {
     view.state.doc.descendants((node, pos) => {
       if (node.type === n.table_cell) cells.push(pos);
     });
-    view.dispatch(view.state.tr.setSelection(CellSelection.create(view.state.doc, cells[0] as number, cells[1] as number)));
+    view.dispatch(view.state.tr.setSelection(CellSelection.create(view.state.doc, cells[0] ?? -1, cells[1] ?? -1)));
     expect(cmd('tableMerge').run(view)).toBe(true);
     const merged = body(view).child(0).child(0).child(0);
     expect(merged.attrs.colspan).toBe(2);

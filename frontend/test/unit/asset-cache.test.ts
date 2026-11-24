@@ -157,7 +157,7 @@ describe('AssetCache.put', () => {
     cache.onAssetError({ type: 'error', code: 'DOCUMENT_TOO_LARGE', retryable: false, message: 'x', reqId: req.reqId });
     await expect(p).rejects.toSatisfy((e: unknown) => OpenDocexError.is(e, 'DOCUMENT_TOO_LARGE'));
     expect(cache.url(assetId)).toBeUndefined();
-    expect(URL.revokeObjectURL).toHaveBeenCalled();
+    expect(vi.mocked(URL).revokeObjectURL).toHaveBeenCalled();
   });
 
   it('rejects after the 60 s timeout', async () => {

@@ -158,8 +158,8 @@ export async function insertImage(view: EditorView, file: File, deps: ImageUploa
 }
 
 /** The files of a clipboard or drop, if any. */
-function filesOf(data: DataTransfer | null): File[] {
-  return data === null ? [] : Array.from(data.files);
+function filesOf(data: DataTransfer | null | undefined): File[] {
+  return data ? Array.from(data.files) : [];
 }
 
 /**
