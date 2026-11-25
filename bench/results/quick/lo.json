@@ -2,10 +2,10 @@
   "stage": "lo",
   "mode": null,
   "quick": true,
-  "complete": false,
-  "startedAt": "2026-11-25T10:30:06.490Z",
+  "complete": true,
+  "startedAt": "2026-11-25T10:56:09.255Z",
   "environment": {
-    "date": "2026-11-25T10:30:06.490Z",
+    "date": "2026-11-25T10:56:09.255Z",
     "cpuModel": "AMD Ryzen 9 9955HX 16-Core Processor",
     "logicalCores": 32,
     "ramGiB": 31.3,
@@ -58,7 +58,7 @@
         "paragraphs": 56,
         "docxBytes": 7423,
         "exportFlatXmlBytes": 52642,
-        "importFlatXmlBytes": 89561,
+        "importFlatXmlBytes": 89559,
         "importFlatToDocxRatio": 12.1,
         "exportFlatToDocxRatio": 7.1,
         "importFlatPctOfCap": 0.003,
@@ -70,16 +70,32 @@
         "libreofficeConcurrency": 1,
         "targetPages": 10,
         "repeats": 1,
-        "exportMsMedian": 1682,
-        "exportMsMin": 1682,
-        "exportMsMax": 1682,
-        "importMsMedian": 2487,
-        "importMsMin": 2487,
-        "importMsMax": 2487,
+        "exportMsMedian": 1705,
+        "exportMsMin": 1705,
+        "exportMsMax": 1705,
+        "importMsMedian": 2513,
+        "importMsMin": 2513,
+        "importMsMax": 2513,
         "batchOf4": {
-          "exportWallMs": 6581,
-          "exportSlowestJobMs": 6581,
-          "importWallMs": 9835
+          "exportWallMs": 6903,
+          "exportSlowestJobMs": 6903,
+          "importWallMs": 10054
+        }
+      },
+      {
+        "libreofficeConcurrency": 2,
+        "targetPages": 10,
+        "repeats": 1,
+        "exportMsMedian": 1736,
+        "exportMsMin": 1736,
+        "exportMsMax": 1736,
+        "importMsMedian": 2505,
+        "importMsMin": 2505,
+        "importMsMax": 2505,
+        "batchOf4": {
+          "exportWallMs": 3799,
+          "exportSlowestJobMs": 3799,
+          "importWallMs": 5493
         }
       }
     ]

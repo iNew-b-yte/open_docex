@@ -1,0 +1,207 @@
+{
+  "stage": "lo",
+  "mode": null,
+  "quick": false,
+  "complete": true,
+  "startedAt": "2026-11-25T10:57:31.081Z",
+  "environment": {
+    "date": "2026-11-25T10:57:31.081Z",
+    "cpuModel": "AMD Ryzen 9 9955HX 16-Core Processor",
+    "logicalCores": 32,
+    "ramGiB": 31.3,
+    "os": "Windows_NT 10.0.26300 (Windows 11 Home Single Language) x64",
+    "node": "v24.18.0",
+    "libreoffice": "LibreOffice 26.8.3.1 861effc5289d539f15c4c18d1ba8579ffd78728b",
+    "chromium": "not measured",
+    "sofficePath": "C:\\Program Files\\LibreOffice\\program\\soffice.exe"
+  },
+  "params": {
+    "rate": 2,
+    "warmMs": 5000,
+    "measureMs": 20000,
+    "oneDocClients": [
+      1,
+      10,
+      50,
+      100
+    ],
+    "manyDocs": [
+      10,
+      100,
+      500
+    ],
+    "stages": [
+      250,
+      500,
+      1000,
+      2000,
+      3000,
+      4000,
+      6000,
+      8000
+    ],
+    "capMeasureMs": 10000,
+    "limitMs": 100,
+    "fanout": [
+      0,
+      10,
+      100,
+      500,
+      1000,
+      2000
+    ],
+    "opsPerSec": 20,
+    "pages": [
+      10,
+      100,
+      300
+    ],
+    "loConcurrency": [
+      1,
+      2
+    ],
+    "loRepeats": 2,
+    "keystrokes": 400,
+    "typingPages": 300
+  },
+  "data": {
+    "maxFileBytes": 52428800,
+    "maxFlatXmlBytes": 3355443200,
+    "documents": [
+      {
+        "targetPages": 10,
+        "actualPages": 10,
+        "paragraphs": 56,
+        "docxBytes": 7423,
+        "exportFlatXmlBytes": 52642,
+        "importFlatXmlBytes": 89559,
+        "importFlatToDocxRatio": 12.1,
+        "exportFlatToDocxRatio": 7.1,
+        "importFlatPctOfCap": 0.003,
+        "capMultipleNeededAtThisRatio": 12.1
+      },
+      {
+        "targetPages": 100,
+        "actualPages": 100,
+        "paragraphs": 609,
+        "docxBytes": 18166,
+        "exportFlatXmlBytes": 469112,
+        "importFlatXmlBytes": 515931,
+        "importFlatToDocxRatio": 28.4,
+        "exportFlatToDocxRatio": 25.8,
+        "importFlatPctOfCap": 0.015,
+        "capMultipleNeededAtThisRatio": 28.4
+      },
+      {
+        "targetPages": 300,
+        "actualPages": 300,
+        "paragraphs": 1839,
+        "docxBytes": 41848,
+        "exportFlatXmlBytes": 1395671,
+        "importFlatXmlBytes": 1464837,
+        "importFlatToDocxRatio": 35,
+        "exportFlatToDocxRatio": 33.4,
+        "importFlatPctOfCap": 0.044,
+        "capMultipleNeededAtThisRatio": 35
+      }
+    ],
+    "timing": [
+      {
+        "libreofficeConcurrency": 1,
+        "targetPages": 10,
+        "repeats": 2,
+        "exportMsMedian": 1662,
+        "exportMsMin": 1662,
+        "exportMsMax": 1713,
+        "importMsMedian": 2459,
+        "importMsMin": 2459,
+        "importMsMax": 2474,
+        "batchOf4": {
+          "exportWallMs": 6643,
+          "exportSlowestJobMs": 6643,
+          "importWallMs": 9823
+        }
+      },
+      {
+        "libreofficeConcurrency": 1,
+        "targetPages": 100,
+        "repeats": 2,
+        "exportMsMedian": 2103,
+        "exportMsMin": 2103,
+        "exportMsMax": 2112,
+        "importMsMedian": 2986,
+        "importMsMin": 2986,
+        "importMsMax": 2990,
+        "batchOf4": {
+          "exportWallMs": 8427,
+          "exportSlowestJobMs": 8427,
+          "importWallMs": 12146
+        }
+      },
+      {
+        "libreofficeConcurrency": 1,
+        "targetPages": 300,
+        "repeats": 2,
+        "exportMsMedian": 2981,
+        "exportMsMin": 2981,
+        "exportMsMax": 3030,
+        "importMsMedian": 4055,
+        "importMsMin": 4055,
+        "importMsMax": 4071,
+        "batchOf4": {
+          "exportWallMs": 12029,
+          "exportSlowestJobMs": 12029,
+          "importWallMs": 16267
+        }
+      },
+      {
+        "libreofficeConcurrency": 2,
+        "targetPages": 10,
+        "repeats": 2,
+        "exportMsMedian": 1675,
+        "exportMsMin": 1675,
+        "exportMsMax": 1707,
+        "importMsMedian": 2459,
+        "importMsMin": 2459,
+        "importMsMax": 2503,
+        "batchOf4": {
+          "exportWallMs": 3975,
+          "exportSlowestJobMs": 3975,
+          "importWallMs": 5939
+        }
+      },
+      {
+        "libreofficeConcurrency": 2,
+        "targetPages": 100,
+        "repeats": 2,
+        "exportMsMedian": 2273,
+        "exportMsMin": 2273,
+        "exportMsMax": 2287,
+        "importMsMedian": 3025,
+        "importMsMin": 3025,
+        "importMsMax": 3041,
+        "batchOf4": {
+          "exportWallMs": 4997,
+          "exportSlowestJobMs": 4997,
+          "importWallMs": 6895
+        }
+      },
+      {
+        "libreofficeConcurrency": 2,
+        "targetPages": 300,
+        "repeats": 2,
+        "exportMsMedian": 3037,
+        "exportMsMin": 3037,
+        "exportMsMax": 3084,
+        "importMsMedian": 4062,
+        "importMsMin": 4062,
+        "importMsMax": 4181,
+        "batchOf4": {
+          "exportWallMs": 7445,
+          "exportSlowestJobMs": 7445,
+          "importWallMs": 9447
+        }
+      }
+    ]
+  }
+}
