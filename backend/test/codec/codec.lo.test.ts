@@ -112,7 +112,9 @@ describe.skipIf(process.env['OPEN_DOCEX_LO_TESTS'] !== '1')('codec with real Lib
   it('kills LibreOffice on timeout, resets the slot, and the next job works', async () => {
     const pool = new InProcessPool();
     const tmpDir = mkdtempSync(join(root, 'to-'));
-    const slow = service(pool, { maxConcurrent: 1, timeoutMs: 400, tmpDir });
+    // 1 ms: no soffice start can finish in it, on a slow or a fast machine alike. A fixed
+    // 400 ms let a fast CI runner (Node 22 job of run 45551669411) finish the import in time.
+    const slow = service(pool, { maxConcurrent: 1, timeoutMs: 1, tmpDir });
     await expect(slow.import({ bytes: read('features.docx'), format: 'docx', assetDir: root })).rejects.toMatchObject({
       code: 'CONVERSION_TIMEOUT',
     });

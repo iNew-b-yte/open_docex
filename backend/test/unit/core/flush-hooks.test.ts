@@ -2,6 +2,7 @@
 // storage notice a session gets after loading while storage is not NORMAL.
 import { readdir } from 'node:fs/promises';
 import { afterEach, describe, expect, it, vi } from 'vitest';
+import { waitFor } from '../../wait-for.js';
 import { historyMaxOps } from '../../../src/core/op-history.js';
 import { Journal } from '../../../src/persistence/journal.js';
 import { docKeyOf, journalDir } from '../../../src/persistence/layout.js';
@@ -28,7 +29,7 @@ async function edited(h: Harness) {
   const a = await h.open(id, 'cA');
   h.submit(a.sid, 'cA', 1, a.epoch, 0, [ins(2, 'X')]);
   h.submit(a.sid, 'cA', 2, a.epoch, 1, [ins(2, 'Y')]);
-  await vi.waitFor(() => expect(h.sink.of(a.sid, 'ack')).toHaveLength(2));
+  await waitFor(() => expect(h.sink.of(a.sid, 'ack')).toHaveLength(2));
   const inst = h.registry.get(id);
   if (inst === undefined) throw new Error('not loaded');
   return { id, a, inst };
@@ -73,7 +74,7 @@ describe('DocumentInstance.compactAfterFlush', () => {
     const model = textOf(inst.model);
     vi.spyOn(Journal.prototype, 'trimBefore').mockRejectedValueOnce(new Error('crash'));
     await inst.compactAfterFlush(2); // never rejects: the failure faults the instance
-    await vi.waitFor(() => expect(inst.state).toBe('CLOSED'));
+    await waitFor(() => expect(inst.state).toBe('CLOSED'));
     expect(h.sink.closes(a.sid)).not.toHaveLength(0);
     expect((await new SnapshotStore(h.dataDir).read(docKeyOf(id)))?.rev).toBe(2);
     const c = await h.open(id, 'cC');
@@ -97,7 +98,7 @@ describe('storage notice after loading (S-38)', () => {
       if (m === undefined) throw new Error('no meta');
       await h.meta.put({ ...m, storageState: state });
       const b = await h.open(id, 'cB');
-      await vi.waitFor(() => expect(h.sink.messages(b.sid).length).toBeGreaterThan(0));
+      await waitFor(() => expect(h.sink.messages(b.sid).length).toBeGreaterThan(0));
       const types = h.sink.messages(b.sid).map((x) => (x.type === 'notice' && x.notice === 'storage' ? `notice:${x.state}` : x.type));
       const done = types.indexOf('load-done');
       if (notice === null) expect(types.some((t) => t.startsWith('notice:'))).toBe(false);

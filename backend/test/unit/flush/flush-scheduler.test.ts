@@ -2,7 +2,8 @@
 // typing, no overlapping flushes, conversion retry, write failure and conflict hand-off.
 import { rm } from 'node:fs/promises';
 import { asDocumentId } from '@open-docex/shared/ids';
-import { afterEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, describe, expect, it } from 'vitest';
+import { waitFor } from '../../wait-for.js';
 import { engineError } from '../../../src/errors/engine-error.js';
 import { FlushScheduler, type FlushRecovery } from '../../../src/flush/flush-scheduler.js';
 import { docKeyOf } from '../../../src/persistence/layout.js';
@@ -63,7 +64,7 @@ async function setup(o: { meta?: Partial<DocumentMeta> } = {}) {
 type Setup = Awaited<ReturnType<typeof setup>>;
 
 async function flushed(s: Setup, rev: number): Promise<void> {
-  await vi.waitFor(() => expect(s.m().lastFlushedRev).toBe(rev));
+  await waitFor(() => expect(s.m().lastFlushedRev).toBe(rev));
   await settle();
 }
 
@@ -152,7 +153,7 @@ describe('FlushScheduler: failures', () => {
     s.codec.failures.push(engineError('CONVERSION_FAILED'));
     s.type('hello world');
     await s.clock.advance(QUIET);
-    await vi.waitFor(() => expect(s.rec.errors()).toHaveLength(1));
+    await waitFor(() => expect(s.rec.errors()).toHaveLength(1));
     expect(s.rec.errors()[0]).toMatchObject({ code: 'CONVERSION_FAILED', documentId: s.id });
     expect(s.m().lastFlushedRev).toBe(0);
     await s.clock.advance(QUIET);

@@ -4,6 +4,7 @@
 import { readdir } from 'node:fs/promises';
 import type { DocumentId } from '@open-docex/shared/ids';
 import { afterEach, describe, expect, it, vi } from 'vitest';
+import { waitFor } from '../../wait-for.js';
 import { CloseCode } from '@open-docex/shared/protocol';
 import { Journal, segmentName } from '../../../src/persistence/journal.js';
 import { docKeyOf, journalDir } from '../../../src/persistence/layout.js';
@@ -33,7 +34,7 @@ async function conflicted(h: Harness, outside = 'outside') {
   const b = await h.open(id, 'cB');
   h.submit(a.sid, 'cA', 1, a.epoch, 0, [ins(2, 'X')]);
   h.submit(b.sid, 'cB', 1, b.epoch, 0, [ins(4, 'Y')]);
-  await vi.waitFor(() => expect(h.sink.of(b.sid, 'ack')).toHaveLength(1));
+  await waitFor(() => expect(h.sink.of(b.sid, 'ack')).toHaveLength(1));
   const m = h.meta.get(docKeyOf(id));
   if (m === undefined) throw new Error('no meta');
   await h.meta.put({ ...m, storageState: 'CONFLICT', conflict: { detectedAt: 1, storageVersion: 'v2' }, localSince: 1 });
@@ -49,7 +50,7 @@ function segments(h: Harness, id: DocumentId): Promise<string[]> {
 
 /** Message types a session received after `from`, once its reload is done. */
 async function after(h: Harness, sid: string, from: number): Promise<string[]> {
-  await vi.waitFor(() => expect(h.sink.messages(sid).slice(from).some((m) => m.type === 'load-done')).toBe(true));
+  await waitFor(() => expect(h.sink.messages(sid).slice(from).some((m) => m.type === 'load-done')).toBe(true));
   return h.sink.messages(sid).slice(from).map((m) => m.type);
 }
 
@@ -95,7 +96,7 @@ describe('DocumentInstance.reloadFromStorage', () => {
     }
     expect(h.sink.messages(waiting)).toEqual([]);
     h.hello(waiting, 'cW');
-    await vi.waitFor(() => expect(h.sink.of(waiting, 'load-start')[0]?.rev).toBe(3));
+    await waitFor(() => expect(h.sink.of(waiting, 'load-start')[0]?.rev).toBe(3));
   });
 
   it('a stale submit or resume based on the discarded content gets resync; new edits apply', async () => {
@@ -105,17 +106,17 @@ describe('DocumentInstance.reloadFromStorage', () => {
     await after(h, a.sid, 0);
     const resyncs = h.sink.of(a.sid, 'resync').length;
     h.submit(a.sid, 'cA', 2, a.epoch, 2, [ins(2, 'Z')]); // sent before the client saw the reload
-    await vi.waitFor(() => expect(h.sink.of(a.sid, 'resync')).toHaveLength(resyncs + 1));
+    await waitFor(() => expect(h.sink.of(a.sid, 'resync')).toHaveLength(resyncs + 1));
     expect(h.sink.of(a.sid, 'resync').at(-1)?.reason).toBe('history-unavailable');
     expect(textOf(inst.model)).toBe('outside');
     expect(inst.rev).toBe(3);
     h.submit(a.sid, 'cA', 3, a.epoch, 3, [ins(2, 'N')]);
-    await vi.waitFor(() => expect(h.sink.of(a.sid, 'ack').at(-1)).toMatchObject({ clientSeq: 3, rev: 4 }));
+    await waitFor(() => expect(h.sink.of(a.sid, 'ack').at(-1)).toMatchObject({ clientSeq: 3, rev: 4 }));
     expect(textOf(inst.model)).toBe('Noutside');
     // A same-epoch resume at the old rev 2 is not caught up: it reloads.
     const c = h.join(inst.documentId);
     h.hello(c, 'cC', { epoch: a.epoch, rev: 2 });
-    await vi.waitFor(() => expect(h.sink.of(c, 'load-start')[0]?.rev).toBe(4));
+    await waitFor(() => expect(h.sink.of(c, 'load-start')[0]?.rev).toBe(4));
     expect(h.sink.of(c, 'resync')[0]?.reason).toBe('history-unavailable');
   });
 
@@ -171,7 +172,7 @@ describe('DocumentInstance.reloadFromStorage', () => {
     expect((await new SnapshotStore(h.dataDir).read(docKeyOf(id)))?.rev).toBe(0);
     // The FIFO loop runs again.
     h.submit(a.sid, 'cA', 2, a.epoch, 2, [ins(2, 'Z')]);
-    await vi.waitFor(() => expect(h.sink.of(a.sid, 'ack').at(-1)).toMatchObject({ clientSeq: 2, rev: 3 }));
+    await waitFor(() => expect(h.sink.of(a.sid, 'ack').at(-1)).toMatchObject({ clientSeq: 2, rev: 3 }));
   });
 
   it('a failed snapshot write deletes nothing: the old snapshot and journal stay', async () => {

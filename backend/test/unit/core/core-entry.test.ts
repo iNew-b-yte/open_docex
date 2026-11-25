@@ -14,6 +14,7 @@ import {
   type ServerMessage,
 } from '@open-docex/shared/protocol';
 import { afterEach, describe, expect, expectTypeOf, it, vi } from 'vitest';
+import { waitFor } from '../../wait-for.js';
 import type { AuditEvent } from '../../../src/api/events.js';
 import { AuditEmitter } from '../../../src/audit/audit-emitter.js';
 import { InProcessEngineChannel } from '../../../src/channel/in-process-engine-channel.js';
@@ -261,10 +262,10 @@ describe('createCoreWiring: boot and shutdown wiring (S-38, S-40)', () => {
       t.main.post({ type: 'frame', sessionId: 's1', data: new TextEncoder().encode(encodeMessage(m) as string), binary: false });
     t.main.post({ type: 'join', sessionId: 's1', documentId: asDocumentId('d.docx'), userId: 'u', access: 'edit', document: { ref: 'd.docx', format: 'docx' } });
     send({ type: 'hello', protocol: PROTOCOL_VERSION, clientId: cid('c1') });
-    await vi.waitFor(() => expect(frames.some((m) => m.type === 'load-done')).toBe(true));
+    await waitFor(() => expect(frames.some((m) => m.type === 'load-done')).toBe(true));
     const start = frames.find((m): m is LoadStartMsg => m.type === 'load-start');
     send({ type: 'submit', clientId: cid('c1'), clientSeq: 1, epoch: start?.epoch as Epoch, baseRev: start?.rev ?? 0, ops: [ins(2, 'X')] });
-    await vi.waitFor(() => expect(frames.some((m) => m.type === 'ack')).toBe(true));
+    await waitFor(() => expect(frames.some((m) => m.type === 'ack')).toBe(true));
     // The shutdown flush writes the dirty document; the write fails.
     storage.failNext('write');
     await t.runtime.shutdown(2000);

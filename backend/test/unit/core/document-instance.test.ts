@@ -2,6 +2,7 @@ import { createHash } from 'node:crypto';
 import { asDocumentId, type DocumentId } from '@open-docex/shared/ids';
 import { CloseCode } from '@open-docex/shared/protocol';
 import { afterEach, describe, expect, it, vi } from 'vitest';
+import { waitFor } from '../../wait-for.js';
 import { docKeyOf } from '../../../src/persistence/layout.js';
 import { SnapshotStore } from '../../../src/persistence/snapshot-store.js';
 import { cid, ins, makeHarness, spyJournal, textOf, type Harness } from './harness.js';
@@ -52,7 +53,7 @@ describe('DocumentInstance: first load', () => {
     const h = await harness();
     const sid = h.join(asDocumentId('nope.docx'));
     h.hello(sid, 'c');
-    await vi.waitFor(() => expect(h.sink.closes(sid)).toEqual([CloseCode.LOAD_FAILED]));
+    await waitFor(() => expect(h.sink.closes(sid)).toEqual([CloseCode.LOAD_FAILED]));
     expect(h.sink.of(sid, 'error')[0]?.code).toBe('DOCUMENT_NOT_FOUND');
     expect(h.registry.get(asDocumentId('nope.docx'))).toBeUndefined();
   });
@@ -61,14 +62,14 @@ describe('DocumentInstance: first load', () => {
     const h = await harness({ config: { limits: { maxFileBytes: 4 } } });
     const id = h.file('big.docx', 'too large');
     const sid = h.join(id);
-    await vi.waitFor(() => expect(h.sink.of(sid, 'error')[0]?.code).toBe('DOCUMENT_TOO_LARGE'));
+    await waitFor(() => expect(h.sink.of(sid, 'error')[0]?.code).toBe('DOCUMENT_TOO_LARGE'));
   });
 
   it('a sheet format fails with DOCUMENT_UNSUPPORTED_CONTENT in V1', async () => {
     const h = await harness();
     const id = h.file('s.xlsx', 'x');
     const sid = h.join(id, 'edit', 'xlsx');
-    await vi.waitFor(() => expect(h.sink.of(sid, 'error')[0]?.code).toBe('DOCUMENT_UNSUPPORTED_CONTENT'));
+    await waitFor(() => expect(h.sink.of(sid, 'error')[0]?.code).toBe('DOCUMENT_UNSUPPORTED_CONTENT'));
   });
 });
 
@@ -81,7 +82,7 @@ describe('DocumentInstance: FIFO loop', () => {
     const b = await h.open(id, 'cB');
     h.order.length = 0;
     h.submit(a.sid, 'cA', 1, a.epoch, 0, [ins(2, 'X')]);
-    await vi.waitFor(() => expect(h.order).toContain('queue.ack'));
+    await waitFor(() => expect(h.order).toContain('queue.ack'));
     expect(h.order).toEqual(['journal', 'send:ack', 'send:remote', 'audit', 'queue.ack']);
     expect(j.spy).toHaveBeenCalledTimes(1);
     const send = h.sink.events.filter((e) => e.kind === 'send').at(-1);
@@ -100,7 +101,7 @@ describe('DocumentInstance: FIFO loop', () => {
     const b = await h.open(id, 'cB');
     h.submit(a.sid, 'cA', 1, a.epoch, 0, [ins(2, 'X')]);
     h.submit(b.sid, 'cB', 1, b.epoch, 0, [ins(4, 'Y')]);
-    await vi.waitFor(() => expect(h.sink.of(b.sid, 'ack')).toHaveLength(1));
+    await waitFor(() => expect(h.sink.of(b.sid, 'ack')).toHaveLength(1));
     expect(h.sink.of(a.sid, 'ack')[0]?.committed).toBeUndefined();
     expect(h.sink.of(b.sid, 'ack')[0]).toEqual({ type: 'ack', clientSeq: 1, rev: 2, committed: [ins(5, 'Y')] });
     expect(textOf(h.registry.get(id)?.model)).toBe('XabY');
@@ -114,11 +115,11 @@ describe('DocumentInstance: FIFO loop', () => {
     const b = await h.open(id, 'cB');
     h.submit(a.sid, 'cA', 1, a.epoch, 0, [ins(2, 'X')]);
     h.submit(b.sid, 'cB', 1, b.epoch, 0, [ins(2, 'Y')]);
-    await vi.waitFor(() => expect(h.sink.of(b.sid, 'ack')).toHaveLength(1));
+    await waitFor(() => expect(h.sink.of(b.sid, 'ack')).toHaveLength(1));
     // b resends its transformed batch; a resends its plain one.
     h.submit(b.sid, 'cB', 1, b.epoch, 0, [ins(2, 'Y')]);
     h.submit(a.sid, 'cA', 1, a.epoch, 0, [ins(2, 'X')]);
-    await vi.waitFor(() => expect(h.sink.of(a.sid, 'ack')).toHaveLength(2));
+    await waitFor(() => expect(h.sink.of(a.sid, 'ack')).toHaveLength(2));
     const bAcks = h.sink.of(b.sid, 'ack');
     expect(bAcks[1]).toEqual(bAcks[0]);
     expect(bAcks[1]?.committed).toBeDefined();
@@ -133,8 +134,8 @@ describe('DocumentInstance: FIFO loop', () => {
     const id = h.file('a.docx', 'ab');
     const a = await h.open(id, 'cA');
     h.submit(a.sid, 'cA', 1, a.epoch, 5, [ins(2, 'X')]);
-    await vi.waitFor(() => expect(h.sink.of(a.sid, 'resync')).toEqual([{ type: 'resync', reason: 'inconsistent' }]));
-    await vi.waitFor(() => expect(h.sink.of(a.sid, 'load-done')).toHaveLength(2));
+    await waitFor(() => expect(h.sink.of(a.sid, 'resync')).toEqual([{ type: 'resync', reason: 'inconsistent' }]));
+    await waitFor(() => expect(h.sink.of(a.sid, 'load-done')).toHaveLength(2));
     expect(h.registry.get(id)?.rev).toBe(0);
   });
 
@@ -143,7 +144,7 @@ describe('DocumentInstance: FIFO loop', () => {
     const id = h.file('a.docx', 'ab');
     const a = await h.open(id, 'cA');
     h.submit(a.sid, 'cA', 1, 'other-epoch', 0, [ins(2, 'X')]);
-    await vi.waitFor(() => expect(h.sink.of(a.sid, 'resync')).toEqual([{ type: 'resync', reason: 'epoch-changed' }]));
+    await waitFor(() => expect(h.sink.of(a.sid, 'resync')).toEqual([{ type: 'resync', reason: 'epoch-changed' }]));
   });
 
   it('rejects a view session with ACCESS_DENIED', async () => {
@@ -151,7 +152,7 @@ describe('DocumentInstance: FIFO loop', () => {
     const id = h.file('a.docx', 'ab');
     const v = await h.open(id, 'cV', 'view');
     h.submit(v.sid, 'cV', 1, v.epoch, 0, [ins(2, 'X')]);
-    await vi.waitFor(() => expect(h.sink.of(v.sid, 'error')).toMatchObject([{ code: 'ACCESS_DENIED', clientSeq: 1 }]));
+    await waitFor(() => expect(h.sink.of(v.sid, 'error')).toMatchObject([{ code: 'ACCESS_DENIED', clientSeq: 1 }]));
   });
 
   it('an op-level throw rejects only that batch with PROTOCOL_OP_REJECTED; the instance stays ACTIVE', async () => {
@@ -159,11 +160,11 @@ describe('DocumentInstance: FIFO loop', () => {
     const id = h.file('a.docx', 'ab');
     const a = await h.open(id, 'cA');
     h.submit(a.sid, 'cA', 1, a.epoch, 0, [{ stepType: 'bogus' }]);
-    await vi.waitFor(() => expect(h.sink.of(a.sid, 'error')).toMatchObject([{ code: 'PROTOCOL_OP_REJECTED', clientSeq: 1 }]));
+    await waitFor(() => expect(h.sink.of(a.sid, 'error')).toMatchObject([{ code: 'PROTOCOL_OP_REJECTED', clientSeq: 1 }]));
     expect(h.registry.get(id)?.state).toBe('ACTIVE');
     expect(h.sink.events.some((e) => e.kind === 'error' && e.err.code === 'PROTOCOL_OP_REJECTED')).toBe(true);
     h.submit(a.sid, 'cA', 2, a.epoch, 0, [ins(2, 'X')]);
-    await vi.waitFor(() => expect(h.sink.of(a.sid, 'ack')).toEqual([{ type: 'ack', clientSeq: 2, rev: 1 }]));
+    await waitFor(() => expect(h.sink.of(a.sid, 'ack')).toEqual([{ type: 'ack', clientSeq: 2, rev: 1 }]));
   });
 
   it('rejects an image op whose asset is not stored, and accepts it after asset-put', async () => {
@@ -174,17 +175,17 @@ describe('DocumentInstance: FIFO loop', () => {
     const assetId = createHash('sha256').update(png).digest('hex');
     const imageOp = { stepType: 'replace', from: 1, to: 1, slice: { content: [{ type: 'image', attrs: { assetId } }] } };
     h.submit(a.sid, 'cA', 1, a.epoch, 0, [imageOp]);
-    await vi.waitFor(() => expect(h.sink.of(a.sid, 'error')[0]?.code).toBe('PROTOCOL_OP_REJECTED'));
+    await waitFor(() => expect(h.sink.of(a.sid, 'error')[0]?.code).toBe('PROTOCOL_OP_REJECTED'));
     h.send(a.sid, { type: 'asset-put', reqId: 7, mime: 'image/png', bytes: png });
-    await vi.waitFor(() =>
+    await waitFor(() =>
       expect(h.sink.of(a.sid, 'asset')).toEqual([{ type: 'asset', reqId: 7, assetId, mime: 'image/png', size: png.length }]),
     );
     h.submit(a.sid, 'cA', 2, a.epoch, 0, [imageOp]);
-    await vi.waitFor(() => expect(h.sink.of(a.sid, 'ack')).toEqual([{ type: 'ack', clientSeq: 2, rev: 1 }]));
+    await waitFor(() => expect(h.sink.of(a.sid, 'ack')).toEqual([{ type: 'ack', clientSeq: 2, rev: 1 }]));
     h.send(a.sid, { type: 'asset-get', reqId: 8, assetId });
-    await vi.waitFor(() => expect(h.sink.of(a.sid, 'asset')[1]).toMatchObject({ reqId: 8, assetId, size: png.length }));
+    await waitFor(() => expect(h.sink.of(a.sid, 'asset')[1]).toMatchObject({ reqId: 8, assetId, size: png.length }));
     h.send(a.sid, { type: 'asset-get', reqId: 9, assetId: 'b'.repeat(64) });
-    await vi.waitFor(() => expect(h.sink.of(a.sid, 'error').at(-1)).toMatchObject({ code: 'DOCUMENT_NOT_FOUND', reqId: 9 }));
+    await waitFor(() => expect(h.sink.of(a.sid, 'error').at(-1)).toMatchObject({ code: 'DOCUMENT_NOT_FOUND', reqId: 9 }));
   });
 
   it('refuses asset-put from a view session and with bytes that are not an image', async () => {
@@ -194,7 +195,7 @@ describe('DocumentInstance: FIFO loop', () => {
     const a = await h.open(id, 'cA');
     h.send(v.sid, { type: 'asset-put', reqId: 1, mime: 'image/png', bytes: new Uint8Array([0x89, 0x50]) });
     h.send(a.sid, { type: 'asset-put', reqId: 2, mime: 'image/png', bytes: new Uint8Array([1, 2, 3]) });
-    await vi.waitFor(() => expect(h.sink.of(a.sid, 'error')).toMatchObject([{ code: 'PROTOCOL_OP_REJECTED', reqId: 2 }]));
+    await waitFor(() => expect(h.sink.of(a.sid, 'error')).toMatchObject([{ code: 'PROTOCOL_OP_REJECTED', reqId: 2 }]));
     expect(h.sink.of(v.sid, 'error')).toMatchObject([{ code: 'ACCESS_DENIED', reqId: 1 }]);
   });
 
@@ -204,7 +205,7 @@ describe('DocumentInstance: FIFO loop', () => {
     const a = await h.open(id, 'cA');
     const b = await h.open(id, 'cB');
     h.submit(a.sid, 'cA', 1, a.epoch, 0, [ins(999, 'X')]);
-    await vi.waitFor(() => expect(h.sink.of(a.sid, 'ack')).toEqual([{ type: 'ack', clientSeq: 1, rev: 0, committed: [] }]));
+    await waitFor(() => expect(h.sink.of(a.sid, 'ack')).toEqual([{ type: 'ack', clientSeq: 1, rev: 0, committed: [] }]));
     expect(h.sink.of(b.sid, 'remote')).toEqual([]);
     expect(h.audits).toEqual([]);
   });
@@ -214,10 +215,10 @@ describe('DocumentInstance: FIFO loop', () => {
     const id = h.file('a.docx', 'ab');
     const early = h.join(id);
     h.submit(early, 'cE', 1, 'e', 0, [ins(2, 'X')]);
-    await vi.waitFor(() => expect(h.sink.of(early, 'error')[0]?.code).toBe('PROTOCOL_INVALID_MESSAGE'));
+    await waitFor(() => expect(h.sink.of(early, 'error')[0]?.code).toBe('PROTOCOL_INVALID_MESSAGE'));
     const a = await h.open(id, 'cA');
     h.submit(a.sid, 'cOther', 1, a.epoch, 0, [ins(2, 'X')]);
-    await vi.waitFor(() => expect(h.sink.of(a.sid, 'error')).toMatchObject([{ code: 'PROTOCOL_INVALID_MESSAGE', clientSeq: 1 }]));
+    await waitFor(() => expect(h.sink.of(a.sid, 'error')).toMatchObject([{ code: 'PROTOCOL_INVALID_MESSAGE', clientSeq: 1 }]));
   });
 
   it('refuses an unsupported protocol version', async () => {
@@ -225,7 +226,7 @@ describe('DocumentInstance: FIFO loop', () => {
     const id = h.file('a.docx', 'ab');
     const sid = h.join(id);
     h.send(sid, { type: 'hello', protocol: 99, clientId: cid('c') });
-    await vi.waitFor(() => expect(h.sink.closes(sid)).toEqual([CloseCode.PROTOCOL_ERROR]));
+    await waitFor(() => expect(h.sink.closes(sid)).toEqual([CloseCode.PROTOCOL_ERROR]));
     expect(h.sink.of(sid, 'error')[0]?.code).toBe('PROTOCOL_VERSION_UNSUPPORTED');
   });
 
@@ -234,8 +235,8 @@ describe('DocumentInstance: FIFO loop', () => {
     const id = h.file('a.docx', 'ab');
     const a = await h.open(id, 'cA');
     h.submit(a.sid, 'cA', 1, a.epoch, 0, [ins(2, 'X'), ins(3, 'Y')]);
-    await vi.waitFor(() => expect(h.sink.of(a.sid, 'ack')).toHaveLength(1));
-    await vi.waitFor(async () => expect((await new SnapshotStore(h.dataDir).read(docKeyOf(id)))?.rev).toBe(2));
+    await waitFor(() => expect(h.sink.of(a.sid, 'ack')).toHaveLength(1));
+    await waitFor(async () => expect((await new SnapshotStore(h.dataDir).read(docKeyOf(id)))?.rev).toBe(2));
   });
 });
 
@@ -249,12 +250,12 @@ describe('DocumentInstance: read-only for unsupported content', () => {
     expect(start?.unsupported).toEqual([{ feature: 'comments', count: 1 }]);
     expect(h.sink.events.some((e) => e.kind === 'document' && e.ev.state === 'unsupported')).toBe(true);
     h.submit(a.sid, 'cA', 1, a.epoch, 0, [ins(2, 'X')]);
-    await vi.waitFor(() => expect(h.sink.of(a.sid, 'error')).toMatchObject([{ code: 'DOCUMENT_READ_ONLY', clientSeq: 1 }]));
+    await waitFor(() => expect(h.sink.of(a.sid, 'error')).toMatchObject([{ code: 'DOCUMENT_READ_ONLY', clientSeq: 1 }]));
     await h.registry.get(id)?.allowUnsupportedEdit();
     expect(h.sink.of(a.sid, 'notice')).toEqual([{ type: 'notice', notice: 'read-only', readOnly: false, reason: 'unsupported-content' }]);
     expect(h.meta.get(docKeyOf(id))?.readOnly.allowedEdit).toBe(true);
     h.submit(a.sid, 'cA', 2, a.epoch, 0, [ins(2, 'X')]);
-    await vi.waitFor(() => expect(h.sink.of(a.sid, 'ack')).toHaveLength(1));
+    await waitFor(() => expect(h.sink.of(a.sid, 'ack')).toHaveLength(1));
   });
 });
 
@@ -269,7 +270,7 @@ describe('DocumentInstance: faults', () => {
     const inst1 = h.registry.get(id1);
     j.failNext();
     h.submit(a.sid, 'cA', 1, a.epoch, 0, [ins(2, 'X')]);
-    await vi.waitFor(() => expect(inst1?.state).toBe('CLOSED'));
+    await waitFor(() => expect(inst1?.state).toBe('CLOSED'));
     expect(h.sink.of(a.sid, 'ack')).toEqual([]);
     expect(h.sink.of(a.sid, 'error').map((e) => e.code)).toEqual(['DOCUMENT_FAULTED']);
     expect(h.sink.closes(a.sid)).toEqual([CloseCode.DOCUMENT_FAULTED]);
@@ -277,7 +278,7 @@ describe('DocumentInstance: faults', () => {
     expect(h.sink.events.some((e) => e.kind === 'document' && e.ev.state === 'faulted' && e.ev.documentId === id1)).toBe(true);
     // The other document keeps working.
     h.submit(b.sid, 'cB', 1, b.epoch, 0, [ins(2, 'Y')]);
-    await vi.waitFor(() => expect(h.sink.of(b.sid, 'ack')).toEqual([{ type: 'ack', clientSeq: 1, rev: 1 }]));
+    await waitFor(() => expect(h.sink.of(b.sid, 'ack')).toEqual([{ type: 'ack', clientSeq: 1, rev: 1 }]));
     // The next join reloads with a new epoch.
     const again = await h.open(id1, 'cA2');
     expect(again.epoch).not.toBe(a.epoch);
@@ -291,7 +292,7 @@ describe('DocumentInstance: load source and replay', () => {
     const b = await h.open(id, 'cB');
     h.submit(a.sid, 'cA', 1, a.epoch, 0, [ins(2, 'X')]);
     h.submit(b.sid, 'cB', 1, b.epoch, 0, [ins(4, 'Y')]);
-    await vi.waitFor(() => expect(h.sink.of(b.sid, 'ack')).toHaveLength(1));
+    await waitFor(() => expect(h.sink.of(b.sid, 'ack')).toHaveLength(1));
     const model = modelJson(h, id);
     await h.closeAll();
     return { id, a, b, model };
@@ -308,10 +309,10 @@ describe('DocumentInstance: load source and replay', () => {
     expect(h.sink.events.some((e) => e.kind === 'document' && e.ev.state === 'loaded' && e.ev.source === 'local')).toBe(true);
     // Dedupe survived: a resend is acked with its original rev.
     h.submit(c.sid, 'cC', 1, c.epoch, 2, [ins(2, 'Z')]);
-    await vi.waitFor(() => expect(h.sink.of(c.sid, 'ack')).toHaveLength(1));
+    await waitFor(() => expect(h.sink.of(c.sid, 'ack')).toHaveLength(1));
     const late = h.join(id);
     h.hello(late, 'cA');
-    await vi.waitFor(() => expect(h.sink.of(late, 'load-start')[0]?.ackedClientSeq).toBe(1));
+    await waitFor(() => expect(h.sink.of(late, 'load-start')[0]?.ackedClientSeq).toBe(1));
   });
 
   it('a clean local copy with the same storage version replays locally', async () => {
@@ -375,7 +376,7 @@ describe('DocumentInstance: resume (R11, PO-16, R-8)', () => {
     const b = await h.open(id, 'cB');
     h.submit(b.sid, 'cB', 1, b.epoch, 0, [ins(4, 'Y')]);
     h.submit(a.sid, 'cA', 1, a.epoch, 0, [ins(2, 'X')]); // transformed over b's batch
-    await vi.waitFor(() => expect(h.sink.of(a.sid, 'ack')).toHaveLength(1));
+    await waitFor(() => expect(h.sink.of(a.sid, 'ack')).toHaveLength(1));
     h.dispatcher.leave(a.sid);
     const r = h.join(id);
     h.hello(r, 'cA', { epoch: a.epoch, rev: 0 });
@@ -387,7 +388,7 @@ describe('DocumentInstance: resume (R11, PO-16, R-8)', () => {
     ]);
     // Live traffic follows.
     h.submit(b.sid, 'cB', 2, b.epoch, 2, [ins(2, 'Z')]);
-    await vi.waitFor(() => expect(h.sink.of(r, 'remote')).toHaveLength(2));
+    await waitFor(() => expect(h.sink.of(r, 'remote')).toHaveLength(2));
   });
 
   it('a same-epoch resume outside the window gets resync and a full load', async () => {
@@ -396,7 +397,7 @@ describe('DocumentInstance: resume (R11, PO-16, R-8)', () => {
     const a = await h.open(id, 'cA');
     const r = h.join(id);
     h.hello(r, 'cA', { epoch: a.epoch, rev: 7 });
-    await vi.waitFor(() => expect(h.sink.of(r, 'load-done')).toHaveLength(1));
+    await waitFor(() => expect(h.sink.of(r, 'load-done')).toHaveLength(1));
     expect(h.sink.messages(r)[0]).toEqual({ type: 'resync', reason: 'inconsistent' });
   });
 
@@ -406,14 +407,14 @@ describe('DocumentInstance: resume (R11, PO-16, R-8)', () => {
     const a = await h.open(id, 'cA');
     const b = await h.open(id, 'cB');
     h.submit(a.sid, 'cA', 1, a.epoch, 0, [ins(2, 'X')]);
-    await vi.waitFor(() => expect(h.sink.of(a.sid, 'ack')).toHaveLength(1));
+    await waitFor(() => expect(h.sink.of(a.sid, 'ack')).toHaveLength(1));
     h.submit(b.sid, 'cB', 1, b.epoch, 1, [ins(2, 'Y')]);
-    await vi.waitFor(() => expect(h.sink.of(b.sid, 'ack')).toHaveLength(1));
+    await waitFor(() => expect(h.sink.of(b.sid, 'ack')).toHaveLength(1));
     // The Core restarts: sessions end, the instance is rebuilt from the journal with a new epoch.
     await h.closeAll();
     const r = h.join(id);
     h.hello(r, 'cA', { epoch: a.epoch, rev: 0 }); // the client never saw its ack
-    await vi.waitFor(() => expect(h.sink.of(r, 'load-done')).toHaveLength(1));
+    await waitFor(() => expect(h.sink.of(r, 'load-done')).toHaveLength(1));
     const msgs = h.sink.messages(r);
     expect(msgs.slice(0, 3)).toEqual([
       { type: 'ack', clientSeq: 1, rev: 1 },
@@ -432,7 +433,7 @@ describe('DocumentInstance: resume (R11, PO-16, R-8)', () => {
     await h.closeAll();
     const r = h.join(id);
     h.hello(r, 'cA', { epoch: 'old', rev: 50 });
-    await vi.waitFor(() => expect(h.sink.of(r, 'load-done')).toHaveLength(1));
+    await waitFor(() => expect(h.sink.of(r, 'load-done')).toHaveLength(1));
     expect(h.sink.messages(r).map((m) => m.type).slice(0, 2)).toEqual(['resync', 'load-start']);
   });
 
@@ -442,12 +443,12 @@ describe('DocumentInstance: resume (R11, PO-16, R-8)', () => {
     const a = await h.open(id, 'cA');
     const b = await h.open(id, 'cB');
     h.submit(b.sid, 'cB', 1, b.epoch, 0, [ins(2, 'Y')]);
-    await vi.waitFor(() => expect(h.sink.of(b.sid, 'ack')).toHaveLength(1));
+    await waitFor(() => expect(h.sink.of(b.sid, 'ack')).toHaveLength(1));
     await h.closeAll();
     const c = await h.open(id, 'cA');
     expect(c.epoch).not.toBe(a.epoch);
     h.submit(c.sid, 'cA', 1, c.epoch, 0, [ins(4, 'X')]);
-    await vi.waitFor(() => expect(h.sink.of(c.sid, 'ack')).toEqual([{ type: 'ack', clientSeq: 1, rev: 2, committed: [ins(5, 'X')] }]));
+    await waitFor(() => expect(h.sink.of(c.sid, 'ack')).toEqual([{ type: 'ack', clientSeq: 1, rev: 2, committed: [ins(5, 'X')] }]));
   });
 });
 
@@ -468,7 +469,7 @@ describe('LoadStreamer pacing', () => {
     expect(h.sink.of(sid, 'load-chunk')).toHaveLength(5);
     // A remote during the load.
     h.submit(a.sid, 'cA', 1, a.epoch, 0, [ins(2, 'X')]);
-    await vi.waitFor(() => expect(h.sink.of(sid, 'remote')).toHaveLength(1));
+    await waitFor(() => expect(h.sink.of(sid, 'remote')).toHaveLength(1));
     for (const t of h.sink.tokens(sid).slice(1)) h.dispatcher.handle({ type: 'written', sessionId: sid, token: t });
     await h.idle();
     const types = h.sink.messages(sid).map((m) => m.type);

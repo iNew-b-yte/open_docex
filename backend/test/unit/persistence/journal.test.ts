@@ -4,6 +4,7 @@ import path from 'node:path';
 import { OpenDocexError } from '@open-docex/shared/errors';
 import type { ClientId } from '@open-docex/shared/ids';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { waitFor } from '../../wait-for.js';
 import {
   decodeLine,
   encodeLine,
@@ -277,12 +278,12 @@ describe('JournalSyncTimer', () => {
 
     await a.append(entry(0));
     clock.fire();
-    await vi.waitFor(() => expect(clock.pending).toHaveLength(1));
+    await waitFor(() => expect(clock.pending).toHaveLength(1));
     expect(spy).toHaveBeenCalledTimes(1); // only `a` was dirty
     expect(a.dirty).toBe(false);
 
     clock.fire();
-    await vi.waitFor(() => expect(clock.pending).toHaveLength(1));
+    await waitFor(() => expect(clock.pending).toHaveLength(1));
     expect(spy).toHaveBeenCalledTimes(1); // nothing new
 
     timer.stop();
@@ -306,7 +307,7 @@ describe('JournalSyncTimer', () => {
     timer.start();
     await j.append(entry(0));
     clock.fire();
-    await vi.waitFor(() => expect(clock.pending).toHaveLength(1));
+    await waitFor(() => expect(clock.pending).toHaveLength(1));
     expect(errors).toEqual([{ code: 'DOCUMENT_FAULTED' }]);
     timer.stop();
     vi.restoreAllMocks();

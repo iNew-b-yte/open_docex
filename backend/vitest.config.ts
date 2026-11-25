@@ -15,5 +15,9 @@ export default defineConfig({
     environment: 'node',
     pool: 'forks',
     include: ['test/**/*.test.ts'],
+    // Real files and real processes: a loaded CI runner can take several times a healthy run.
+    // `test/wait-for.ts` polls for 20 s, which stays below this.
+    testTimeout: 30_000,
+    hookTimeout: 30_000,
   },
 });

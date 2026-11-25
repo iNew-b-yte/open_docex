@@ -3,7 +3,8 @@
 import { appendFile, rm } from 'node:fs/promises';
 import path from 'node:path';
 import type { ClientId, DocumentId } from '@open-docex/shared/ids';
-import { afterEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, describe, expect, it } from 'vitest';
+import { waitFor } from '../../wait-for.js';
 import type { DocumentInstance } from '../../../src/core/document-instance.js';
 import type { DocumentRegistry } from '../../../src/core/registry.js';
 import { FlushScheduler } from '../../../src/flush/flush-scheduler.js';
@@ -83,24 +84,24 @@ describe('flush and recovery with real instances', () => {
     const id = h.file('a.docx', 'ab');
     const a = await h.open(id, 'cA');
     h.submit(a.sid, 'cA', 1, a.epoch, 0, [ins(2, 'X')]);
-    await vi.waitFor(() => expect(h.sink.of(a.sid, 'ack')).toHaveLength(1));
+    await waitFor(() => expect(h.sink.of(a.sid, 'ack')).toHaveLength(1));
 
     h.storage.failNext('write');
     await clock.advance(QUIET);
-    await vi.waitFor(() => expect(state(h, id)).toBe('LOCAL'));
+    await waitFor(() => expect(state(h, id)).toBe('LOCAL'));
     expect(storageNotices(h, a.sid)).toEqual(['local']);
 
     // Editing continues while local.
     h.submit(a.sid, 'cA', 2, a.epoch, 1, [ins(2, 'Y')]);
-    await vi.waitFor(() => expect(h.sink.of(a.sid, 'ack')).toHaveLength(2));
+    await waitFor(() => expect(h.sink.of(a.sid, 'ack')).toHaveLength(2));
 
     h.storage.failNext('stat');
     await clock.advance(1 * MIN);
-    await vi.waitFor(() => expect(h.meta.get(docKeyOf(id))?.retryCount).toBe(1));
+    await waitFor(() => expect(h.meta.get(docKeyOf(id))?.retryCount).toBe(1));
     expect(decodeText(h.storage.getFile(id)?.bytes)).toBe('ab');
 
     await clock.advance(5 * MIN);
-    await vi.waitFor(() => expect(state(h, id)).toBe('NORMAL'));
+    await waitFor(() => expect(state(h, id)).toBe('NORMAL'));
     const inst = h.registry.get(id);
     expect(decodeText(h.storage.getFile(id)?.bytes)).toBe(textOf(inst?.model));
     expect(textOf(inst?.model)).toBe('YXab');
@@ -110,9 +111,9 @@ describe('flush and recovery with real instances', () => {
 
     // Back in NORMAL, the scheduler flushes again.
     h.submit(a.sid, 'cA', 3, a.epoch, 2, [ins(2, 'Z')]);
-    await vi.waitFor(() => expect(h.sink.of(a.sid, 'ack')).toHaveLength(3));
+    await waitFor(() => expect(h.sink.of(a.sid, 'ack')).toHaveLength(3));
     await clock.advance(QUIET);
-    await vi.waitFor(() => expect(decodeText(h.storage.getFile(id)?.bytes)).toBe('ZYXab'));
+    await waitFor(() => expect(decodeText(h.storage.getFile(id)?.bytes)).toBe('ZYXab'));
   });
 
   it('a conflict, then resolve(discard-local): sessions reload the storage content and flushing resumes', async () => {
@@ -120,11 +121,11 @@ describe('flush and recovery with real instances', () => {
     const id = h.file('a.docx', 'ab');
     const a = await h.open(id, 'cA');
     h.submit(a.sid, 'cA', 1, a.epoch, 0, [ins(2, 'X')]);
-    await vi.waitFor(() => expect(h.sink.of(a.sid, 'ack')).toHaveLength(1));
+    await waitFor(() => expect(h.sink.of(a.sid, 'ack')).toHaveLength(1));
     h.storage.setFile(id, new TextEncoder().encode('outside'));
 
     await clock.advance(QUIET);
-    await vi.waitFor(() => expect(state(h, id)).toBe('CONFLICT'));
+    await waitFor(() => expect(state(h, id)).toBe('CONFLICT'));
     expect(storageNotices(h, a.sid)).toEqual(['pending']);
     expect(rec.errors().map((e) => e.code)).toEqual(['STORAGE_CONFLICT']);
     expect(decodeText(h.storage.getFile(id)?.bytes)).toBe('outside');
@@ -133,7 +134,7 @@ describe('flush and recovery with real instances', () => {
     const before = h.sink.messages(a.sid).length;
     const entry = await recovery.resolve(id, 'discard-local');
     expect(entry.state).toBe('NORMAL');
-    await vi.waitFor(() => expect(h.sink.of(a.sid, 'load-done').length).toBeGreaterThan(1));
+    await waitFor(() => expect(h.sink.of(a.sid, 'load-done').length).toBeGreaterThan(1));
     const types = h.sink.messages(a.sid).slice(before).map((m) => m.type);
     expect(types.slice(0, 2)).toEqual(['resync', 'load-start']);
     expect(storageNotices(h, a.sid)).toEqual(['pending', 'normal']);
@@ -141,9 +142,9 @@ describe('flush and recovery with real instances', () => {
     expect(recovery.list()).toEqual([]);
 
     h.submit(a.sid, 'cA', 2, a.epoch, 2, [ins(2, 'N')]);
-    await vi.waitFor(() => expect(h.sink.of(a.sid, 'ack').at(-1)?.rev).toBe(3));
+    await waitFor(() => expect(h.sink.of(a.sid, 'ack').at(-1)?.rev).toBe(3));
     await clock.advance(QUIET);
-    await vi.waitFor(() => expect(decodeText(h.storage.getFile(id)?.bytes)).toBe('Noutside'));
+    await waitFor(() => expect(decodeText(h.storage.getFile(id)?.bytes)).toBe('Noutside'));
   });
 
   it('a conflict, then resolve(overwrite-storage): the local model replaces the outside edit', async () => {
@@ -151,10 +152,10 @@ describe('flush and recovery with real instances', () => {
     const id = h.file('a.docx', 'ab');
     const a = await h.open(id, 'cA');
     h.submit(a.sid, 'cA', 1, a.epoch, 0, [ins(2, 'X')]);
-    await vi.waitFor(() => expect(h.sink.of(a.sid, 'ack')).toHaveLength(1));
+    await waitFor(() => expect(h.sink.of(a.sid, 'ack')).toHaveLength(1));
     h.storage.setFile(id, new TextEncoder().encode('outside'));
     await clock.advance(QUIET);
-    await vi.waitFor(() => expect(state(h, id)).toBe('CONFLICT'));
+    await waitFor(() => expect(state(h, id)).toBe('CONFLICT'));
     expect(decodeText((await recovery.readLocalCopy(id)).bytes)).toBe('Xab');
     await recovery.resolve(id, 'overwrite-storage');
     expect(decodeText(h.storage.getFile(id)?.bytes)).toBe('Xab');

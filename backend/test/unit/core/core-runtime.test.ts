@@ -3,7 +3,8 @@ import { mkdir, mkdtemp, rm, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { encodeMessage, PROTOCOL_VERSION } from '@open-docex/shared/protocol';
-import { afterEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, describe, expect, it } from 'vitest';
+import { waitFor } from '../../wait-for.js';
 import type { CoreChannelSide } from '../../../src/channel/engine-channel.js';
 import type { CoreEvent, CoreRequest } from '../../../src/channel/messages.js';
 import { CoreRuntime, type CoreServices } from '../../../src/core/core-runtime.js';
@@ -63,7 +64,7 @@ async function setup(o: { mod?: unknown; probeError?: Error } = {}) {
 
 async function init(side: FakeSide, id = 1): Promise<CoreEvent> {
   side.post({ type: 'init', id, workerConfigModule: path.resolve('worker-config.mjs'), logLevel: 'error' });
-  return vi.waitFor(() => {
+  return waitFor(() => {
     const r = side.reply(id);
     if (r === undefined) throw new Error('no reply');
     return r;
@@ -85,7 +86,7 @@ describe('CoreRuntime', () => {
     t.side.post({ type: 'join', sessionId: 's1', documentId: 'd.docx' as never, userId: 'u', access: 'edit', document: { ref: 'd.docx', format: 'docx' } });
     const hello = encodeMessage({ type: 'hello', protocol: PROTOCOL_VERSION, clientId: cid('c1') }) as string;
     t.side.post({ type: 'frame', sessionId: 's1', data: new TextEncoder().encode(hello), binary: false });
-    await vi.waitFor(() => {
+    await waitFor(() => {
       const sends = t.side.events.filter((e) => e.type === 'send');
       expect(sends.some((e) => e.type === 'send' && String(e.frames[0]?.data).includes('"load-start"'))).toBe(true);
     });
@@ -95,7 +96,7 @@ describe('CoreRuntime', () => {
     expect(t.side.events.at(-1)).toEqual({ type: 'pong', seq: 4 });
 
     t.side.post({ type: 'shutdown', id: 2, timeoutMs: 1000 });
-    await vi.waitFor(() => expect(t.side.reply(2)).toEqual({ type: 'result', id: 2, ok: true, value: undefined }));
+    await waitFor(() => expect(t.side.reply(2)).toEqual({ type: 'result', id: 2, ok: true, value: undefined }));
     expect(existsSync(lockPath(t.dataDir))).toBe(false);
   });
 
@@ -129,7 +130,7 @@ describe('CoreRuntime', () => {
     expect(r).toMatchObject({ type: 'result', ok: false, error: { code: 'CONFIG_DATA_DIR_UNWRITABLE' } });
     expect(r.type === 'result' && !r.ok && r.error.message).toContain(`pid ${process.pid}`);
     t.side.post({ type: 'shutdown', id: 9, timeoutMs: 1000 });
-    await vi.waitFor(() => expect(t.side.reply(9)).toBeDefined());
+    await waitFor(() => expect(t.side.reply(9)).toBeDefined());
   });
 
   it('answers an API call it does not serve yet with an error result', async () => {
@@ -138,6 +139,6 @@ describe('CoreRuntime', () => {
     t.side.post({ type: 'call', id: 5, method: 'documents.info', args: {} });
     expect(t.side.reply(5)).toMatchObject({ type: 'result', id: 5, ok: false, error: { code: 'ENGINE_UNAVAILABLE' } });
     t.side.post({ type: 'shutdown', id: 6, timeoutMs: 1000 });
-    await vi.waitFor(() => expect(t.side.reply(6)).toBeDefined());
+    await waitFor(() => expect(t.side.reply(6)).toBeDefined());
   });
 });

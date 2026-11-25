@@ -18,6 +18,7 @@ import {
 } from '@open-docex/shared/protocol';
 import { textSchema } from '@open-docex/shared/text';
 import { vi } from 'vitest';
+import { waitFor } from '../../wait-for.js';
 import type { AuditEvent, DocumentEvent } from '../../../src/api/events.js';
 import type { WorkerConfig } from '../../../src/api/options.js';
 import { resolveWorkerConfig } from '../../../src/api/validate-options.js';
@@ -287,7 +288,7 @@ export async function makeHarness(o: HarnessOptions = {}) {
     async open(documentId: DocumentId, clientId: string, access: 'edit' | 'view' = 'edit') {
       const sid = h.join(documentId, access);
       h.hello(sid, clientId);
-      await vi.waitFor(() => {
+      await waitFor(() => {
         if (sink.of(sid, 'load-done').length === 0) throw new Error('not loaded');
       });
       const start = sink.of(sid, 'load-start')[0];

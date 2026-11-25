@@ -3,6 +3,7 @@
 import { rm } from 'node:fs/promises';
 import { asDocumentId, type ClientId, type DocumentId } from '@open-docex/shared/ids';
 import { afterEach, describe, expect, it, vi } from 'vitest';
+import { waitFor } from '../../wait-for.js';
 import { OpenDocexError } from '@open-docex/shared/errors';
 import { engineError } from '../../../src/errors/engine-error.js';
 import { Journal } from '../../../src/persistence/journal.js';
@@ -90,7 +91,7 @@ const writeError = (): OpenDocexError => engineError('STORAGE_WRITE_FAILED', { d
 
 /** Waits until the document's meta satisfies `pred`. */
 async function until(s: Setup, pred: (m: DocumentMeta) => boolean): Promise<void> {
-  await vi.waitFor(() => {
+  await waitFor(() => {
     if (!pred(s.m())) throw new Error(`meta not there yet: ${s.m().storageState}`);
   });
   await settle();
@@ -168,7 +169,7 @@ describe('RecoveryManager: NORMAL → LOCAL → PENDING with retries at 1, 5 and
     let release!: () => void;
     s.codec.gate = new Promise((r) => (release = r));
     await s.clock.advance(1 * MIN);
-    await vi.waitFor(() => expect(s.codec.calls).toBe(1));
+    await waitFor(() => expect(s.codec.calls).toBe(1));
     s.target.edit('hello world!'); // rev 3 arrives during the export of rev 2
     release();
     await until(s, (m) => m.storageState === 'NORMAL');
@@ -204,7 +205,7 @@ describe('RecoveryManager: CONFLICT', () => {
     let release!: () => void;
     s.codec.gate = new Promise((r) => (release = r));
     await s.clock.advance(1 * MIN);
-    await vi.waitFor(() => expect(s.codec.calls).toBe(1));
+    await waitFor(() => expect(s.codec.calls).toBe(1));
     const outside = s.storage.setFile(s.id, encodeText('raced'));
     release();
     await until(s, (m) => m.storageState === 'CONFLICT');
@@ -465,7 +466,7 @@ describe('RecoveryManager: restart (state persists in meta)', () => {
     await j2.close();
     const r = await restart(s, 0);
     r.rm.resumeAfterBoot();
-    await vi.waitFor(() => expect(r.flush.markDirty).toHaveBeenCalledTimes(1));
+    await waitFor(() => expect(r.flush.markDirty).toHaveBeenCalledTimes(1));
     expect(r.flush.markDirty).toHaveBeenCalledWith(r.target);
     expect(r.registry.loads).toBe(1); // doc-2 is clean: not loaded
     expect(r.clock.pending).toEqual([]);
