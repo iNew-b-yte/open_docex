@@ -18,7 +18,7 @@
  */
 import { getPageSettings } from '@open-docex/shared/text';
 import type { Node as PMNode } from 'prosemirror-model';
-import { Plugin, PluginKey, type EditorState } from 'prosemirror-state';
+import { Plugin, PluginKey, Selection, type EditorState } from 'prosemirror-state';
 import { Decoration, DecorationSet, type EditorView } from 'prosemirror-view';
 import type { BlockResizeSignal } from './nodeviews/BlockResizeSignal.js';
 import { fillFields, footerOf, headerOf, type HeaderFooterRegions } from './HeaderFooterRegions.js';
@@ -89,6 +89,24 @@ interface PassMemo {
   geomKey: string;
 }
 
+/**
+ * A click on the blank space below the last block lands on the tail spacer, which is not
+ * editable. Firefox then puts the caret on the editor root, outside any text, and typing and
+ * Home/End do nothing. This puts the caret at the end of the document instead. It runs on
+ * `click`, not `mousedown`, so ProseMirror still records the mousedown (its "the browser reset
+ * the caret after focus" check relies on that, and would undo a Home pressed soon after).
+ * The DOM selection is set too, because the state selection may already be the end.
+ */
+export function caretAtEndOnTailClick(view: EditorView, event: Event): boolean {
+  const target = event.target;
+  if (!view.editable || !(target instanceof Element) || target.closest('.odx-tail') === null) return false;
+  const end = Selection.atEnd(view.state.doc);
+  view.dispatch(view.state.tr.setSelection(end).scrollIntoView());
+  const at = view.domAtPos(end.head);
+  view.dom.ownerDocument.getSelection()?.collapse(at.node, at.offset);
+  return false;
+}
+
 /** Creates the pagination plugin. */
 export function PaginationPlugin(deps: PaginationDeps): Plugin<PaginationState> {
   return new Plugin<PaginationState>({
@@ -104,6 +122,7 @@ export function PaginationPlugin(deps: PaginationDeps): Plugin<PaginationState> 
     },
     props: {
       decorations: (state) => paginationKey.getState(state)?.deco ?? DecorationSet.empty,
+      handleDOMEvents: { click: caretAtEndOnTailClick },
       attributes(state) {
         const p = paginationKey.getState(state) ?? EMPTY;
         const g = pageGeometry(getPageSettings(state.doc));
