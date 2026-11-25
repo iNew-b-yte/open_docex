@@ -34,7 +34,9 @@ import { LocalFsStorage } from '../../../src/storage/local-fs-storage.js';
 import type { StorageRef } from '../../../src/storage/storage-adapter.js';
 import { realCodec } from '../../unit/core/in-process-pool.js';
 import { waitFor } from '../../wait-for.js';
-import { buildWorkerConfig, createSuiteCodec, type SuiteSettings } from '../fixtures/suite-env.mjs';
+import type { WiredCodec } from '../../../src/core/core-entry.js';
+import type { CoreServiceContext } from '../../../src/core/core-runtime.js';
+import { buildWorkerConfig, createSuiteCodec, flagOn, type SuiteSettings } from '../fixtures/suite-env.mjs';
 import { dist, fixtures, haveDist, plainFork } from '../worker-harness.js';
 import { TestClient, type Loaded } from '../test-client.js';
 import { loadedText } from './doc-helpers.js';
@@ -66,6 +68,19 @@ export interface RecordedEvents {
 type StorageOp = 'read' | 'write' | 'stat' | 'create';
 
 const SELF = fileURLToPath(import.meta.url);
+
+/**
+ * The real codec with the `export-fail` flag honoured, so that main mode can stop "without a
+ * flush" with LibreOffice too (the fake codec reads the flag itself, `fixtures/suite-env.mjs`).
+ */
+function withExportFlag(inner: WiredCodec, ctlDir: string): WiredCodec {
+  return {
+    import: (i) => inner.import(i),
+    probe: () => inner.probe(),
+    close: () => inner.close(),
+    export: (i) => (flagOn(ctlDir, 'export-fail') ? Promise.reject(new Error('export is down')) : inner.export(i)),
+  };
+}
 
 /** Closes the engine and its folders in `dispose()`. */
 export class Rig {
@@ -132,7 +147,10 @@ export class Rig {
     };
     const authorize = (ctx: AuthorizeContext): AuthorizeResult | { deny: 401 } | null => this.#authorize(ctx);
     if (this.mode === 'main') {
-      const codec = this.#o.codec === 'lo' ? realCodec : () => createSuiteCodec({ textSchema, page: resolveWorkerConfig({}).blankDocument.page, ctlDir: this.ctlDir });
+      const codec =
+        this.#o.codec === 'lo'
+          ? (c: CoreServiceContext): WiredCodec => withExportFlag(realCodec(c), this.ctlDir)
+          : () => createSuiteCodec({ textSchema, page: resolveWorkerConfig({}).blankDocument.page, ctlDir: this.ctlDir });
       this.engine = await createEngineWith(
         { mode: 'main', workerConfigModule: SELF, http: { server: this.#server }, authorize },
         { core: { codec, importModule: () => Promise.resolve({ default: buildWorkerConfig({ LocalFsStorage, settings }) }) } },

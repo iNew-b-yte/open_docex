@@ -36,6 +36,19 @@ export function insertOp(pos: number, text: string): Record<string, unknown> {
   return { stepType: 'replace', from: pos, to: pos, slice: { content: [{ type: 'text', text }] } };
 }
 
+/** The position at the start of the first paragraph of the body (real documents, with regions). */
+export function firstParagraphStart(doc: TextSnapshot): number {
+  let at = -1;
+  doc.forEach((region, offset) => {
+    if (region.type.name !== 'body') return;
+    region.descendants((node, pos) => {
+      if (at < 0 && node.type.name === 'paragraph') at = offset + 1 + pos + 1;
+      return false;
+    });
+  });
+  return at;
+}
+
 /** An op that appends `text` to the single-paragraph document `current`. */
 export function appendOp(current: string, text: string): Record<string, unknown> {
   return insertOp(posIn(current, 0, current.length), text);

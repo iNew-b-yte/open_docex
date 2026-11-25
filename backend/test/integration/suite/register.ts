@@ -17,12 +17,10 @@ export interface Scenario {
 
 /**
  * Defines the scenarios of `mode` inside a `describe`. Worker mode needs the compiled Core
- * (`npm run build`) and is skipped without it. `enabled` lets a caller skip the whole suite
- * (the real-LibreOffice suite passes `OPEN_DOCEX_LO_TESTS === '1'`).
+ * (`npm run build`) and is skipped without it.
  */
-export function registerScenarios(mode: Mode, scenarios: readonly Scenario[], o: { title: string; codec: 'fake' | 'lo'; enabled?: boolean }): void {
-  const enabled = (o.enabled ?? true) && (mode === 'main' || haveDist);
-  describe.skipIf(!enabled)(`${o.title} (${mode} mode)`, () => {
+export function registerScenarios(mode: Mode, scenarios: readonly Scenario[], o: { title: string; codec: 'fake' | 'lo' }): void {
+  describe.skipIf(mode === 'worker' && !haveDist)(`${o.title} (${mode} mode)`, () => {
     let rig: Rig | undefined;
     afterEach(async () => {
       const r = rig;
