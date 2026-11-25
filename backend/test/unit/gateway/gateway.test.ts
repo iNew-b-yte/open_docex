@@ -222,6 +222,13 @@ describe('Gateway upgrade: authorize and the reject matrix', () => {
     expect(await c.status).toBe(0); // the client refuses a server that selects none
   });
 
+  it('does not negotiate permessage-deflate, whatever the client offers (no decompression bombs, no CPU in main)', async () => {
+    const h = await start({ authorize: () => OK });
+    const c = connect(h.url(), undefined, undefined, { perMessageDeflate: true });
+    expect(await c.status).toBe(101);
+    expect(c.ws.extensions).toBe('');
+  });
+
   it('never logs tokens, headers or the query string', async () => {
     const authorizeThrows = vi.fn(() => {
       throw new Error('boom SECRET-IN-ERROR');
