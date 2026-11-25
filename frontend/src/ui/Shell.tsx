@@ -15,14 +15,15 @@ import { UnsupportedBanner } from './UnsupportedBanner.js';
 import { ShellContext, useSession, useShell, type ShellEnv } from './useSession.js';
 
 /** A restore notice from the sync client (LLD Part 3 §6.2, S-37). Dismissible. */
-function RestoreBanner({ notice }: { notice: 'discarded' | 'partialLoss' | 'lost' }) {
+function RestoreBanner({ notice, seq }: { notice: 'discarded' | 'partialLoss' | 'lost'; seq: number }) {
   const { labels } = useShell();
-  const [dismissed, setDismissed] = useState<string | null>(null);
-  if (dismissed === notice) return null;
+  // Keyed on the notice count, so the same notice arriving again after a dismissal shows again.
+  const [dismissed, setDismissed] = useState<number | null>(null);
+  if (dismissed === seq) return null;
   return (
     <div className="odx-banner odx-banner-restore" role="alert">
       <p>{labels.restore[notice]}</p>
-      <button type="button" className="odx-btn" onClick={() => setDismissed(notice)}>
+      <button type="button" className="odx-btn" onClick={() => setDismissed(seq)}>
         {labels.banner.dismiss}
       </button>
     </div>
@@ -50,7 +51,7 @@ function Layout() {
         />
       )}
       {status.readOnlyReason !== null && <ReadOnlyBadge reason={status.readOnlyReason} />}
-      {snap.restoreNotice != null && <RestoreBanner notice={snap.restoreNotice} />}
+      {snap.restoreNotice != null && <RestoreBanner notice={snap.restoreNotice} seq={snap.restoreNoticeSeq ?? 0} />}
       <UnsupportedBanner
         findings={unsupported}
         {...(snap.conversions ? { conversions: snap.conversions } : {})}

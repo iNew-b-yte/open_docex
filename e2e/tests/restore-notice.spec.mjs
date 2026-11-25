@@ -9,12 +9,6 @@ import { expect, openEditor, test, textOf } from '../harness/fixtures.mjs';
 const READ_ONLY_ON = JSON.stringify({ type: 'notice', notice: 'read-only', readOnly: true, reason: 'unsupported-content' });
 
 test('a second identical restore notice shows again after the user dismissed the first', async ({ page, startServer }) => {
-  // KNOWN BUG (found by V1-40): `RestoreBanner` in `frontend/src/ui/Shell.tsx` keeps the dismissed
-  // notice text and `ShellSession` cannot clear the notice, so the second identical notice stays
-  // hidden. This test is marked `fail` so the suite stays green until the client is fixed; when it
-  // is, Playwright reports "expected to fail but passed": remove the `test.fail` line then.
-  test.fail();
-
   const h = await startServer();
   await h.addDoc('doc', 'hello');
   const state = { ws: null, hold: false };

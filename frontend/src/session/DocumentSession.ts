@@ -65,6 +65,8 @@ export interface SessionSnapshot {
   readonly pendingCount?: number;
   /** The last restore notice from the sync client (S-37), or null. */
   readonly restoreNotice?: RestoreNoticeKey | null;
+  /** Counts every restore notice, so a repeat of the same one is a new notice (the banner keys on it). */
+  readonly restoreNoticeSeq?: number;
 }
 
 const INITIAL_STATUS: SessionStatus = Object.freeze({
@@ -97,6 +99,7 @@ export class DocumentSession implements MountSession {
   #pendingCount = 0;
   #activity: 'idle' | 'busy' | 'restoring' = 'idle';
   #restoreNotice: RestoreNoticeKey | null = null;
+  #restoreNoticeSeq = 0;
   #snapshot: SessionSnapshot;
 
   #binding: DocumentBinding | null = null;
@@ -353,6 +356,7 @@ export class DocumentSession implements MountSession {
         connected: () => this.#connection.state === 'open',
         notify: (n) => {
           this.#restoreNotice = n;
+          this.#restoreNoticeSeq += 1;
           this.#publish();
         },
         reportError: (code) => {
@@ -597,6 +601,7 @@ export class DocumentSession implements MountSession {
       conversions: this.#conversions,
       pendingCount: this.#pendingCount,
       restoreNotice: this.#restoreNotice,
+      restoreNoticeSeq: this.#restoreNoticeSeq,
     });
   }
 
@@ -610,7 +615,8 @@ export class DocumentSession implements MountSession {
       s.ready === this.#ready &&
       s.conversions === this.#conversions &&
       s.pendingCount === this.#pendingCount &&
-      s.restoreNotice === this.#restoreNotice
+      s.restoreNotice === this.#restoreNotice &&
+      s.restoreNoticeSeq === this.#restoreNoticeSeq
     ) {
       return;
     }

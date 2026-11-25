@@ -33,6 +33,12 @@ const set = (patch: Partial<ShellSnapshot>): void => {
   snap = { ...snap, ...patch };
   act(() => listeners.forEach((f) => f()));
 };
+/** Like the real session: every notice, even a repeat, advances the counter. */
+let seq = 0;
+const notify = (n: 'discarded' | 'partialLoss' | 'lost'): void => {
+  seq += 1;
+  set({ restoreNotice: n, restoreNoticeSeq: seq });
+};
 const banner = (): HTMLElement | null => host.querySelector('.odx-banner-restore');
 
 beforeEach(() => {
@@ -61,12 +67,20 @@ describe('restore notice banner', () => {
   });
 
   it('shows the label of each notice, and can be dismissed', () => {
-    set({ restoreNotice: 'partialLoss' });
+    notify('partialLoss');
     expect(banner()?.textContent).toContain(DEFAULT_LABELS.restore.partialLoss);
     act(() => banner()?.querySelector('button')?.click());
     expect(banner()).toBeNull();
     // A different notice shows again.
-    set({ restoreNotice: 'lost' });
+    notify('lost');
     expect(banner()?.textContent).toContain(DEFAULT_LABELS.restore.lost);
+  });
+
+  it('shows the same notice again after it was dismissed (V1-40 bug)', () => {
+    notify('discarded');
+    act(() => banner()?.querySelector('button')?.click());
+    expect(banner()).toBeNull();
+    notify('discarded');
+    expect(banner()?.textContent).toContain(DEFAULT_LABELS.restore.discarded);
   });
 });
