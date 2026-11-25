@@ -4,7 +4,7 @@
 //   node bench/probe.mjs <main|worker> <clients> [--gens K] [--conc C] [--batch B] [--pause MS]
 //
 // --gens   load-generator processes (default: the benchmark's own count)
-// --conc   connects in flight per generator (default 50, or ODX_BENCH_CONCURRENCY)
+// --conc   connects in flight per generator (default: 128 / gens, or ODX_BENCH_CONCURRENCY)
 // --batch  add the clients in batches of B with --pause ms between them (a paced ramp); default one batch
 // ODX_BENCH_LOAD_TIMEOUT_MS sets how long a client has to load (default 60000).
 import { Cluster, genCount } from './net.mjs';
@@ -22,7 +22,7 @@ const batch = opt('batch', n);
 const pause = opt('pause', 0);
 
 const c = await Cluster.start(mode, gens);
-c.concurrency = opt('conc', undefined);
+c.concurrency = opt('conc', c.concurrency);
 const t0 = performance.now();
 const total = { failed: 0, reasons: {}, loadMsMax: 0 };
 let have = 0;
@@ -48,6 +48,6 @@ while (have < n) {
 await sleep(1000);
 const w = await c.window(1000);
 const st = await c.serverStats();
-console.log(JSON.stringify({ mode, clients: have, gens, conc: c.concurrency ?? Number(process.env.ODX_BENCH_CONCURRENCY ?? 50), batch, pause, seconds: Math.round((performance.now() - t0) / 100) / 10, failed: total.failed, open: w.open, closes: w.closes, closeCodes: w.closeCodes, slowestLoadMs: total.loadMsMax, genLagP99Ms: w.genLagP99Ms, reasons: total.reasons, engine: st.events }, null, 1));
+console.log(JSON.stringify({ mode, clients: have, gens, conc: c.concurrency, batch, pause, seconds: Math.round((performance.now() - t0) / 100) / 10, failed: total.failed, open: w.open, closes: w.closes, closeCodes: w.closeCodes, slowestLoadMs: total.loadMsMax, genLagP99Ms: w.genLagP99Ms, reasons: total.reasons, engine: st.events }, null, 1));
 await c.stop();
 process.exit(0);

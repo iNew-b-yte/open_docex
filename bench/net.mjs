@@ -11,6 +11,15 @@ import { sleep, summarize } from './lib/stats.mjs';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 
+/**
+ * Connects in flight over all load generators together. The accept queue of the engine process
+ * holds about 234 connections on the benchmark machine (Windows 11) whatever backlog `listen` is
+ * given; when the engine's event loop is busy and more connects arrive at once, the OS answers the
+ * excess with ECONNREFUSED (V1-41 follow-up, docs/benchmarks/V1.md). 128 stays well under that.
+ * `ODX_BENCH_CONCURRENCY` overrides it per generator.
+ */
+export const MAX_CONNECTS_IN_FLIGHT = 128;
+
 /** A started engine plus `k` load generators. */
 export class Cluster {
   #id = 0;
@@ -28,7 +37,8 @@ export class Cluster {
     this.mode = mode;
     this.k = k;
     this.users = 0;
-    this.concurrency = undefined; // connects in flight per generator (default: ODX_BENCH_CONCURRENCY or 50)
+    /** Connects in flight per generator. */
+    this.concurrency = Number(process.env.ODX_BENCH_CONCURRENCY) || Math.max(1, Math.floor(MAX_CONNECTS_IN_FLIGHT / k));
   }
 
   async #boot() {
