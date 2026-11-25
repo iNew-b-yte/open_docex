@@ -2,7 +2,8 @@
  * First load, resync and resume for one document (LLD Part 2 §8.5 [A7], Part 1 §6 R11–R12,
  * §0 PO-16, R-8, R-9).
  *
- * - **Full load:** `load-start`, then the chunks, then `load-done`. Only chunks are paced: at
+ * - **Full load:** `load-start` (carrying `limits.maxAssetBytes`, §0 R-3 and S-45), then the
+ *   chunks, then `load-done`. Only chunks are paced: at
  *   most {@link LOAD_WINDOW} are unwritten at a time, each carrying a token that the main side
  *   answers with `written`. The session joins the broadcast set before `load-start`, so remotes
  *   for later revs may arrive between chunks (the client buffers them until `load-done`).
@@ -25,6 +26,19 @@ import { sendTo, type SessionRecord } from './session-record.js';
 
 /** Most load chunks sent and not yet written, per session (LLD choice, §8.5). */
 export const LOAD_WINDOW = 4;
+
+/**
+ * The `limits.maxAssetBytes` that `load-start` announces (§0 R-3, S-45): the largest image an
+ * `asset-put` may carry, so a client can refuse an oversized image before the edge closes the
+ * socket with 1009.
+ *
+ * The edge limit is the Gateway's `ws.maxPayloadBytes` (default 16 MiB) for the whole binary
+ * frame, which is a 6-byte prefix, a header of at most 65 536 bytes and then the image
+ * (Part 1 §5.1). The Core does not learn `maxPayloadBytes` from the main process, so this is
+ * the default's bound: a smaller adopter setting is not reflected here (LLD gap-fill, see the
+ * V1-20 report).
+ */
+export const MAX_ASSET_BYTES = 16 * 1024 * 1024 - 6 - 65_536;
 
 /** The instance state the streamer reads. `DocumentInstance` provides it. */
 export interface LoadSource<S> {
@@ -86,6 +100,7 @@ export class LoadStreamer<S> {
       access: r.access,
       readOnly: src.readOnly,
       totalChunks: chunks.length,
+      limits: { maxAssetBytes: MAX_ASSET_BYTES },
     };
     if (src.findings.length > 0) start.unsupported = [...src.findings];
     if (src.conversions.length > 0) start.conversions = [...src.conversions];
