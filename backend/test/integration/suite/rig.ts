@@ -33,7 +33,15 @@ import { docKeyOf, metaPath, snapshotPath } from '../../../src/persistence/layou
 import { LocalFsStorage } from '../../../src/storage/local-fs-storage.js';
 import type { StorageRef } from '../../../src/storage/storage-adapter.js';
 import { realCodec } from '../../unit/core/in-process-pool.js';
-import { waitFor } from '../../wait-for.js';
+import { waitFor as pollFor } from '../../wait-for.js';
+
+/**
+ * Every wait in this rig: 60 s, three times the unit-test default. A Core restart is a backoff, a fork
+ * and a boot (meta scan, audit replay), and under a loaded or stalled machine that exceeded 20 s in two
+ * of about seven worker-mode runs (the boot-flush and crash-resume scenarios). Each test has 120 s.
+ */
+const RIG_WAIT_MS = 60_000;
+const waitFor = <T>(check: () => T | Promise<T>): Promise<T> => pollFor(check, RIG_WAIT_MS);
 import type { WiredCodec } from '../../../src/core/core-entry.js';
 import type { CoreServiceContext } from '../../../src/core/core-runtime.js';
 import { buildWorkerConfig, createSuiteCodec, flagOn, type SuiteSettings } from '../fixtures/suite-env.mjs';

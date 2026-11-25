@@ -132,7 +132,7 @@ V1-00 ─┬─ V1-01 ─┬─ V1-02 ──────────────
 - **Fixed, Ubuntu, `.docx` round trip (S-47):** `features.docx` and `features-word.docx` lost the right alignment of "ALIGN-RIGHT paragraph". Cause: LibreOffice 26.2.7.3 gives no `w:jc` to a paragraph the mapper wrote as `fo:text-align="end"`. The mapper now writes `right`. Reproduced and verified locally on a TDF-signed 26.2.7.3 build (all three fixtures round-trip equal on 26.2.7.3 and 26.8.3.1). The Linux CI run is still to be confirmed.
 
 **Next tasks, in order** (each depends only on done tasks):
-1. **V1-40 (merged, in review):** Firefox E2E failures are being debugged (worker 	ask/V1-40-firefox-fix); WebKit can only be confirmed by a CI run. The restore-banner bug it found is fixed (commit 2470478). Playwright E2E on Chromium, Firefox and WebKit, including the real-server check moved from V1-36 and the restore-banner re-notice case (needs V1-20 and V1-36).
+1. **V1-40 (merged; waiting for a CI run to confirm WebKit):** Playwright E2E on Chromium, Firefox and WebKit, including the real-server check moved from V1-36 and the restore-banner re-notice case (needs V1-20 and V1-36).
 2. **V1-41** (benchmark, including the S-6 typing budget in a real browser), **V1-42** (adopter docs) after V1-20.
 3. **V1-43:** the V1 release gate (`ship` checklist, CHANGELOG, `npm publish --dry-run`). The real publish happens only on the project owner's go.
 - V2-S1 (the Univer spike) may run during V1, but ask the project owner before starting it.
