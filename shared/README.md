@@ -86,7 +86,7 @@ Generated from `ERROR_CATALOGUE`. `CLIENT_*` codes are raised in the browser onl
 | `PROTOCOL_VERSION_UNSUPPORTED` | protocol | no | error | Deploy the same release of client and server. |
 | `PROTOCOL_OP_REJECTED` | protocol | no | error | The change failed validation and was discarded. If this is frequent, report a bug with the `error` event. |
 | `CLIENT_CONNECT_FAILED` | client | yes | error | Check the server is running and that proxies allow WebSocket upgrades on the engine path. |
-| `CLIENT_ASSET_TOO_LARGE` | client | no | warning | Raise limits.maxAssetBytes or use a smaller image. |
+| `CLIENT_ASSET_TOO_LARGE` | client | no | warning | Use a smaller image. |
 | `CLIENT_IMAGE_TYPE_UNSUPPORTED` | client | no | warning | Only PNG, JPEG and GIF are supported (PO-24). |
 
 ## Not supported in V1

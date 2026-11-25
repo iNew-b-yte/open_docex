@@ -143,7 +143,7 @@ export const ERROR_CATALOGUE: Readonly<Record<ErrorCode, Readonly<CatalogueEntry
   CLIENT_CONNECT_FAILED: entry('client', true, 'error', "Can't connect.",
     'Check the server is running and that proxies allow WebSocket upgrades on the engine path.'),
   CLIENT_ASSET_TOO_LARGE: entry('client', false, 'warning', 'This image is too large.',
-    'Raise limits.maxAssetBytes or use a smaller image.'),
+    'Use a smaller image.'),
   CLIENT_IMAGE_TYPE_UNSUPPORTED: entry('client', false, 'warning', 'Only PNG, JPEG and GIF images can be added.',
     'Only PNG, JPEG and GIF are supported (PO-24).'),
 });

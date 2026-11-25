@@ -500,7 +500,7 @@ export function toClientError(err: unknown, ctx?: { clientSeq?: number; reqId?: 
 | PROTOCOL_VERSION_UNSUPPORTED | protocol | no | error | Please reload the page to update the editor. | Deploy the same release of client and server. |
 | PROTOCOL_OP_REJECTED | protocol | no | error | A change could not be applied. Reloading. | The change failed validation and was discarded. If this is frequent, report a bug with the `error` event. |
 | CLIENT_CONNECT_FAILED | client | yes | error | Can't connect. | Check the server is running and that proxies allow WebSocket upgrades on the engine path. |
-| CLIENT_ASSET_TOO_LARGE | client | no | warning | This image is too large. | Raise limits.maxAssetBytes or use a smaller image. |
+| CLIENT_ASSET_TOO_LARGE | client | no | warning | This image is too large. | Use a smaller image. |
 | CLIENT_IMAGE_TYPE_UNSUPPORTED | client | no | warning | Only PNG, JPEG and GIF images can be added. | Only PNG, JPEG and GIF are supported (PO-24). |
 
 Codes whose client message is "The editing service hit a server problem." (the three `CONFIG_*`, `STORAGE_WRITE_FAILED`, `ENGINE_FAILED`) are not meant to reach a client; the generic text is what `toClientError` sends if one does. The `CLIENT_*` rows and these messages were approved by the project owner on 2026-11-22.
