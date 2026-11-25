@@ -58,7 +58,17 @@ jobs:
           node-version: 24
           cache: npm
       - name: Install LibreOffice
-        run: choco install libreoffice-fresh -y --no-progress
+        # choco can fail to reach its feed (run 45640202792: "Unable to find package", 0/0 installed)
+        # and the step still passed, so 29 LibreOffice tests failed later. Retry, then fail here.
+        run: |
+          $soffice = Join-Path $env:ProgramFiles 'LibreOffice/program/soffice.exe'
+          for ($i = 1; $i -le 3; $i++) {
+            choco install libreoffice-fresh -y --no-progress
+            if (Test-Path $soffice) { break }
+            Write-Host "LibreOffice install attempt $i did not produce $soffice"
+            Start-Sleep -Seconds (15 * $i)
+          }
+          if (-not (Test-Path $soffice)) { throw 'LibreOffice was not installed' }
       - run: npm ci
       - run: npm run build
       - run: npm test
