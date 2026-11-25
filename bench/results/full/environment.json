@@ -1,0 +1,64 @@
+{
+  "quick": false,
+  "params": {
+    "rate": 2,
+    "warmMs": 5000,
+    "measureMs": 20000,
+    "oneDocClients": [
+      1,
+      10,
+      50,
+      100
+    ],
+    "manyDocs": [
+      10,
+      100,
+      500
+    ],
+    "stages": [
+      250,
+      500,
+      1000,
+      2000,
+      3000,
+      4000,
+      6000,
+      8000,
+      10000,
+      12000
+    ],
+    "limitMs": 100,
+    "fanout": [
+      0,
+      10,
+      50,
+      100,
+      250,
+      500,
+      1000,
+      2000
+    ],
+    "opsPerSec": 20,
+    "pages": [
+      10,
+      100,
+      300
+    ],
+    "loConcurrency": [
+      1,
+      2
+    ],
+    "loRepeats": 3,
+    "keystrokes": 400,
+    "typingPages": 300
+  },
+  "date": "2026-11-25T08:48:10.199Z",
+  "cpuModel": "AMD Ryzen 9 9955HX 16-Core Processor",
+  "logicalCores": 32,
+  "ramGiB": 31.3,
+  "os": "Windows_NT 10.0.26300 (Windows 11 Home Single Language) x64",
+  "node": "v24.18.0",
+  "libreoffice": "LibreOffice 26.8.3.1 861effc5289d539f15c4c18d1ba8579ffd78728b",
+  "chromium": "159.0.8154.6",
+  "sofficePath": "C:\\Program Files\\LibreOffice\\program\\soffice.exe"
+}

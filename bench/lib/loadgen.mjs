@@ -177,3 +177,6 @@ process.on('message', async (msg) => {
   }
 });
 void observerByDoc;
+
+// Never outlive the orchestrator (a stage killed on its time limit).
+process.on('disconnect', () => process.exit(0));

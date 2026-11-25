@@ -1,0 +1,236 @@
+{
+  "main": [
+    {
+      "mode": "main",
+      "sessions": 2,
+      "ops": 183,
+      "failed": 0,
+      "mainCpuUsPerOp": -134056.1,
+      "coreCpuUsPerOp": null,
+      "mainCpuPct": 0,
+      "coreCpuPct": null,
+      "baselineMainCpuPct": 1.6,
+      "baselineCoreCpuPct": null,
+      "ack": {
+        "n": 183,
+        "p50": 1.41,
+        "p95": 2.46,
+        "p99": 215.12,
+        "max": 294.97,
+        "mean": 5.93
+      },
+      "remote": {
+        "n": 183,
+        "p50": 1.49,
+        "p95": 2.59,
+        "p99": 215.17,
+        "max": 295.16,
+        "mean": 6.02
+      },
+      "genLagP99Ms": 25.43
+    },
+    {
+      "mode": "main",
+      "sessions": 12,
+      "ops": 346,
+      "failed": 0,
+      "mainCpuUsPerOp": 858.6,
+      "coreCpuUsPerOp": null,
+      "mainCpuPct": 2.3,
+      "coreCpuPct": null,
+      "baselineMainCpuPct": 0.8,
+      "baselineCoreCpuPct": null,
+      "ack": {
+        "n": 346,
+        "p50": 1.02,
+        "p95": 1.41,
+        "p99": 4.95,
+        "max": 6.06,
+        "mean": 1.08
+      },
+      "remote": {
+        "n": 346,
+        "p50": 1.06,
+        "p95": 1.5,
+        "p99": 4.98,
+        "max": 6.11,
+        "mean": 1.13
+      },
+      "genLagP99Ms": 25.08
+    },
+    {
+      "mode": "main",
+      "sessions": 52,
+      "ops": 349,
+      "failed": 0,
+      "mainCpuUsPerOp": 2286.5,
+      "coreCpuUsPerOp": null,
+      "mainCpuPct": 4.1,
+      "coreCpuPct": null,
+      "baselineMainCpuPct": 0.1,
+      "baselineCoreCpuPct": null,
+      "ack": {
+        "n": 349,
+        "p50": 0.97,
+        "p95": 1.36,
+        "p99": 6.08,
+        "max": 11.53,
+        "mean": 1.09
+      },
+      "remote": {
+        "n": 349,
+        "p50": 1.01,
+        "p95": 1.4,
+        "p99": 6.12,
+        "max": 11.56,
+        "mean": 1.13
+      },
+      "genLagP99Ms": 29.02
+    },
+    {
+      "mode": "main",
+      "sessions": 102,
+      "ops": 353,
+      "failed": 0,
+      "mainCpuUsPerOp": 3541.1,
+      "coreCpuUsPerOp": null,
+      "mainCpuPct": 6.2,
+      "coreCpuPct": null,
+      "baselineMainCpuPct": 0,
+      "baselineCoreCpuPct": null,
+      "ack": {
+        "n": 353,
+        "p50": 1.31,
+        "p95": 1.61,
+        "p99": 2.61,
+        "max": 7.4,
+        "mean": 1.32
+      },
+      "remote": {
+        "n": 353,
+        "p50": 1.36,
+        "p95": 1.68,
+        "p99": 2.67,
+        "max": 7.47,
+        "mean": 1.37
+      },
+      "genLagP99Ms": 24.74
+    },
+    {
+      "mode": "main",
+      "sessions": 252,
+      "ops": 354,
+      "failed": 0,
+      "mainCpuUsPerOp": 6398.3,
+      "coreCpuUsPerOp": null,
+      "mainCpuPct": 11.3,
+      "coreCpuPct": null,
+      "baselineMainCpuPct": 0,
+      "baselineCoreCpuPct": null,
+      "ack": {
+        "n": 354,
+        "p50": 1.11,
+        "p95": 1.49,
+        "p99": 5.06,
+        "max": 6.1,
+        "mean": 1.18
+      },
+      "remote": {
+        "n": 354,
+        "p50": 1.17,
+        "p95": 1.53,
+        "p99": 5.08,
+        "max": 6.13,
+        "mean": 1.24
+      },
+      "genLagP99Ms": 19.28
+    },
+    {
+      "mode": "main",
+      "sessions": 502,
+      "ops": 356,
+      "failed": 0,
+      "mainCpuUsPerOp": 12904.5,
+      "coreCpuUsPerOp": null,
+      "mainCpuPct": 23,
+      "coreCpuPct": null,
+      "baselineMainCpuPct": 0,
+      "baselineCoreCpuPct": null,
+      "ack": {
+        "n": 356,
+        "p50": 1.19,
+        "p95": 1.58,
+        "p99": 5.44,
+        "max": 6.76,
+        "mean": 1.26
+      },
+      "remote": {
+        "n": 356,
+        "p50": 1.24,
+        "p95": 1.64,
+        "p99": 5.49,
+        "max": 6.81,
+        "mean": 1.31
+      },
+      "genLagP99Ms": 23.17
+    },
+    {
+      "mode": "main",
+      "sessions": 1002,
+      "ops": 350,
+      "failed": 0,
+      "mainCpuUsPerOp": 24194.4,
+      "coreCpuUsPerOp": null,
+      "mainCpuPct": 42.5,
+      "coreCpuPct": null,
+      "baselineMainCpuPct": 0.2,
+      "baselineCoreCpuPct": null,
+      "ack": {
+        "n": 350,
+        "p50": 1.26,
+        "p95": 1.69,
+        "p99": 6.11,
+        "max": 6.92,
+        "mean": 1.38
+      },
+      "remote": {
+        "n": 350,
+        "p50": 1.31,
+        "p95": 1.75,
+        "p99": 6.14,
+        "max": 6.95,
+        "mean": 1.43
+      },
+      "genLagP99Ms": 18.1
+    },
+    {
+      "mode": "main",
+      "sessions": 2002,
+      "ops": 394,
+      "failed": 0,
+      "mainCpuUsPerOp": 43226,
+      "coreCpuUsPerOp": null,
+      "mainCpuPct": 85.8,
+      "coreCpuPct": null,
+      "baselineMainCpuPct": 0.8,
+      "baselineCoreCpuPct": null,
+      "ack": {
+        "n": 394,
+        "p50": 9.15,
+        "p95": 46.43,
+        "p99": 59.18,
+        "max": 65.09,
+        "mean": 14.67
+      },
+      "remote": {
+        "n": 394,
+        "p50": 9.18,
+        "p95": 46.45,
+        "p99": 59.2,
+        "max": 65.11,
+        "mean": 14.7
+      },
+      "genLagP99Ms": 24.02
+    }
+  ]
+}

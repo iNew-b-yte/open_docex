@@ -136,7 +136,8 @@ export class Cluster {
 /** Load generators: leave cores for the engine (one or two processes) and the OS. */
 export const genCount = () => Math.max(2, Math.min(8, Math.floor(os.cpus().length / 4)));
 
-const log = (...a) => console.log('[net]', ...a);
+const t00 = Date.now();
+const log = (...a) => console.log(`[net +${Math.round((Date.now() - t00) / 1000)}s]`, ...a);
 
 /** Item 2: latency on one document (n clients) and across many documents (2 clients each). */
 export async function latencyBench(mode, o) {
@@ -150,6 +151,7 @@ export async function latencyBench(mode, o) {
     const w = await c.window(o.measureMs);
     out.oneDoc.push({ mode, clients: n, docs: 1, typists: n === 1 ? 1 : n - 1, failed, ...w });
     log(mode, 'one doc', n, 'ack p99', w.ack.p99, 'remote p99', w.remote.p99);
+    o.progress?.(out);
     await c.stop();
   }
   for (const d of o.manyDocs) {
@@ -162,6 +164,7 @@ export async function latencyBench(mode, o) {
     const w = await c.window(o.measureMs);
     out.manyDocs.push({ mode, clients: d * 2, docs: d, typists: d, failed, ...w });
     log(mode, 'many docs', d, 'ack p99', w.ack.p99, 'remote p99', w.remote.p99);
+    o.progress?.(out);
     await c.stop();
   }
   return out;
@@ -187,10 +190,11 @@ export async function capacityBench(mode, variant, o) {
     have += specs.length;
     await sleep(o.warmMs);
     await c.window(1000);
-    const w = await c.window(o.measureMs);
+    const w = await c.window(o.capMeasureMs ?? o.measureMs);
     const row = { mode, variant, clients: have, docs: docSeq, failedToLoad: failed, rampSeconds: Math.round((performance.now() - t0) / 100) / 10, ...w };
     stages.push(row);
     log(mode, variant, have, 'ack p99', w.ack.p99, 'main cpu', w.mainCpuPct, 'core cpu', w.coreCpuPct, 'open', w.open, 'failed', failed);
+    o.progress?.({ stages, stoppedBecause: 'in progress' });
     if (w.ack.p99 !== null && w.ack.p99 > o.limitMs) stop = `p99 ack ${w.ack.p99} ms > ${o.limitMs} ms`;
     else if (failed > 0 || w.open < have * 0.99) stop = `${failed} clients failed to load, ${have - w.open} sockets lost`;
     else if (w.errors > 0 || w.closes > 0) stop = `${w.errors} errors, ${w.closes} closes`;
@@ -233,6 +237,7 @@ export async function fanoutBench(mode, o) {
       genLagP99Ms: w.genLagP99Ms,
     });
     log(mode, 'fanout', s + 2, 'main us/op', rows.at(-1).mainCpuUsPerOp, 'core us/op', rows.at(-1).coreCpuUsPerOp, 'remote p99', w.remote.p99);
+    o.progress?.(rows);
     await c.stop();
   }
   return rows;

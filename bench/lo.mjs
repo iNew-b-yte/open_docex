@@ -2,72 +2,19 @@
 // 300 pages, with LibreOffice concurrency 1 and 2, plus the flat-XML size against the S-15 cap
 // (`maxFlatXmlBytes` = 64 x `maxFileBytes`). Uses the real `CodecService` over the real
 // compiled `CodecPool` (a worker thread), the production path. Nothing else may run meanwhile.
-import { mkdtemp, readFile, rm, stat, writeFile } from 'node:fs/promises';
+import { mkdtemp, rm, stat, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
-import { execFile } from 'node:child_process';
-import { pathToFileURL } from 'node:url';
-import { promisify } from 'node:util';
-import { textSchema } from '@open-docex/shared/text';
-import { resolveWorkerConfig } from '../backend/dist/api/validate-options.js';
 import { CodecPool } from '../backend/dist/codec/codec-pool.js';
 import { CodecService, FLAT_XML_FACTOR } from '../backend/dist/codec/codec-service.js';
 import { FodtMapper } from '../backend/dist/codec/fodt-mapper.js';
 import { locateLibreOffice } from '../backend/dist/codec/libreoffice-locate.js';
 import { createRunner } from '../backend/dist/codec/libreoffice-runner.js';
 import { noopLogger } from '../backend/dist/log/logger.js';
+import { buildModel, pagesOf } from './lib/docgen.mjs';
 import { quantile } from './lib/stats.mjs';
 
-const run = promisify(execFile);
 const MAX_FILE_BYTES = 50 * 2 ** 20; // the default `limits.maxFileBytes`
-
-const SENTENCES = [
-  'The quick brown fox jumps over the lazy dog while the committee reviews the quarterly figures.',
-  'Collaborative editing needs every participant to see the same document within a fraction of a second.',
-  'A paragraph of ordinary prose has long words, short words, numbers like 3.14159 and the odd comma, semicolon; or colon: for variety.',
-  'Pagination is computed from measured block heights, so line wrapping and fonts decide where each page ends.',
-];
-
-/** A paragraph of about 600 characters, with one bold run so that the export has marks to write. */
-function paragraph(i) {
-  let text = '';
-  for (let k = 0; text.length < 600; k++) text += `${SENTENCES[(i + k) % SENTENCES.length]} `;
-  text = text.trim();
-  const cut = 40 + (i % 50);
-  return textSchema.node('paragraph', null, [
-    textSchema.text(text.slice(0, cut)),
-    textSchema.text(text.slice(cut, cut + 25), [textSchema.marks.bold.create()]),
-    textSchema.text(text.slice(cut + 25)),
-  ]);
-}
-
-/** A model of `n` paragraphs, a heading before every tenth. */
-function buildModel(n) {
-  const page = resolveWorkerConfig({}).blankDocument.page;
-  const blocks = [];
-  for (let i = 0; i < n; i++) {
-    if (i % 10 === 0) blocks.push(textSchema.node('heading', { level: 1 + ((i / 10) % 3) }, [textSchema.text(`Section ${i / 10 + 1}`)]));
-    blocks.push(paragraph(i));
-  }
-  const { size, orientation, margins } = page;
-  return textSchema.node('doc', { size, orientation, margins }, [textSchema.node('body', null, blocks)]).toJSON();
-}
-
-/**
- * The page count of a docx: LibreOffice renders it to PDF (a separate throw-away profile) and the
- * `/Type /Page` objects are counted. LibreOffice does not write a page count into docProps.
- */
-async function pagesOf(sofficePath, docxPath, root) {
-  const outDir = path.join(root, `pdf-${path.basename(docxPath, '.docx')}`);
-  const profile = pathToFileURL(path.join(root, 'profile-pdf')).href;
-  try {
-    await run(sofficePath, [`-env:UserInstallation=${profile}`, '--headless', '--convert-to', 'pdf', '--outdir', outDir, docxPath], { timeout: 600_000 });
-    const pdf = await readFile(path.join(outDir, `${path.basename(docxPath, '.docx')}.pdf`));
-    return (pdf.toString('latin1').match(/\/Type\s*\/Page[^s]/g) ?? []).length || null;
-  } catch {
-    return null;
-  }
-}
 
 const median = (a) => quantile(Float64Array.from(a).sort(), 0.5);
 const r1 = (x) => Math.round(x * 10) / 10;
@@ -78,6 +25,7 @@ export async function loBench(P) {
   const runner = createRunner();
   const mapper = new FodtMapper();
   const limits = { soffice, timeoutMs: 600_000, maxFlatXmlBytes: FLAT_XML_FACTOR * MAX_FILE_BYTES, maxFileBytes: MAX_FILE_BYTES };
+  const progress = P.progress ?? (() => undefined);
   const result = { maxFileBytes: MAX_FILE_BYTES, maxFlatXmlBytes: limits.maxFlatXmlBytes, documents: [], timing: [] };
   const mkCodec = (maxConcurrent) =>
     new CodecService({
@@ -131,6 +79,7 @@ export async function loBench(P) {
     });
   }
   await codec1.close();
+  progress(result);
 
   // 2. Timing, sequential (one job at a time) and 4 jobs submitted at once, per concurrency.
   for (const conc of P.loConcurrency) {
@@ -178,6 +127,7 @@ export async function loBench(P) {
       };
       result.timing.push(row);
       console.log('[lo]', JSON.stringify(row));
+      progress(result);
     }
     await codec.close();
   }
