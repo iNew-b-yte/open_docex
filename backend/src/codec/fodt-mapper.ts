@@ -1355,7 +1355,7 @@ class Exporter {
     const props: string[] = [];
     const align = a['align'] as string | undefined;
     if (align === 'center' || align === 'justify') props.push(`fo:text-align="${align}"`);
-    else if (align === 'right') props.push('fo:text-align="end"');
+    else if (align === 'right') props.push('fo:text-align="right"');
     const len = (key: string, css: string): void => {
       const v = a[key];
       if (typeof v === 'number') props.push(`${css}="${pt(v)}"`);

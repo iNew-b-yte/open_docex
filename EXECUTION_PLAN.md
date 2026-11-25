@@ -129,7 +129,7 @@ V1-00 ─┬─ V1-01 ─┬─ V1-02 ──────────────
 - **Fixed, Ubuntu:** `libreoffice-draw` and fonts were missing (EMF/WMF/TIFF/SVG → PNG). That caused 3 of the 5 failures per job. `ci.yml` now installs them.
 - **Fixed, Windows:** the 2 failures in `document-instance.test.ts` were `vi.waitFor` at its fixed 1 s. All 83 backend `vi.waitFor` calls now use `backend/test/wait-for.ts` (20 s), and the backend project has a 30 s `testTimeout`. The log shows no file-locking error, but the cause is unconfirmed until CI re-runs.
 - **Fixed, Node 22 only:** the real-LibreOffice timeout test used 400 ms and a fast runner finished in time. It now uses 1 ms.
-- **OPEN (needs the project owner; see Open questions):** `round-trips features.docx` and `features-word.docx` fail on Ubuntu 26.04 (LibreOffice 26.2.7.3 from apt). The paragraph "ALIGN-RIGHT paragraph" comes back left-aligned after export and re-import. The local 26.8.3.1 keeps it, and `features.odt` passes on both. The cause is not diagnosed: it may be LibreOffice 26.2's docx export or import, or the mapper.
+- **Fixed, Ubuntu, `.docx` round trip (S-47):** `features.docx` and `features-word.docx` lost the right alignment of "ALIGN-RIGHT paragraph". Cause: LibreOffice 26.2.7.3 gives no `w:jc` to a paragraph the mapper wrote as `fo:text-align="end"`. The mapper now writes `right`. Reproduced and verified locally on a TDF-signed 26.2.7.3 build (all three fixtures round-trip equal on 26.2.7.3 and 26.8.3.1). The Linux CI run is still to be confirmed.
 
 **Next tasks, in order** (each depends only on done tasks):
 1. **V1-20 (in progress, worker on `task/V1-20-integration-suite`):** integration suite in main and worker mode with real LibreOffice (crash and restart, storage failure through recovery, conflict, dedupe after resend, at-least-once audit). Also send `load-start.limits.maxAssetBytes` from the Core (S-45). The load-tolerance part is done (S-46). Narrowing `ApiArgs`/`ApiResult` in `channel/messages.ts` is deferred: it touches V1-18/V1-19 files outside this task's scope and nothing needs it.
@@ -144,7 +144,7 @@ V1-00 ─┬─ V1-01 ─┬─ V1-02 ──────────────
 
 The orchestrator records questions here and asks the project owner.
 
-**Open (2026-11-25): the `.docx` round-trip difference on LibreOffice 26.2.7.3.** `features.docx` and `features-word.docx` lose the right alignment of one paragraph on the Ubuntu CI runner (see the resume point). Recommendation: diagnose it locally first, with a TDF-signed LibreOffice 26.2.7.3 Windows build extracted (not installed) from the TDF archive, and run only the fodt round-trip test against it. The orchestrator downloaded and extracted it into its scratchpad, but the auto-mode permission check blocked running the tests against it, so it needs the project owner's go. Then, depending on the finding: fix the mapper, or loosen the test for that paragraph, or pin the CI LibreOffice. A diagnostic CI run would need a push, which also needs the project owner.
+**Resolved 2026-11-25 (project owner chose to diagnose locally):** the `.docx` round-trip difference on LibreOffice 26.2.7.3 was the mapper writing `fo:text-align="end"` (LLD §0.5 S-47). The orchestrator ran the real import and export code against a TDF-signed 26.2.7.3 Windows build extracted into its scratchpad, with the owner's go, and nothing was installed or pushed.
 
 **Resolved 2026-11-22 (project owner):**
 - V1-00 scope extended with root `tsconfig.json`, `eslint.config.js`, root `vitest.config.ts`, `package-lock.json` and `shared/src/env.d.ts`, which its acceptance needs (P1 §1.1–§1.4).
@@ -198,4 +198,4 @@ The orchestrator records questions here and asks the project owner.
 | 2026-11-22 | Wave 3: V1-02 and V1-03 done (442 tests on main); V1-10 part 1 merged, rest re-sequenced (S-22). |
 | 2026-11-22 | Waves 4–5: V1-04, V1-10, V1-11, V1-12, V1-13 and V1-30 done (846 tests on main). |
 | 2026-11-22 | V1-00 done (CI run 45012148604 green). Post-review fixes to lint, @types and LLD §1.3/§1.6/§1.7/§1.9 approved and applied. |
-| 2026-11-25 | V1-19 done. First CI run of the real-LibreOffice tests failed; fixes for Ubuntu packages, Windows timing and the timeout test merged (S-46). The 26.2 `.docx` round-trip difference is open. V1-20 started. |
+| 2026-11-25 | V1-19 done. First CI run of the real-LibreOffice tests failed; fixes for Ubuntu packages, Windows timing and the timeout test merged (S-46). The 26.2 `.docx` round-trip difference was the mapper writing `end` for right alignment; fixed (S-47). V1-20 started. |

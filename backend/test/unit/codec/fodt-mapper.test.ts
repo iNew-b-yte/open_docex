@@ -501,6 +501,15 @@ describe('FodtMapper export', () => {
     expect(xml).toContain('office:mimetype="application/vnd.oasis.opendocument.text"');
   });
 
+  it('writes right alignment as the physical fo:text-align="right", not "end" (S-47)', async () => {
+    // LibreOffice 26.2.7.3 gives no w:jc to a paragraph written as "end" when it exports .docx, so
+    // the paragraph came back left-aligned; 26.8.3.1 coped with both values.
+    const dir = await importFodt({ body: '' });
+    const xml = await exportFodt(model([{ type: 'paragraph', attrs: paraAttrs({ align: 'right' }), content: [{ type: 'text', text: 'R' }] }]), dir.assetDir);
+    expect(xml).toContain('fo:text-align="right"');
+    expect(xml).not.toContain('fo:text-align="end"');
+  });
+
   it('writes marks as spans, links as text:a, and only the fonts in use', async () => {
     const dir = await importFodt({ body: '' });
     const xml = await exportFodt(
