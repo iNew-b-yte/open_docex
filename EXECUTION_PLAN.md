@@ -125,14 +125,14 @@ V1-00 ─┬─ V1-01 ─┬─ V1-02 ──────────────
 
 **Done and merged on `main`:** V1-00 to V1-04, V1-10 to V1-20, V1-30 to V1-36, V1-S2 and V1-S3. On `main`, build, typecheck, lint and test pass: 1,590 tests, plus 853 backend tests with the real-LibreOffice suite (`OPEN_DOCEX_LO_TESTS=1 npx vitest run --project backend`). The server (V1-10 to V1-19) and the client (V1-30 to V1-36) are both complete. Nothing is in progress and no task branches are open.
 
-**CI status (run 45551669411, the first push of the real-LibreOffice tests, 2026-11-25): `static` passed and every `test` job failed.** Fixes are on `main` (commit 9828ef5, LLD §0.5 S-46) but CI has not re-run, because nothing is pushed:
+**CI status (2026-11-25).** Run 45551669411 (the first push of the real-LibreOffice tests) failed on every `test` job. After the S-46/S-47 fixes, run 45606138640 passed `static`, `e2e` (with WebKit) and the three Ubuntu `test` jobs, and failed `test-windows` (two storage-flush timeouts, fixed by S-50 and not yet re-run on CI). The notes below are the history of run 45551669411:
 - **Fixed, Ubuntu:** `libreoffice-draw` and fonts were missing (EMF/WMF/TIFF/SVG → PNG). That caused 3 of the 5 failures per job. `ci.yml` now installs them.
 - **Fixed, Windows:** the 2 failures in `document-instance.test.ts` were `vi.waitFor` at its fixed 1 s. All 83 backend `vi.waitFor` calls now use `backend/test/wait-for.ts` (20 s), and the backend project has a 30 s `testTimeout`. The log shows no file-locking error, but the cause is unconfirmed until CI re-runs.
 - **Fixed, Node 22 only:** the real-LibreOffice timeout test used 400 ms and a fast runner finished in time. It now uses 1 ms.
 - **Fixed, Ubuntu, `.docx` round trip (S-47):** `features.docx` and `features-word.docx` lost the right alignment of "ALIGN-RIGHT paragraph". Cause: LibreOffice 26.2.7.3 gives no `w:jc` to a paragraph the mapper wrote as `fo:text-align="end"`. The mapper now writes `right`. Reproduced and verified locally on a TDF-signed 26.2.7.3 build (all three fixtures round-trip equal on 26.2.7.3 and 26.8.3.1). The Linux CI run is still to be confirmed.
 
 **Next tasks, in order** (each depends only on done tasks):
-1. **V1-40 (merged; waiting for a CI run to confirm WebKit):** Playwright E2E on Chromium, Firefox and WebKit, including the real-server check moved from V1-36 and the restore-banner re-notice case (needs V1-20 and V1-36).
+1. **V1-40 (done locally):** the queue-full, links and pagination specs have not run on WebKit or on Ubuntu CI yet. Also: no test sends a real server `QUEUE_FULL` frame to a real client (S-49).
 2. **V1-41** (benchmark, including the S-6 typing budget in a real browser), **V1-42** (adopter docs) after V1-20.
 3. **V1-43:** the V1 release gate (`ship` checklist, CHANGELOG, `npm publish --dry-run`). The real publish happens only on the project owner's go.
 - V2-S1 (the Univer spike) may run during V1, but ask the project owner before starting it.
@@ -199,4 +199,4 @@ The orchestrator records questions here and asks the project owner.
 | 2026-11-22 | Wave 3: V1-02 and V1-03 done (442 tests on main); V1-10 part 1 merged, rest re-sequenced (S-22). |
 | 2026-11-22 | Waves 4–5: V1-04, V1-10, V1-11, V1-12, V1-13 and V1-30 done (846 tests on main). |
 | 2026-11-22 | V1-00 done (CI run 45012148604 green). Post-review fixes to lint, @types and LLD §1.3/§1.6/§1.7/§1.9 approved and applied. |
-| 2026-11-25 | V1-19 and V1-20 done (1,701 tests with real LibreOffice, S-48). First CI run of the real-LibreOffice tests failed; fixes for Ubuntu packages, Windows timing and the timeout test merged (S-46). The 26.2 `.docx` round-trip difference was the mapper writing `end` for right alignment; fixed (S-47). V1-20 started. |
+| 2026-11-25 | Pushed `main` (run 45606138640: Ubuntu, static and e2e green; Windows red, fixed by S-50). V1-40, V1-41 and V1-42 done locally. V1-19 and V1-20 done (1,701 tests with real LibreOffice, S-48). First CI run of the real-LibreOffice tests failed; fixes for Ubuntu packages, Windows timing and the timeout test merged (S-46). The 26.2 `.docx` round-trip difference was the mapper writing `end` for right alignment; fixed (S-47). V1-20 started. |
