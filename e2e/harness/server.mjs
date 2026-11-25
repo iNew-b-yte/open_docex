@@ -164,6 +164,10 @@ export async function startHarness(o = {}) {
         // `ws` hands its frames to `cork`/`write`; with the callback never called, `pendingBytes` grows.
       }
     },
+    /** Drops the TCP connections of `user` without a close frame, as a network failure would. */
+    dropSockets(user) {
+      for (const socket of sockets.get(user) ?? []) socket.destroy();
+    },
     /** Worker mode: SIGKILLs the Core; the Supervisor restarts it. Resolves once serving again. */
     async restartCore() {
       const child = children.at(-1);

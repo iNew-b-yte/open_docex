@@ -27,9 +27,12 @@ export const editorOf = (page) => page.locator('.odx-editor-surface .ProseMirror
 export async function openEditor(page, harness, { documentId = 'doc', user, access = 'edit', editAnyway = true, waitReady = true }) {
   await page.goto(harness.baseUrl);
   await page.evaluate((args) => window.odx.start(args), { documentId, token: `${access}:${user}`, editAnyway });
-  if (waitReady) await expect(editorOf(page)).toBeVisible();
+  if (waitReady) {
+    await expect(editorOf(page)).toBeVisible();
+    await expect.poll(() => page.evaluate(() => window.odx.log.statuses.at(-1)?.load)).toBe('ready');
+  }
   return editorOf(page);
 }
 
 /** The text of the document as shown. */
-export const textOf = (page) => editorOf(page).innerText();
+export const textOf = (page) => editorOf(page).textContent();

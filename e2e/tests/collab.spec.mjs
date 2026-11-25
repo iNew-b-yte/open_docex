@@ -13,9 +13,9 @@ test('two users type at once and converge, including the BRD "cat" case', async 
 
   // Alice puts the caret before "cat" and types; Bob puts it after "cat" and types.
   await ea.click();
-  await a.keyboard.press('Control+Home');
+  await a.keyboard.press('Home');
   await eb.click();
-  await b.keyboard.press('Control+End');
+  await b.keyboard.press('End');
   await a.keyboard.type('big ');
   await b.keyboard.type('s');
 
@@ -53,7 +53,7 @@ test('a view-only user cannot edit, sends no change, and still sees remote edits
   await ev.click();
   await v.keyboard.type('nope');
   await ea.click();
-  await a.keyboard.press('Control+End');
+  await a.keyboard.press('End');
   await a.keyboard.type(' world');
   await expect.poll(() => textOf(v)).toBe('hello world');
   expect(submits).toEqual([]);
@@ -78,9 +78,10 @@ test('paste and drag-drop an image: it appears for the other user with a blob sr
         dt.items.add(new File([bytes], `${kind}.png`, { type: 'image/png' }));
         const r = (el.querySelector('p') ?? el).getBoundingClientRect();
         const init = { dataTransfer: dt, bubbles: true, cancelable: true, clientX: r.left + 3, clientY: r.top + r.height / 2 };
-        let ev;
-        if (kind === 'paste') ev = new ClipboardEvent('paste', { clipboardData: dt, bubbles: true, cancelable: true });
-        else ev = new DragEvent('drop', init);
+        // Firefox ignores the data object in the event constructors, so it is set as a property.
+        const ev = new Event(kind, { bubbles: true, cancelable: true });
+        Object.defineProperty(ev, kind === 'paste' ? 'clipboardData' : 'dataTransfer', { value: dt });
+        if (kind === 'drop') Object.assign(ev, { clientX: init.clientX, clientY: init.clientY });
         el.dispatchEvent(ev);
       },
       { b64: png, kind },

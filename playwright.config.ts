@@ -22,6 +22,8 @@ export default defineConfig({
   projects: [
     { name: 'chromium', use: { ...devices['Desktop Chrome'] } },
     { name: 'firefox', use: { ...devices['Desktop Firefox'] } },
-    { name: 'webkit', use: { ...devices['Desktop Safari'] } },
+    // WebKit runs in CI only (owner decision: on the Windows dev machine its helper is blocked).
+    // Locally the default is Chromium and Firefox; set ODX_E2E_WEBKIT=1 to include WebKit.
+    ...(ci || process.env['ODX_E2E_WEBKIT'] === '1' ? [{ name: 'webkit', use: { ...devices['Desktop Safari'] } }] : []),
   ],
 });
