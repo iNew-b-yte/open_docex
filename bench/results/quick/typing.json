@@ -1,0 +1,168 @@
+{
+  "stage": "typing",
+  "mode": null,
+  "quick": true,
+  "complete": true,
+  "startedAt": "2026-11-25T10:29:49.780Z",
+  "environment": {
+    "date": "2026-11-25T10:29:49.780Z",
+    "cpuModel": "AMD Ryzen 9 9955HX 16-Core Processor",
+    "logicalCores": 32,
+    "ramGiB": 31.3,
+    "os": "Windows_NT 10.0.26300 (Windows 11 Home Single Language) x64",
+    "node": "v24.18.0",
+    "libreoffice": "LibreOffice 26.8.3.1 861effc5289d539f15c4c18d1ba8579ffd78728b",
+    "chromium": "159.0.8154.6",
+    "sofficePath": "C:\\Program Files\\LibreOffice\\program\\soffice.exe"
+  },
+  "params": {
+    "rate": 2,
+    "warmMs": 1500,
+    "measureMs": 3000,
+    "oneDocClients": [
+      1,
+      10
+    ],
+    "manyDocs": [
+      10
+    ],
+    "stages": [
+      100,
+      200
+    ],
+    "capMeasureMs": 3000,
+    "limitMs": 100,
+    "fanout": [
+      0,
+      10
+    ],
+    "opsPerSec": 20,
+    "pages": [
+      10
+    ],
+    "loConcurrency": [
+      1,
+      2
+    ],
+    "loRepeats": 1,
+    "keystrokes": 60,
+    "typingPages": 20
+  },
+  "data": {
+    "browser": "159.0.8154.6",
+    "keystrokesPerLocation": 60,
+    "warmup": 60,
+    "budgetP95Ms": 8,
+    "documentId": "typing-0",
+    "paragraphs": 120,
+    "pages": 20,
+    "locations": {
+      "start": {
+        "keystrokes": 60,
+        "total": {
+          "n": 60,
+          "p50": 0.7,
+          "p95": 1,
+          "p99": 1.6,
+          "max": 1.6,
+          "mean": 0.74
+        },
+        "sync": {
+          "n": 60,
+          "p50": 0.5,
+          "p95": 0.7,
+          "p99": 0.9,
+          "max": 0.9,
+          "mean": 0.56
+        },
+        "pass": {
+          "n": 60,
+          "p50": 0.1,
+          "p95": 0.3,
+          "p99": 0.7,
+          "max": 0.7,
+          "mean": 0.16
+        },
+        "layout": {
+          "n": 60,
+          "p50": 0,
+          "p95": 0.1,
+          "p99": 0.2,
+          "max": 0.2,
+          "mean": 0.02
+        }
+      },
+      "middle": {
+        "keystrokes": 60,
+        "total": {
+          "n": 60,
+          "p50": 0.6,
+          "p95": 0.7,
+          "p99": 1.2,
+          "max": 1.2,
+          "mean": 0.56
+        },
+        "sync": {
+          "n": 60,
+          "p50": 0.4,
+          "p95": 0.6,
+          "p99": 0.7,
+          "max": 0.7,
+          "mean": 0.44
+        },
+        "pass": {
+          "n": 60,
+          "p50": 0.1,
+          "p95": 0.2,
+          "p99": 0.4,
+          "max": 0.4,
+          "mean": 0.12
+        },
+        "layout": {
+          "n": 60,
+          "p50": 0,
+          "p95": 0,
+          "p99": 0.2,
+          "max": 0.2,
+          "mean": 0
+        }
+      },
+      "end": {
+        "keystrokes": 60,
+        "total": {
+          "n": 60,
+          "p50": 0.5,
+          "p95": 0.7,
+          "p99": 0.8,
+          "max": 0.8,
+          "mean": 0.48
+        },
+        "sync": {
+          "n": 60,
+          "p50": 0.4,
+          "p95": 0.6,
+          "p99": 0.7,
+          "max": 0.7,
+          "mean": 0.44
+        },
+        "pass": {
+          "n": 60,
+          "p50": 0,
+          "p95": 0.1,
+          "p99": 0.3,
+          "max": 0.3,
+          "mean": 0.04
+        },
+        "layout": {
+          "n": 60,
+          "p50": 0,
+          "p95": 0,
+          "p99": 0.1,
+          "max": 0.1,
+          "mean": 0
+        }
+      }
+    },
+    "documentBlocks": 120
+  }
+}

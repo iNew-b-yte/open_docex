@@ -1,0 +1,103 @@
+{
+  "stage": "lo",
+  "mode": null,
+  "quick": true,
+  "complete": true,
+  "startedAt": "2026-11-25T10:56:09.255Z",
+  "environment": {
+    "date": "2026-11-25T10:56:09.255Z",
+    "cpuModel": "AMD Ryzen 9 9955HX 16-Core Processor",
+    "logicalCores": 32,
+    "ramGiB": 31.3,
+    "os": "Windows_NT 10.0.26300 (Windows 11 Home Single Language) x64",
+    "node": "v24.18.0",
+    "libreoffice": "LibreOffice 26.8.3.1 861effc5289d539f15c4c18d1ba8579ffd78728b",
+    "chromium": "not measured",
+    "sofficePath": "C:\\Program Files\\LibreOffice\\program\\soffice.exe"
+  },
+  "params": {
+    "rate": 2,
+    "warmMs": 1500,
+    "measureMs": 3000,
+    "oneDocClients": [
+      1,
+      10
+    ],
+    "manyDocs": [
+      10
+    ],
+    "stages": [
+      100,
+      200
+    ],
+    "capMeasureMs": 3000,
+    "limitMs": 100,
+    "fanout": [
+      0,
+      10
+    ],
+    "opsPerSec": 20,
+    "pages": [
+      10
+    ],
+    "loConcurrency": [
+      1,
+      2
+    ],
+    "loRepeats": 1,
+    "keystrokes": 60,
+    "typingPages": 20
+  },
+  "data": {
+    "maxFileBytes": 52428800,
+    "maxFlatXmlBytes": 3355443200,
+    "documents": [
+      {
+        "targetPages": 10,
+        "actualPages": 10,
+        "paragraphs": 56,
+        "docxBytes": 7423,
+        "exportFlatXmlBytes": 52642,
+        "importFlatXmlBytes": 89559,
+        "importFlatToDocxRatio": 12.1,
+        "exportFlatToDocxRatio": 7.1,
+        "importFlatPctOfCap": 0.003,
+        "capMultipleNeededAtThisRatio": 12.1
+      }
+    ],
+    "timing": [
+      {
+        "libreofficeConcurrency": 1,
+        "targetPages": 10,
+        "repeats": 1,
+        "exportMsMedian": 1705,
+        "exportMsMin": 1705,
+        "exportMsMax": 1705,
+        "importMsMedian": 2513,
+        "importMsMin": 2513,
+        "importMsMax": 2513,
+        "batchOf4": {
+          "exportWallMs": 6903,
+          "exportSlowestJobMs": 6903,
+          "importWallMs": 10054
+        }
+      },
+      {
+        "libreofficeConcurrency": 2,
+        "targetPages": 10,
+        "repeats": 1,
+        "exportMsMedian": 1736,
+        "exportMsMin": 1736,
+        "exportMsMax": 1736,
+        "importMsMedian": 2505,
+        "importMsMin": 2505,
+        "importMsMax": 2505,
+        "batchOf4": {
+          "exportWallMs": 3799,
+          "exportSlowestJobMs": 3799,
+          "importWallMs": 5493
+        }
+      }
+    ]
+  }
+}
