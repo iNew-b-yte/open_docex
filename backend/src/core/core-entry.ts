@@ -60,6 +60,8 @@ export interface CoreWiringOptions {
   codec?: (c: CoreServiceContext) => WiredCodec;
   /** The compiled codec thread entry. Default: `../codec/codec-thread-entry.js` next to this module. */
   codecEntry?: URL;
+  /** Replaces `import(url)` for the worker config module, so a test can hand over a config object. */
+  importModule?: (url: string) => Promise<unknown>;
 }
 
 /** What {@link createCoreWiring} returns. */
@@ -179,6 +181,7 @@ export function createCoreWiring(o: CoreWiringOptions = {}): CoreWiring {
   const parts: Parts = {};
 
   const services: CoreServices = {
+    ...(o.importModule !== undefined ? { importModule: o.importModule } : {}),
     codec(c) {
       parts.ctx = c;
       const codec =
