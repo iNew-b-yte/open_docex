@@ -17,6 +17,8 @@ import {
 export interface Loaded {
   start: LoadStartMsg;
   chunks: unknown[];
+  /** The `load-chunk` messages as sent (`{ seq, data }`), for `assembleText`. */
+  chunkMessages: Array<{ seq: number; data: unknown }>;
   doneRev: number;
   /** All chunk data as one JSON string, for `toContain` checks on the document text. */
   json: string;
@@ -84,7 +86,8 @@ export class TestClient {
     const chunks = this.messages.flatMap((m) => (m.type === 'load-chunk' ? [m.data] : []));
     this.epoch = start.epoch;
     this.rev = done.rev;
-    return { start, chunks, doneRev: done.rev, json: JSON.stringify(chunks) };
+    const chunkMessages = this.messages.flatMap((m) => (m.type === 'load-chunk' ? [{ seq: m.seq, data: m.data }] : []));
+    return { start, chunks, chunkMessages, doneRev: done.rev, json: JSON.stringify(chunks) };
   }
 
   /** Submits `ops` on top of the client's current rev and waits for the ack. */
