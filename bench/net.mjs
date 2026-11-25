@@ -28,6 +28,7 @@ export class Cluster {
     this.mode = mode;
     this.k = k;
     this.users = 0;
+    this.concurrency = undefined; // connects in flight per generator (default: ODX_BENCH_CONCURRENCY or 50)
   }
 
   async #boot() {
@@ -79,9 +80,19 @@ export class Cluster {
   async add(specs, rate = 2) {
     const per = Array.from({ length: this.k }, () => []);
     for (const s of specs) per[this.#owner(s.doc)].push({ ...s, user: `u${this.users++}` });
-    const r = await Promise.all(per.map((list, i) => (list.length ? this.#call(this.gens[i], { cmd: 'add', specs: list, rate }) : { failed: 0 })));
+    const r = await Promise.all(per.map((list, i) => (list.length ? this.#call(this.gens[i], { cmd: 'add', specs: list, rate, concurrency: this.concurrency }) : { failed: 0 })));
+    // Failure reasons, merged over the generators: reason -> { n, minMs, maxMs } (times since that client's connect()).
     this.lastFailReasons = {};
-    for (const x of r) for (const [k, v] of Object.entries(x.reasons ?? {})) this.lastFailReasons[k] = (this.lastFailReasons[k] ?? 0) + v;
+    this.lastLoadMsMax = 0;
+    for (const x of r) {
+      this.lastLoadMsMax = Math.max(this.lastLoadMsMax, x.loadMsMax ?? 0);
+      for (const [k, v] of Object.entries(x.reasons ?? {})) {
+        const m = (this.lastFailReasons[k] ??= { n: 0, minMs: Infinity, maxMs: 0 });
+        m.n += v.n;
+        m.minMs = Math.min(m.minMs, v.minMs);
+        m.maxMs = Math.max(m.maxMs, v.maxMs);
+      }
+    }
     return r.reduce((a, x) => a + (x.failed ?? 0), 0);
   }
 
@@ -198,6 +209,7 @@ export async function capacityBench(mode, variant, o) {
     await c.window(1000);
     const w = await c.window(o.capMeasureMs ?? o.measureMs);
     if (failed > 0) log(mode, variant, have, 'load failures:', JSON.stringify(c.lastFailReasons), 'close codes', JSON.stringify(w.closeCodes));
+    log(mode, variant, have, 'slowest successful load (ms since connect)', c.lastLoadMsMax);
     const row = { mode, variant, clients: have, docs: docSeq, failedToLoad: failed, failReasons: c.lastFailReasons, rampSeconds: Math.round((performance.now() - t0) / 100) / 10, ...w };
     stages.push(row);
     log(mode, variant, have, 'ack p99', w.ack.p99, 'main cpu', w.mainCpuPct, 'core cpu', w.coreCpuPct, 'open', w.open, 'failed', failed);
