@@ -13,7 +13,7 @@
 // Failures are switched with flag files (`fixtures/suite-env.mjs`), which both modes read the same
 // way. Waiting is `waitFor` from `test/wait-for.ts` only.
 import type { ChildProcess, ForkOptions } from 'node:child_process';
-import { existsSync, mkdirSync, rmSync, writeFileSync } from 'node:fs';
+import { mkdirSync, rmSync, writeFileSync } from 'node:fs';
 import { copyFile, mkdtemp, readFile, rm, utimes, writeFile } from 'node:fs/promises';
 import { createServer, type Server } from 'node:http';
 import type { AddressInfo } from 'node:net';
@@ -274,7 +274,10 @@ export class Rig {
     for (const op of ['read', 'write', 'stat', 'create'] as const) this.flag(`storage-fail-${op}`, false);
   }
 
-  /** Makes the codec's export reject (fake codec only) until switched off. */
+  /**
+   * Makes the codec's export reject until switched off, so a flush cannot write. The fake codec
+   * and main mode's real codec read the flag; a forked real Core does not (its crash is a kill).
+   */
   exportDown(on: boolean): void {
     this.flag('export-fail', on);
   }
@@ -367,11 +370,6 @@ export class Rig {
     });
   }
 
-  /** Whether `path` below the data folder exists (for the layout checks). */
-  hasData(...segments: string[]): boolean {
-    return existsSync(path.join(this.dataDir, ...segments));
-  }
-
   /** The recovery entry of a document, or `undefined` when it is NORMAL. */
   async recoveryEntry(documentId: string) {
     return (await this.engine.recovery.list()).find((e) => e.documentId === documentId);
@@ -419,11 +417,6 @@ export class Rig {
   /** `ws://…/open-docex?doc=<id>`. */
   url(documentId: string): string {
     return `ws://127.0.0.1:${this.#port}/open-docex?doc=${encodeURIComponent(documentId)}`;
-  }
-
-  /** An HTTP origin for plain requests to the server. */
-  get origin(): string {
-    return `http://127.0.0.1:${this.#port}`;
   }
 
   /** Opens a socket as `user`. `Authorization: Bearer <access>:<user>`. The test says `hello`. */
