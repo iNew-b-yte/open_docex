@@ -134,7 +134,7 @@ Browsers cannot read the status of a failed WebSocket upgrade. They see close co
 
 ## Main mode and worker mode
 
-- **Worker mode (default).** The core, which holds every open document and runs the codec, runs in a child process. Your main process only forwards frames, so a slow conversion cannot stall your application. If the core crashes, the supervisor restarts it with back-off, clients reconnect, and no acknowledged change is lost (it is in the journal). After `supervisor.maxRestarts` within `restartWindowMs`, the engine goes to `failed`: see `ENGINE_FAILED`.
+- **Worker mode (default).** The core, which holds every open document and runs the codec, runs in a child process. Your main process only forwards frames, so a slow conversion cannot stall your application. If the core crashes, the supervisor restarts it with back-off, clients reconnect, and acknowledged changes are recovered from the journal. A crash of the core process loses none of them. After a power loss or operating-system crash the default `journal.fsync: 'interval'` can lose up to about one `fsyncIntervalMs` (1 s) of acknowledged changes; `'always'` closes that gap at a cost in speed. After `supervisor.maxRestarts` within `restartWindowMs`, the engine goes to `failed`: see `ENGINE_FAILED`.
 - **Main mode (`mode: 'main'`).** The core runs inside your process. Simpler for development and tests. A crash in the core is a crash of your process.
 
 Both modes read the same worker config module. In worker mode the module is loaded in the child process, so everything in it (including your storage adapter) lives there, and values must be created inside the module.
