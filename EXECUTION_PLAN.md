@@ -180,6 +180,7 @@ The orchestrator records questions here and asks the project owner.
 
 **Notes for later tasks (from the V1-00 review):**
 - V1-30: `frontend/package.json` has `"sideEffects": false`. Because `./style.css` is exported, V1-30 must check that bundlers keep the CSS import, and raise it if not.
+- V1-43 (from V1-42): (1) `shared/package.json` exports `./sheet` but `shared/src/sheet` does not exist (V2), so that path cannot resolve in a V1 tarball: remove or defer it. (2) The `CLIENT_ASSET_TOO_LARGE` catalogue remediation says "Raise limits.maxAssetBytes", but no such option exists (the limit is the fixed `MAX_ASSET_BYTES`, S-48). The catalogue is a frozen contract, so changing the text needs an LLD change; ask the project owner.
 - V1-43: `dist/tsconfig.tsbuildinfo` is included in the npm tarballs. Decide whether to exclude it.
 - V1-36/V1-40: one full-suite run during V1-35 failed 1 frontend test that wasn't captured; later runs were clean. Watch for a timing-sensitive frontend test.
 - V1-20 (S-45): make the Core send `load-start.limits.maxAssetBytes` (its file scope may include `backend/src/core/load-streamer.ts` for this only, with a test), and consider narrowing `ApiArgs`/`ApiResult` in `channel/messages.ts` instead of the facade's local map.
