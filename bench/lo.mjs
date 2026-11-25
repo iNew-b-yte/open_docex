@@ -11,7 +11,7 @@ import { FodtMapper } from '../backend/dist/codec/fodt-mapper.js';
 import { locateLibreOffice } from '../backend/dist/codec/libreoffice-locate.js';
 import { createRunner } from '../backend/dist/codec/libreoffice-runner.js';
 import { noopLogger } from '../backend/dist/log/logger.js';
-import { buildModel, pagesOf } from './lib/docgen.mjs';
+import { modelForPages } from './lib/docgen.mjs';
 import { quantile } from './lib/stats.mjs';
 
 const MAX_FILE_BYTES = 50 * 2 ** 20; // the default `limits.maxFileBytes`
@@ -38,22 +38,13 @@ export async function loBench(P) {
 
   // 1. Generate documents of the target page counts (calibrated against LibreOffice's page count).
   const codec1 = mkCodec(1);
-  let paraPerPage = 4.5;
   const docs = [];
   for (const target of P.pages) {
-    let n = Math.round(target * paraPerPage);
-    let model, bytes, pages;
-    for (let attempt = 0; attempt < 3; attempt++) {
-      model = buildModel(n);
-      bytes = await codec1.export({ kind: 'text', format: 'docx', model, assetDir: root });
-      const calPath = path.join(root, `cal-${target}.docx`);
-      await writeFile(calPath, bytes);
-      pages = await pagesOf(soffice, calPath, root);
-      console.log('[lo] calibrate: target', target, 'paragraphs', n, '-> pages', pages);
-      if (pages === null || Math.abs(pages - target) / target <= 0.1) break;
-      paraPerPage = n / pages;
-      n = Math.round(target * paraPerPage);
-    }
+    const { model, bytes, pages, paragraphs: n } = await modelForPages({
+      target, sofficePath: soffice, root,
+      exportDocx: (m) => codec1.export({ kind: 'text', format: 'docx', model: m, assetDir: root }),
+    });
+    console.log('[lo] generated: target', target, 'paragraphs', n, '-> pages', pages);
     // Flat XML sizes: the mapper's export, and LibreOffice's docx -> fodt (what import reads).
     const exportFlat = path.join(root, `doc-${target}.fodt`);
     await mapper.export({ kind: 'text', format: 'docx', model, flatXmlPath: exportFlat, assetDir: root, limits, lo: {} });

@@ -1,6 +1,6 @@
 // Generates text documents of a given size and counts their pages with real LibreOffice.
 import { execFile } from 'node:child_process';
-import { readFile } from 'node:fs/promises';
+import { readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { promisify } from 'node:util';
@@ -56,4 +56,27 @@ export async function pagesOf(sofficePath, docxPath, root) {
   } catch {
     return null;
   }
+}
+
+/**
+ * A model whose real LibreOffice page count is within `tolerance` (default 3%) of `target`.
+ * `exportDocx(model)` returns docx bytes. Pages grow almost linearly with the paragraph count, so
+ * each attempt rescales the paragraph count by target / measured pages. Throws when it cannot converge.
+ */
+export async function modelForPages({ target, exportDocx, sofficePath, root, tolerance = 0.03, perPage = 5.6, maxAttempts = 8 }) {
+  let n = Math.round(target * perPage);
+  const tried = [];
+  for (let attempt = 0; attempt < maxAttempts; attempt++) {
+    const model = buildModel(n);
+    const bytes = await exportDocx(model);
+    const file = path.join(root, `cal-${target}.docx`);
+    await writeFile(file, bytes);
+    const pages = await pagesOf(sofficePath, file, root);
+    tried.push(`${n}->${pages}`);
+    if (pages === null) throw new Error(`cannot count pages of the generated document (${tried.join(', ')})`);
+    if (Math.abs(pages - target) / target <= tolerance) return { model, bytes, pages, paragraphs: n };
+    const next = Math.round(n * (target / pages));
+    n = next === n ? n + (pages < target ? 1 : -1) : next;
+  }
+  throw new Error(`page count did not converge to ${target} +-${tolerance * 100}% (${tried.join(', ')})`);
 }
