@@ -31,7 +31,18 @@ export async function openEditor(page, harness, { documentId = 'doc', user, acce
     await expect(editorOf(page)).toBeVisible();
     await expect.poll(() => page.evaluate(() => window.odx.log.statuses.at(-1)?.load)).toBe('ready');
   }
-  return editorOf(page);
+  const editor = editorOf(page);
+  // A key pressed within ProseMirror's focus window after a click is taken as "the browser reset the
+  // caret" and undone (prosemirror-view: `lastFocus` under 200 ms old, last click over 300 ms old).
+  // Measured in Firefox: Home 8-12 ms after the click was reverted in about 3 of 10 runs, and with a
+  // 350 ms wait in 0 of 20 (V1-40 follow-up). A real user does not press a key that fast, so the
+  // wait belongs to the test, not the client. Every `click()` on the editor therefore waits it out.
+  const click = editor.click.bind(editor);
+  editor.click = async (options) => {
+    await click(options);
+    await page.waitForTimeout(350);
+  };
+  return editor;
 }
 
 /** The text of the document as shown. */

@@ -1,6 +1,9 @@
 // A busy server: `QUEUE_FULL` answers to a submit (LLD Part 3 §17 item 5). The client keeps the
 // change, shows the busy status, retries the same envelope, and the document converges with
 // nothing lost or duplicated.
+// Only the intercepted QUEUE_FULL is tested here. A "real server with a one-slot queue" variant was
+// removed (V1-40 follow-up): it needed a real QUEUE_FULL by chance, so it timed out in Firefox in about
+// 2 of 10 runs. The server side is bounded in backend/test/unit/queue/memory-queue.test.ts.
 import { expect, openEditor, test, textOf } from '../harness/fixtures.mjs';
 
 const newPage = async (browser) => (await browser.newContext()).newPage();
@@ -60,49 +63,4 @@ test('a QUEUE_FULL answer is retried with the same envelope until accepted, and 
   expect(forwarded[0]).toEqual(rejected[0]);
   const seqs = forwarded.map((f) => f.clientSeq);
   expect(new Set(seqs).size).toBe(seqs.length);
-});
-
-test('a real server with one queue slot answers QUEUE_FULL, and two writers still converge exactly', async ({ browser, startServer }) => {
-  // `perDocument: 1` (LLD Part 3 §17 item 5): while one submit is queued, the next gets `QUEUE_FULL`.
-  const h = await startServer({ config: { queue: { type: 'memory', perDocument: 1, global: 1 } } });
-  await h.addDoc('doc', 'base');
-  const a = await newPage(browser);
-  const b = await newPage(browser);
-  let queueFull = 0;
-  for (const page of [a, b]) {
-    page.on('websocket', (ws) =>
-      ws.on('framereceived', (f) => {
-        if (typeof f.payload === 'string' && f.payload.includes('"QUEUE_FULL"')) queueFull++;
-      }),
-    );
-  }
-  const ea = await openEditor(a, h, { user: 'alice' });
-  const eb = await openEditor(b, h, { user: 'bob' });
-  await expect(ea).toHaveText('base');
-  await expect(eb).toHaveText('base');
-  await ea.click();
-  await a.keyboard.press('Home');
-  await eb.click();
-  await b.keyboard.press('End');
-
-  // Both type at once, in bursts, until the server has answered QUEUE_FULL at least once.
-  // Alice only types "a" at the start and Bob only "b" at the end, so the expected text is exact.
-  let bursts = 0;
-  await expect
-    .poll(
-      async () => {
-        await Promise.all([a.keyboard.type('a'.repeat(30)), b.keyboard.type('b'.repeat(30))]);
-        bursts++;
-        return queueFull > 0;
-      },
-      { timeout: 60_000, intervals: [0] },
-    )
-    .toBe(true);
-
-  const expected = 'a'.repeat(30 * bursts) + 'base' + 'b'.repeat(30 * bursts);
-  await expect.poll(() => textOf(a), { timeout: 30_000 }).toBe(expected);
-  await expect.poll(() => textOf(b), { timeout: 30_000 }).toBe(expected);
-  await expect.poll(() => h.storedText('doc'), { timeout: 30_000 }).toBe(expected);
-  // Whoever was answered QUEUE_FULL showed the busy status.
-  expect((await everBusy(a)) || (await everBusy(b))).toBe(true);
 });
