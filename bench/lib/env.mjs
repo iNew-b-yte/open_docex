@@ -1,5 +1,6 @@
 // Describes the machine and the tool versions a benchmark ran on.
 import { execFile } from 'node:child_process';
+import { existsSync } from 'node:fs';
 import os from 'node:os';
 import { promisify } from 'node:util';
 import { locateLibreOffice } from '../../backend/dist/codec/libreoffice-locate.js';
@@ -21,7 +22,9 @@ export async function describeEnvironment({ browser = false } = {}) {
   try {
     const soffice = await locateLibreOffice();
     env.sofficePath = soffice;
-    env.libreoffice = (await run(soffice, ['--version'], { timeout: 60_000 })).stdout.trim();
+    // On Windows soffice.exe prints nothing; its console twin soffice.com does.
+    const cli = soffice.replace(/soffice\.exe$/i, 'soffice.com');
+    env.libreoffice = (await run(existsSync(cli) ? cli : soffice, ['--version'], { timeout: 60_000 })).stdout.trim();
   } catch (e) {
     env.libreoffice = `not found (${String(e).slice(0, 80)})`;
   }
