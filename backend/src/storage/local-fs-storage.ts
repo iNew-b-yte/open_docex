@@ -20,12 +20,13 @@
  */
 import { randomBytes } from 'node:crypto';
 import { constants as fsConstants, type BigIntStats } from 'node:fs';
-import { open, realpath, rename, stat, unlink, utimes, type FileHandle } from 'node:fs/promises';
+import { open, realpath, stat, unlink, utimes, type FileHandle } from 'node:fs/promises';
 import path from 'node:path';
 import { OpenDocexError, type ErrorCode } from '@open-docex/shared/errors';
 import type { FileFormat } from '@open-docex/shared/protocol';
 import { engineError } from '../errors/engine-error.js';
 import { noopLogger, type Logger } from '../log/logger.js';
+import { renameReplacing } from '../persistence/atomic-file.js';
 import type {
   StorageAdapter,
   StorageCreateInput,
@@ -206,7 +207,8 @@ export class LocalFsStorage implements StorageAdapter {
         // the version always changes on our own writes.
         if (current !== null) await ensureLaterMtime(tmp, current);
         // 3. Replace the target.
-        await rename(tmp, abs);
+        // Retried on Windows: a reader or a virus scan holding the target would fail it (S-50).
+        await renameReplacing(tmp, abs);
         renamed = true;
         const after = await stat(abs, { bigint: true });
         return { ok: true, version: versionOf(after) };
