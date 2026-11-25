@@ -20,7 +20,7 @@ const lag = monitorEventLoopDelay({ resolution: 10 });
 lag.enable();
 
 function fresh() {
-  return { ack: [], remote: [], sent: 0, acked: 0, errors: 0, closes: 0 };
+  return { ack: [], remote: [], sent: 0, acked: 0, errors: 0, closes: 0, closeCodes: {} };
 }
 
 class Client {
@@ -75,13 +75,24 @@ class Client {
         if (this.spec.role === 'observer') this.onRemote(m);
       } else if (m.type === 'error') win.errors++;
     });
-    ws.on('close', () => {
+    ws.on('close', (code) => {
       this.open = false;
-      if (this.loaded || this.spec.role) win.closes++;
+      this.closeCode = code;
+      if (this.loaded) {
+        win.closes++;
+        win.closeCodes[code] = (win.closeCodes[code] ?? 0) + 1;
+      }
       this.resolveReady(false);
       clearTimeout(this.timer);
     });
-    ws.on('error', () => this.resolveReady(false));
+    ws.on('error', (e) => {
+      this.failReason = String(e.message ?? e).slice(0, 80);
+      this.resolveReady(false);
+    });
+    ws.on('unexpected-response', (_req, res) => {
+      this.failReason = `HTTP ${res.statusCode}`;
+      this.resolveReady(false);
+    });
   }
 
   onRemote(m) {
@@ -123,6 +134,7 @@ class Client {
 
 async function add(specs, rate, concurrency = 50) {
   let failed = 0;
+  const reasons = {};
   const created = specs.map((s) => new Client(s));
   for (const c of created) {
     clients.push(c);
@@ -133,12 +145,16 @@ async function add(specs, rate, concurrency = 50) {
     while (i < created.length) {
       const c = created[i++];
       c.connect();
-      if (!(await Promise.race([c.ready, new Promise((r) => setTimeout(() => r(false), 60_000))]))) failed++;
+      if (!(await Promise.race([c.ready, new Promise((r) => setTimeout(() => r(false), 60_000))]))) {
+        failed++;
+        const why = c.failReason ?? (c.closeCode !== undefined ? `closed ${c.closeCode} before load` : 'no load-done in 60 s');
+        reasons[why] = (reasons[why] ?? 0) + 1;
+      }
     }
   };
   await Promise.all(Array.from({ length: concurrency }, worker));
   for (const c of created) if (c.loaded && c.spec.role === 'typist') c.startTyping(c.spec.rate ?? rate);
-  return failed;
+  return { failed, reasons };
 }
 
 process.on('message', async (msg) => {
@@ -146,8 +162,8 @@ process.on('message', async (msg) => {
     port = msg.port;
     process.send({ type: 'done', id: msg.id });
   } else if (msg.cmd === 'add') {
-    const failed = await add(msg.specs, msg.rate);
-    process.send({ type: 'done', id: msg.id, failed });
+    const { failed, reasons } = await add(msg.specs, msg.rate);
+    process.send({ type: 'done', id: msg.id, failed, reasons });
   } else if (msg.cmd === 'reset') {
     win = fresh();
     lag.reset();
@@ -164,6 +180,7 @@ process.on('message', async (msg) => {
         acked: w.acked,
         errors: w.errors,
         closes: w.closes,
+        closeCodes: w.closeCodes,
         open: clients.filter((c) => c.open).length,
         lagP99Ms: Math.round((lag.percentile(99) / 1e6) * 100) / 100,
       },

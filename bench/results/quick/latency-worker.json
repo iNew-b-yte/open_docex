@@ -1,0 +1,168 @@
+{
+  "stage": "latency",
+  "mode": "worker",
+  "quick": true,
+  "complete": true,
+  "startedAt": "2026-11-25T09:44:20.054Z",
+  "environment": {
+    "date": "2026-11-25T09:44:20.054Z",
+    "cpuModel": "AMD Ryzen 9 9955HX 16-Core Processor",
+    "logicalCores": 32,
+    "ramGiB": 31.3,
+    "os": "Windows_NT 10.0.26300 (Windows 11 Home Single Language) x64",
+    "node": "v24.18.0",
+    "libreoffice": "LibreOffice 26.8.3.1 861effc5289d539f15c4c18d1ba8579ffd78728b",
+    "chromium": "not measured",
+    "sofficePath": "C:\\Program Files\\LibreOffice\\program\\soffice.exe"
+  },
+  "params": {
+    "rate": 2,
+    "warmMs": 1500,
+    "measureMs": 3000,
+    "oneDocClients": [
+      1,
+      10
+    ],
+    "manyDocs": [
+      10
+    ],
+    "stages": [
+      100,
+      200
+    ],
+    "capMeasureMs": 3000,
+    "limitMs": 100,
+    "fanout": [
+      0,
+      10
+    ],
+    "opsPerSec": 20,
+    "pages": [
+      10
+    ],
+    "loConcurrency": [
+      1,
+      2
+    ],
+    "loRepeats": 1,
+    "keystrokes": 60,
+    "typingPages": 20
+  },
+  "data": {
+    "oneDoc": [
+      {
+        "mode": "worker",
+        "clients": 1,
+        "docs": 1,
+        "typists": 1,
+        "failed": 0,
+        "wallMs": 3047,
+        "sent": 5,
+        "acked": 6,
+        "errors": 0,
+        "closes": 0,
+        "closeCodes": {},
+        "open": 1,
+        "ack": {
+          "n": 6,
+          "p50": 1.85,
+          "p95": 2.88,
+          "p99": 2.88,
+          "max": 2.88,
+          "mean": 2.26
+        },
+        "remote": {
+          "n": 0,
+          "p50": null,
+          "p95": null,
+          "p99": null,
+          "max": null,
+          "mean": null
+        },
+        "genLagP99Ms": 22.79,
+        "mainCpuPct": 0,
+        "coreCpuPct": 3.1,
+        "mainCpuUs": 0,
+        "coreCpuUs": 94000,
+        "mainRssMiB": 61,
+        "coreRssMiB": 57
+      },
+      {
+        "mode": "worker",
+        "clients": 10,
+        "docs": 1,
+        "typists": 9,
+        "failed": 0,
+        "wallMs": 3077,
+        "sent": 55,
+        "acked": 54,
+        "errors": 0,
+        "closes": 0,
+        "closeCodes": {},
+        "open": 10,
+        "ack": {
+          "n": 54,
+          "p50": 1.84,
+          "p95": 7.26,
+          "p99": 7.32,
+          "max": 7.32,
+          "mean": 2.18
+        },
+        "remote": {
+          "n": 54,
+          "p50": 1.93,
+          "p95": 7.28,
+          "p99": 7.36,
+          "max": 7.36,
+          "mean": 2.25
+        },
+        "genLagP99Ms": 21.91,
+        "mainCpuPct": 2.6,
+        "coreCpuPct": 2,
+        "mainCpuUs": 79000,
+        "coreCpuUs": 62000,
+        "mainRssMiB": 64,
+        "coreRssMiB": 59
+      }
+    ],
+    "manyDocs": [
+      {
+        "mode": "worker",
+        "clients": 20,
+        "docs": 10,
+        "typists": 10,
+        "failed": 0,
+        "wallMs": 3110,
+        "sent": 68,
+        "acked": 67,
+        "errors": 0,
+        "closes": 0,
+        "closeCodes": {},
+        "open": 20,
+        "ack": {
+          "n": 67,
+          "p50": 1.93,
+          "p95": 2.89,
+          "p99": 3.52,
+          "max": 3.52,
+          "mean": 2.01
+        },
+        "remote": {
+          "n": 67,
+          "p50": 2,
+          "p95": 2.99,
+          "p99": 3.63,
+          "max": 3.63,
+          "mean": 2.1
+        },
+        "genLagP99Ms": 25.07,
+        "mainCpuPct": 2.5,
+        "coreCpuPct": 2,
+        "mainCpuUs": 78000,
+        "coreCpuUs": 63000,
+        "mainRssMiB": 65,
+        "coreRssMiB": 62
+      }
+    ]
+  }
+}

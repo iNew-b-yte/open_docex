@@ -44,7 +44,7 @@ else if (stage === 'capacity') {
     data[variant] = await capacityBench(mode, variant, { ...P, progress: (d) => save({ ...data, [variant]: d }, false) });
     save(data, false);
   }
-} else if (stage === 'fanout') data = await (await import('./net.mjs')).fanoutBench(mode, P);
+} else if (stage === 'fanout') data = await (await import('./net.mjs')).fanoutBench(mode, { ...P, sessions: P.fanout });
 else if (stage === 'lo') data = await (await import('./lo.mjs')).loBench(P);
 else data = await (await import('./typing.mjs')).typingBench(P);
 

@@ -80,6 +80,8 @@ export class Cluster {
     const per = Array.from({ length: this.k }, () => []);
     for (const s of specs) per[this.#owner(s.doc)].push({ ...s, user: `u${this.users++}` });
     const r = await Promise.all(per.map((list, i) => (list.length ? this.#call(this.gens[i], { cmd: 'add', specs: list, rate }) : { failed: 0 })));
+    this.lastFailReasons = {};
+    for (const x of r) for (const [k, v] of Object.entries(x.reasons ?? {})) this.lastFailReasons[k] = (this.lastFailReasons[k] ?? 0) + v;
     return r.reduce((a, x) => a + (x.failed ?? 0), 0);
   }
 
@@ -105,6 +107,10 @@ export class Cluster {
       acked: sum('acked'),
       errors: sum('errors'),
       closes: sum('closes'),
+      closeCodes: res.reduce((a, r) => {
+        for (const [k, v] of Object.entries(r.closeCodes)) a[k] = (a[k] ?? 0) + v;
+        return a;
+      }, {}),
       open: sum('open'),
       ack: summarize(res.flatMap((r) => r.ack)),
       remote: summarize(res.flatMap((r) => r.remote)),
@@ -191,13 +197,14 @@ export async function capacityBench(mode, variant, o) {
     await sleep(o.warmMs);
     await c.window(1000);
     const w = await c.window(o.capMeasureMs ?? o.measureMs);
-    const row = { mode, variant, clients: have, docs: docSeq, failedToLoad: failed, rampSeconds: Math.round((performance.now() - t0) / 100) / 10, ...w };
+    if (failed > 0) log(mode, variant, have, 'load failures:', JSON.stringify(c.lastFailReasons), 'close codes', JSON.stringify(w.closeCodes));
+    const row = { mode, variant, clients: have, docs: docSeq, failedToLoad: failed, failReasons: c.lastFailReasons, rampSeconds: Math.round((performance.now() - t0) / 100) / 10, ...w };
     stages.push(row);
     log(mode, variant, have, 'ack p99', w.ack.p99, 'main cpu', w.mainCpuPct, 'core cpu', w.coreCpuPct, 'open', w.open, 'failed', failed);
     o.progress?.({ stages, stoppedBecause: 'in progress' });
     if (w.ack.p99 !== null && w.ack.p99 > o.limitMs) stop = `p99 ack ${w.ack.p99} ms > ${o.limitMs} ms`;
     else if (failed > 0 || w.open < have * 0.99) stop = `${failed} clients failed to load, ${have - w.open} sockets lost`;
-    else if (w.errors > 0 || w.closes > 0) stop = `${w.errors} errors, ${w.closes} closes`;
+    else if (w.errors > 0 || w.closes > 0) stop = `${w.errors} errors, ${w.closes} closes ${JSON.stringify(w.closeCodes)}`;
     else if (w.genLagP99Ms > 75) stop = `load generator saturated (event-loop p99 ${w.genLagP99Ms} ms): result not valid beyond this stage`;
     else if ((w.mainCpuPct ?? 0) > 95 || (w.coreCpuPct ?? 0) > 95) stop = 'a server process used more than 95% of one core';
     if (stop) break;
@@ -220,14 +227,18 @@ export async function fanoutBench(mode, o) {
     await c.window(1000);
     const w = await c.window(o.measureMs);
     const ops = w.acked;
-    const per = (us, b) => (ops > 0 ? Math.round(((us - b * (w.wallMs / base.wallMs)) / ops) * 10) / 10 : null);
+    const perRaw = (us) => (ops > 0 && us !== null ? Math.round((us / ops) * 10) / 10 : null);
+    // Net of the idle baseline measured before the typist joined (null when the baseline was noisier than the signal).
+    const perNet = (us, b) => (ops > 0 && us !== null && b !== null && us - b * (w.wallMs / base.wallMs) > 0 ? Math.round(((us - b * (w.wallMs / base.wallMs)) / ops) * 10) / 10 : null);
     rows.push({
       mode,
       sessions: s + 2,
       ops,
       failed: failedIdle + failedT,
-      mainCpuUsPerOp: per(w.mainCpuUs, base.mainCpuUs),
-      coreCpuUsPerOp: w.coreCpuUs === null ? null : per(w.coreCpuUs, base.coreCpuUs),
+      mainCpuUsPerOp: perNet(w.mainCpuUs, base.mainCpuUs),
+      coreCpuUsPerOp: perNet(w.coreCpuUs, base.coreCpuUs),
+      mainCpuUsPerOpRaw: perRaw(w.mainCpuUs),
+      coreCpuUsPerOpRaw: perRaw(w.coreCpuUs),
       mainCpuPct: w.mainCpuPct,
       coreCpuPct: w.coreCpuPct,
       baselineMainCpuPct: base.mainCpuPct,

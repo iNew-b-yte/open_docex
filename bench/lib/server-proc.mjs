@@ -28,7 +28,6 @@ const settings = { dataDir: path.join(root, 'data'), storageRoot, ctlDir, config
 const INITIAL = Array.from({ length: 20 }, (_, i) => `Line ${i}: the quick brown fox jumps over the lazy dog again`).join('\n');
 const known = new Set();
 const server = createServer();
-let sentCpu = 0;
 
 const authorize = (ctx) => {
   const token = ctx.url.searchParams.get('token');
@@ -72,23 +71,33 @@ if (mode === 'main') {
 await new Promise((resolve) => server.listen(0, '127.0.0.1', resolve));
 process.send({ type: 'ready', port: server.address().port, pid: process.pid });
 
-function stats() {
-  const c = process.cpuUsage();
-  const m = process.memoryUsage();
-  const out = { at: Date.now(), main: { cpuUs: c.user + c.system, rss: m.rss, heapUsed: m.heapUsed }, sockets: engine.sessions ? undefined : undefined };
+let lastCore = null;
+async function stats() {
+  const asked = Date.now();
   if (mode === 'worker') {
-    try {
-      const k = JSON.parse(readFileSync(path.join(ctlDir, 'core-stats.json'), 'utf8'));
-      out.core = { cpuUs: k.cpuUs, rss: k.rss, heapUsed: k.heapUsed, at: k.at };
-    } catch {
-      out.core = null;
+    // The Core writes its figures every 100 ms; wait for one written after this request.
+    for (let i = 0; i < 30; i++) {
+      try {
+        const k = JSON.parse(readFileSync(path.join(ctlDir, 'core-stats.json'), 'utf8'));
+        if (k.at >= asked) {
+          lastCore = { cpuUs: k.cpuUs, rss: k.rss, heapUsed: k.heapUsed, at: k.at };
+          break;
+        }
+      } catch {
+        // Being replaced; try again.
+      }
+      await new Promise((r) => setTimeout(r, 20));
     }
   }
+  const c = process.cpuUsage();
+  const m = process.memoryUsage();
+  const out = { at: Date.now(), main: { cpuUs: c.user + c.system, rss: m.rss, heapUsed: m.heapUsed } };
+  if (mode === 'worker') out.core = lastCore;
   return out;
 }
 
 process.on('message', async (msg) => {
-  if (msg.cmd === 'stats') process.send({ type: 'stats', id: msg.id, stats: stats() });
+  if (msg.cmd === 'stats') process.send({ type: 'stats', id: msg.id, stats: await stats() });
   else if (msg.cmd === 'stop') {
     await engine.shutdown({ timeoutMs: 15_000 }).catch(() => undefined);
     server.closeAllConnections();
@@ -96,7 +105,6 @@ process.on('message', async (msg) => {
     process.exit(0);
   }
 });
-void sentCpu;
 
 // Never outlive the orchestrator (a stage killed on its time limit).
 process.on('disconnect', () => process.exit(0));

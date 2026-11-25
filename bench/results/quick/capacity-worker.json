@@ -1,0 +1,219 @@
+{
+  "stage": "capacity",
+  "mode": "worker",
+  "quick": true,
+  "complete": true,
+  "startedAt": "2026-11-25T09:45:03.523Z",
+  "environment": {
+    "date": "2026-11-25T09:45:03.523Z",
+    "cpuModel": "AMD Ryzen 9 9955HX 16-Core Processor",
+    "logicalCores": 32,
+    "ramGiB": 31.3,
+    "os": "Windows_NT 10.0.26300 (Windows 11 Home Single Language) x64",
+    "node": "v24.18.0",
+    "libreoffice": "LibreOffice 26.8.3.1 861effc5289d539f15c4c18d1ba8579ffd78728b",
+    "chromium": "not measured",
+    "sofficePath": "C:\\Program Files\\LibreOffice\\program\\soffice.exe"
+  },
+  "params": {
+    "rate": 2,
+    "warmMs": 1500,
+    "measureMs": 3000,
+    "oneDocClients": [
+      1,
+      10
+    ],
+    "manyDocs": [
+      10
+    ],
+    "stages": [
+      100,
+      200
+    ],
+    "capMeasureMs": 3000,
+    "limitMs": 100,
+    "fanout": [
+      0,
+      10
+    ],
+    "opsPerSec": 20,
+    "pages": [
+      10
+    ],
+    "loConcurrency": [
+      1,
+      2
+    ],
+    "loRepeats": 1,
+    "keystrokes": 60,
+    "typingPages": 20
+  },
+  "data": {
+    "idle": {
+      "stages": [
+        {
+          "mode": "worker",
+          "variant": "idle",
+          "clients": 100,
+          "docs": 20,
+          "failedToLoad": 0,
+          "failReasons": {},
+          "rampSeconds": 5.8,
+          "wallMs": 3036,
+          "sent": 0,
+          "acked": 0,
+          "errors": 0,
+          "closes": 0,
+          "closeCodes": {},
+          "open": 100,
+          "ack": {
+            "n": 0,
+            "p50": null,
+            "p95": null,
+            "p99": null,
+            "max": null,
+            "mean": null
+          },
+          "remote": {
+            "n": 0,
+            "p50": null,
+            "p95": null,
+            "p99": null,
+            "max": null,
+            "mean": null
+          },
+          "genLagP99Ms": 24.35,
+          "mainCpuPct": 0,
+          "coreCpuPct": 0.5,
+          "mainCpuUs": 0,
+          "coreCpuUs": 16000,
+          "mainRssMiB": 67,
+          "coreRssMiB": 63
+        },
+        {
+          "mode": "worker",
+          "variant": "idle",
+          "clients": 200,
+          "docs": 40,
+          "failedToLoad": 0,
+          "failReasons": {},
+          "rampSeconds": 6.1,
+          "wallMs": 3137,
+          "sent": 0,
+          "acked": 0,
+          "errors": 0,
+          "closes": 0,
+          "closeCodes": {},
+          "open": 200,
+          "ack": {
+            "n": 0,
+            "p50": null,
+            "p95": null,
+            "p99": null,
+            "max": null,
+            "mean": null
+          },
+          "remote": {
+            "n": 0,
+            "p50": null,
+            "p95": null,
+            "p99": null,
+            "max": null,
+            "mean": null
+          },
+          "genLagP99Ms": 24.74,
+          "mainCpuPct": 2.5,
+          "coreCpuPct": 0.5,
+          "mainCpuUs": 78000,
+          "coreCpuUs": 16000,
+          "mainRssMiB": 60,
+          "coreRssMiB": 56
+        }
+      ],
+      "stoppedBecause": "last stage reached without exceeding the limit"
+    },
+    "typing": {
+      "stages": [
+        {
+          "mode": "worker",
+          "variant": "typing",
+          "clients": 100,
+          "docs": 20,
+          "failedToLoad": 0,
+          "failReasons": {},
+          "rampSeconds": 6,
+          "wallMs": 3115,
+          "sent": 127,
+          "acked": 125,
+          "errors": 0,
+          "closes": 0,
+          "closeCodes": {},
+          "open": 100,
+          "ack": {
+            "n": 125,
+            "p50": 1.7,
+            "p95": 2.9,
+            "p99": 12.26,
+            "max": 12.51,
+            "mean": 2.03
+          },
+          "remote": {
+            "n": 125,
+            "p50": 1.78,
+            "p95": 3.1,
+            "p99": 12.32,
+            "max": 12.63,
+            "mean": 2.13
+          },
+          "genLagP99Ms": 22.72,
+          "mainCpuPct": 2,
+          "coreCpuPct": 3,
+          "mainCpuUs": 62000,
+          "coreCpuUs": 93000,
+          "mainRssMiB": 66,
+          "coreRssMiB": 63
+        },
+        {
+          "mode": "worker",
+          "variant": "typing",
+          "clients": 200,
+          "docs": 40,
+          "failedToLoad": 0,
+          "failReasons": {},
+          "rampSeconds": 5.9,
+          "wallMs": 3105,
+          "sent": 256,
+          "acked": 255,
+          "errors": 0,
+          "closes": 0,
+          "closeCodes": {},
+          "open": 200,
+          "ack": {
+            "n": 255,
+            "p50": 1.5,
+            "p95": 2.82,
+            "p99": 34.59,
+            "max": 50.57,
+            "mean": 2.57
+          },
+          "remote": {
+            "n": 255,
+            "p50": 1.58,
+            "p95": 2.95,
+            "p99": 34.64,
+            "max": 50.64,
+            "mean": 2.64
+          },
+          "genLagP99Ms": 25.36,
+          "mainCpuPct": 7.5,
+          "coreCpuPct": 5.5,
+          "mainCpuUs": 234000,
+          "coreCpuUs": 172000,
+          "mainRssMiB": 63,
+          "coreRssMiB": 58
+        }
+      ],
+      "stoppedBecause": "last stage reached without exceeding the limit"
+    }
+  }
+}
