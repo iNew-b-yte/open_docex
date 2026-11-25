@@ -9,7 +9,7 @@ import type { EditorView } from 'prosemirror-view';
 import { afterEach, describe, expect, it } from 'vitest';
 import { GAP_PX, pageGeometry, snap64 } from '../../src/text/geometry.js';
 import { HeaderFooterRegions } from '../../src/text/HeaderFooterRegions.js';
-import { PaginationPlugin, paginationKey, type PaginationState } from '../../src/text/PaginationPlugin.js';
+import { PaginationPlugin, caretAtEndOnTailClick, paginationKey, type PaginationState } from '../../src/text/PaginationPlugin.js';
 import { BlockResizeSignal } from '../../src/text/nodeviews/BlockResizeSignal.js';
 import { DEFAULT_LABELS } from '../../src/labels.js';
 import { assetHarness, ASSET_A, cell, li, makeEditor, n, p, PAGE, row, table, ul } from './text-fixtures.js';
@@ -479,3 +479,34 @@ describe('lifecycle', () => {
 });
 
 export type { EditorView };
+
+describe('click on the tail spacer (V1-40, Firefox)', () => {
+  it('puts the caret at the end of the document, in the DOM selection too', async () => {
+    const e = make(body(p('abc'), p('def')));
+    await settle();
+    e.view.focus();
+    const tail = e.view.dom.querySelector('.odx-tail');
+    expect(tail).not.toBeNull();
+    const ev = new MouseEvent('click', { bubbles: true });
+    Object.defineProperty(ev, 'target', { value: tail });
+    expect(caretAtEndOnTailClick(e.view, ev)).toBe(false);
+    const end = e.view.state.selection;
+    expect(end.empty).toBe(true);
+    expect(e.view.state.doc.textBetween(end.head, e.view.state.doc.content.size)).toBe('');
+    expect(e.view.state.doc.resolve(end.head).parent.textContent).toBe('def');
+    expect(e.view.dom.ownerDocument.getSelection()?.anchorNode).not.toBeNull();
+  });
+
+  it('ignores clicks elsewhere and a read-only view', async () => {
+    const e = make(body(p('abc')), true);
+    await settle();
+    const before = e.view.state.selection;
+    const ev = new MouseEvent('click', { bubbles: true });
+    Object.defineProperty(ev, 'target', { value: e.view.dom.querySelector('.odx-tail') });
+    caretAtEndOnTailClick(e.view, ev);
+    expect(e.view.state.selection.eq(before)).toBe(true);
+    const ev2 = new MouseEvent('click', { bubbles: true });
+    Object.defineProperty(ev2, 'target', { value: e.view.dom.querySelector('p') });
+    expect(caretAtEndOnTailClick(e.view, ev2)).toBe(false);
+  });
+});
