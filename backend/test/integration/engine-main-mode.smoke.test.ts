@@ -18,6 +18,7 @@ import { LocalFsStorage } from '../../src/storage/local-fs-storage.js';
 import type { StorageAdapter, StorageRef } from '../../src/storage/storage-adapter.js';
 import { FakeStorage } from '../../test-kit/storage/fake-storage.js';
 import { ins } from '../unit/core/harness.js';
+import { waitFor } from '../wait-for.js';
 import { TextFileCodec } from '../unit/core/wiring-fakes.js';
 import { TestClient } from './test-client.js';
 
@@ -239,7 +240,7 @@ describe('createEngine in main mode with LocalFsStorage and real WebSocket clien
     await alice.hello();
     await alice.submit([ins(2, 'a')]);
     await alice.submit([ins(3, 'b')]);
-    await new Promise((resolve) => setTimeout(resolve, 100));
+    await waitFor(() => expect(events).toHaveLength(2)); // audit events follow the ack, so wait for them
     expect(events.map((a) => [a.rev, a.replayed, a.userId])).toEqual([
       [1, false, 'alice'],
       [2, false, 'alice'],
@@ -291,7 +292,7 @@ describe('createEngine in main mode with LocalFsStorage and real WebSocket clien
     fake.failNext('write', { times: 3 });
     await alice.submit([ins(2, 'kept')]);
     // The quiet period passes, the write fails, and the document goes to LOCAL.
-    await expect.poll(() => stored.map((s) => s.state), { timeout: 8000 }).toContain('local');
+    await waitFor(() => expect(stored.map((s) => s.state)).toContain('local'));
     const list = await r.engine.recovery.list();
     expect(list).toMatchObject([{ documentId: 'blank-1', state: 'LOCAL', localRev: 1 }]);
     // Editing goes on.

@@ -11,6 +11,7 @@ import path from 'node:path';
 import { afterEach, describe, expect, it } from 'vitest';
 import { createEngineWith } from '../../src/api/create-engine.js';
 import { ins } from '../unit/core/harness.js';
+import { waitFor } from '../wait-for.js';
 import { fixtures, haveDist, plainFork, WorkerHarness } from './worker-harness.js';
 
 const FAKE_CORE = path.join(fixtures, 'fake-codec-core.mjs');
@@ -61,8 +62,10 @@ describe.skipIf(!haveDist)('createEngine in worker mode (forked compiled Core)',
     expect(server.listenerCount('upgrade')).toBe(0);
   }, 30_000);
 
-  it('killing the Core closes every client with 4001, answers 503 while it restarts, and recovers', async () => {
-    const t = await h.start({ coreEntry: FAKE_CORE, supervisor: { backoffMs: [1500], heartbeatIntervalMs: 1000, heartbeatTimeoutMs: 5000 } });
+  // The state while the Core is down (HTTP 503, ENGINE_RESTARTING) is checked in the integration
+  // suite (`suite-worker.test.ts`), where a held boot makes that window as long as the test needs.
+  it('killing the Core closes every client with 4001, and the Core comes back with the data', async () => {
+    const t = await h.start({ coreEntry: FAKE_CORE, supervisor: { backoffMs: [10] } });
     const { ref } = await t.engine.documents.create({ kind: 'text', format: 'docx', name: 'Blank', target: 'storage' });
     t.refs.set('doc-1', ref as string);
     const alice = await t.connect('doc-1', 'alice');
@@ -77,16 +80,10 @@ describe.skipIf(!haveDist)('createEngine in worker mode (forked compiled Core)',
     expect(a).toEqual({ code: 4001, reason: 'ENGINE_RESTARTING' });
     expect(b).toEqual({ code: 4001, reason: 'ENGINE_RESTARTING' });
     expect(alice.messages.some((m) => m.type === 'notice' && m.notice === 'engine-restarting')).toBe(true);
-    expect(t.states.map((s) => s.state)).toContain('restarting');
-
-    // While the Core is down (the 1.5 s backoff has not passed): calls reject, upgrades get 503.
-    expect(t.engine.state).toBe('restarting');
-    await expect(t.engine.recovery.list()).rejects.toMatchObject({ code: 'ENGINE_RESTARTING', retryable: true });
-    await expect(t.connect('doc-1', 'carol')).rejects.toThrow('HTTP 503');
 
     // The Core comes back, and the clients can reconnect and see their data.
-    await expect.poll(() => t.engine.state, { timeout: 20_000 }).toBe('running');
-    expect(t.states.map((s) => s.state)).toEqual(['restarting', 'started']);
+    await waitFor(() => expect(t.states.map((s) => s.state)).toEqual(['restarting', 'started']));
+    expect(t.engine.state).toBe('running');
     const again = await t.connect('doc-1', 'alice');
     const reloaded = await again.hello();
     expect(reloaded.json).toContain('persisted');
