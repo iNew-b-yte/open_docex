@@ -1,7 +1,7 @@
 {
   "name": "@open-docex/shared",
-  "version": "0.0.0",
-  "description": "Isomorphic contracts shared by @open-docex/server and @open-docex/client: protocol, errors, ids, OT, text and sheet models.",
+  "version": "0.1.0",
+  "description": "Isomorphic contracts shared by @open-docex/server and @open-docex/client: protocol, errors, ids, OT and text models.",
   "license": "MIT",
   "type": "module",
   "sideEffects": false,
@@ -35,15 +35,11 @@
       "@open-docex/source": "./src/text/index.ts",
       "types": "./dist/text/index.d.ts",
       "import": "./dist/text/index.js"
-    },
-    "./sheet": {
-      "@open-docex/source": "./src/sheet/index.ts",
-      "types": "./dist/sheet/index.d.ts",
-      "import": "./dist/sheet/index.js"
     }
   },
   "files": [
-    "dist"
+    "dist",
+    "!dist/**/*.tsbuildinfo"
   ],
   "engines": {
     "node": ">=22.12"

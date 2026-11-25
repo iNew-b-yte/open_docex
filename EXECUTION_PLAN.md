@@ -64,7 +64,7 @@ V1-00 ─┬─ V1-01 ─┬─ V1-02 ──────────────
 | review (merged; Chromium green 9/9; Firefox fails restore-notice 5/5 and cat 3/5, under debugging; WebKit unverified until CI) |
 | V1-41 | **Benchmark (S4)** of connections per Core, op latency p50/p99, IPC fan-out and export time, followed by a **proposal** for new default limits | perf | `bench/**`, `docs/benchmarks/V1.md` | HLD §16; PO-4 | V1-20 | Numbers are reported, including typing work at 300 pages in a real browser against the S-6 budget (p95 ≤ 8 ms; S-42). Any change to the defaults goes to the project owner as an HLD/LLD change. | done (docs/benchmarks/V1.md, re-measured; N3 idle met, active missed) |
 | V1-42 | **Adopter documentation:** README per package (install, LibreOffice requirement, configuration, `authorize`, worker config module, security notes, error-code table) | docs | `shared/README.md`, `backend/README.md`, `frontend/README.md` | HLD §12, §14, §18 | V1-20, V1-36 | Each example in the docs runs. | done |
-| V1-43 | **V1 release gate.** `ship` skill checklist, CHANGELOG, versions, `npm publish --dry-run`. The real publish happens only on the project owner's go (they own the `@open-docex` npm org). | release | `CHANGELOG.md`, `*/package.json` (version), `.github/workflows/release.yml` | AGENTS.md §5–§6 | V1-40, V1-41, V1-42 | The project owner approves. | todo |
+| V1-43 | **V1 release gate.** `ship` skill checklist, CHANGELOG, versions, `npm publish --dry-run`. The real publish happens only on the project owner's go (they own the `@open-docex` npm org). | release | `CHANGELOG.md`, `*/package.json` (version), `.github/workflows/release.yml` | AGENTS.md §5–§6 | V1-40, V1-41, V1-42 | The project owner approves. | review (gate run locally 2026-11-25, S-52; NOT published; waiting for the project owner and a green Windows CI run) |
 
 ---
 
@@ -123,7 +123,7 @@ V1-00 ─┬─ V1-01 ─┬─ V1-02 ──────────────
 
 ## Resume point (updated 2026-11-25)
 
-**Done and merged on `main`:** V1-00 to V1-04, V1-10 to V1-20, V1-30 to V1-36, V1-S2 and V1-S3. On `main`, build, typecheck, lint and test pass: 1,590 tests, plus 853 backend tests with the real-LibreOffice suite (`OPEN_DOCEX_LO_TESTS=1 npx vitest run --project backend`). The server (V1-10 to V1-19) and the client (V1-30 to V1-36) are both complete. Nothing is in progress and no task branches are open.
+**Done and merged on `main`:** every V1 task except the owner's approval in V1-43: V1-00 to V1-04, V1-10 to V1-20, V1-30 to V1-36, V1-40 to V1-42, V1-S2 and V1-S3. On `main` (2026-11-25), build, typecheck, lint, `check:versions`, `check:licenses` and `audit:prod` pass, and the full suite with real LibreOffice shows 91 files, 1,708 tests passed, 3 skipped; E2E passes on Chromium (17) and Firefox (17). Nothing is in progress and no task branches are open.
 
 **CI status (2026-11-25).** Run 45551669411 (the first push of the real-LibreOffice tests) failed on every `test` job. After the S-46/S-47 fixes, run 45606138640 passed `static`, `e2e` (with WebKit) and the three Ubuntu `test` jobs, and failed `test-windows` (two storage-flush timeouts, fixed by S-50 and not yet re-run on CI). The notes below are the history of run 45551669411:
 - **Fixed, Ubuntu:** `libreoffice-draw` and fonts were missing (EMF/WMF/TIFF/SVG → PNG). That caused 3 of the 5 failures per job. `ci.yml` now installs them.
@@ -131,10 +131,10 @@ V1-00 ─┬─ V1-01 ─┬─ V1-02 ──────────────
 - **Fixed, Node 22 only:** the real-LibreOffice timeout test used 400 ms and a fast runner finished in time. It now uses 1 ms.
 - **Fixed, Ubuntu, `.docx` round trip (S-47):** `features.docx` and `features-word.docx` lost the right alignment of "ALIGN-RIGHT paragraph". Cause: LibreOffice 26.2.7.3 gives no `w:jc` to a paragraph the mapper wrote as `fo:text-align="end"`. The mapper now writes `right`. Reproduced and verified locally on a TDF-signed 26.2.7.3 build (all three fixtures round-trip equal on 26.2.7.3 and 26.8.3.1). The Linux CI run is still to be confirmed.
 
-**Next tasks, in order** (each depends only on done tasks):
-1. **V1-40 (done locally):** the queue-full, links and pagination specs have not run on WebKit or on Ubuntu CI yet. Also: no test sends a real server `QUEUE_FULL` frame to a real client (S-49).
-2. **V1-41** (benchmark, including the S-6 typing budget in a real browser), **V1-42** (adopter docs) after V1-20.
-3. **V1-43:** the V1 release gate (`ship` checklist, CHANGELOG, `npm publish --dry-run`). The real publish happens only on the project owner's go.
+**Next, in order:**
+1. **Push the S-51 CI fix and the V1-43 commit** (the project owner decides), then check that `test-windows` passes: its real-LibreOffice tests have not passed on CI since the Chocolatey install failure in run 45640202792. Also still unconfirmed on CI: the S-50 storage fix over more than one run.
+2. **V1-43, owner approval:** the gate ran locally (see S-52 and `CHANGELOG.md`). Open before a real publish: the version number (0.1.0 is a placeholder), the secret `NPM_TOKEN`, the push of a `v0.1.0` tag (which runs `release.yml`), the proposal in `docs/benchmarks/V1.md` (about 500/1000 clients per process; new options `limits.maxClientsPerDocument`, `limits.maxConnections`), and a note in `backend/README.md` about Windows connection bursts. Publishing happens only on the project owner's go.
+3. Known V1 limits, all in `CHANGELOG.md`: no real server `QUEUE_FULL` end-to-end test (S-49); thousands of ACTIVE connections missed (N3); two unexplained multi-minute LibreOffice stalls on the local machine.
 - V2-S1 (the Univer spike) may run during V1, but ask the project owner before starting it.
 
 **Standing rules (also in the new-session prompt):** apply recommendations on project code and record them as LLD §0.5 S-rows; ask before anything outward-facing and before starting V2-S1; no co-author trailers; never push unless asked (`main` is about 135 commits ahead of GitHub; the real-LibreOffice tests have never run on Linux CI yet); workers on Sonnet, at most 2 at once, short reports.
@@ -199,4 +199,4 @@ The orchestrator records questions here and asks the project owner.
 | 2026-11-22 | Wave 3: V1-02 and V1-03 done (442 tests on main); V1-10 part 1 merged, rest re-sequenced (S-22). |
 | 2026-11-22 | Waves 4–5: V1-04, V1-10, V1-11, V1-12, V1-13 and V1-30 done (846 tests on main). |
 | 2026-11-22 | V1-00 done (CI run 45012148604 green). Post-review fixes to lint, @types and LLD §1.3/§1.6/§1.7/§1.9 approved and applied. |
-| 2026-11-25 | Pushed `main` (run 45606138640: Ubuntu, static and e2e green; Windows red, fixed by S-50). V1-40, V1-41 and V1-42 done locally. V1-19 and V1-20 done (1,701 tests with real LibreOffice, S-48). First CI run of the real-LibreOffice tests failed; fixes for Ubuntu packages, Windows timing and the timeout test merged (S-46). The 26.2 `.docx` round-trip difference was the mapper writing `end` for right alignment; fixed (S-47). V1-20 started. |
+| 2026-11-25 | V1-43 gate run locally (S-52): version 0.1.0, CHANGELOG, `release.yml`, tarballs and consumer test checked; not published. Pushed `main` (run 45606138640: Ubuntu, static and e2e green; Windows red, fixed by S-50). V1-40, V1-41 and V1-42 done locally. V1-19 and V1-20 done (1,701 tests with real LibreOffice, S-48). First CI run of the real-LibreOffice tests failed; fixes for Ubuntu packages, Windows timing and the timeout test merged (S-46). The 26.2 `.docx` round-trip difference was the mapper writing `end` for right alignment; fixed (S-47). V1-20 started. |

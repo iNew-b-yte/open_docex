@@ -1,6 +1,6 @@
 {
   "name": "@open-docex/client",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "open_docex browser client: mount() a collaborative document editor into any page.",
   "license": "MIT",
   "type": "module",
@@ -16,7 +16,8 @@
     "./style.css": "./dist/lib/style.css"
   },
   "files": [
-    "dist"
+    "dist",
+    "!dist/**/*.tsbuildinfo"
   ],
   "engines": {
     "node": ">=22.12"
@@ -30,7 +31,7 @@
     "prepack": "node -e \"require('fs').copyFileSync('../LICENSE', 'LICENSE')\""
   },
   "dependencies": {
-    "@open-docex/shared": "0.0.0",
+    "@open-docex/shared": "0.1.0",
     "prosemirror-commands": "^1.7.2",
     "prosemirror-dropcursor": "^1.8.4",
     "prosemirror-gapcursor": "^1.4.1",
