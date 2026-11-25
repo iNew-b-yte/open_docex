@@ -10,6 +10,7 @@
 import { InProcessEngineChannel } from '../channel/in-process-engine-channel.js';
 import type { EngineChannel } from '../channel/engine-channel.js';
 import type { CoreWiringOptions } from '../core/core-entry.js';
+import { engineError } from '../errors/engine-error.js';
 import { routeCoreEvents } from '../gateway/core-events.js';
 import { Gateway } from '../gateway/gateway.js';
 import { levelFilter } from '../log/logger.js';
@@ -78,6 +79,8 @@ export async function createEngineWith(options: EngineOptions, internals: Engine
       await runtime.boot({ workerConfigModule: opts.workerConfigModule, logLevel: opts.logLevel });
     }
   } catch (err) {
+    // `CoreRuntime.boot` released its own resources; the channel and Gateway are ours.
+    inProcess?.close(engineError('ENGINE_UNAVAILABLE', { message: 'The engine failed to start.' }));
     gateway.detach();
     throw err;
   }

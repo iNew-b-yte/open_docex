@@ -17,9 +17,9 @@ import type { IncomingMessage } from 'node:http';
 import { randomUUID } from 'node:crypto';
 import type { Duplex } from 'node:stream';
 import { WebSocketServer, type RawData, type WebSocket } from 'ws';
-import { OpenDocexError, toClientError } from '@open-docex/shared/errors';
+import { OpenDocexError, toClientError, type ErrorCode } from '@open-docex/shared/errors';
 import type { DocumentId } from '@open-docex/shared/ids';
-import { CloseCode, decodeClientMessage, encodeMessage } from '@open-docex/shared/protocol';
+import { CloseCode, closeCodeFor, decodeClientMessage, encodeMessage, WS_SUBPROTOCOL } from '@open-docex/shared/protocol';
 import type { EngineEventMap } from '../api/events.js';
 import type { AuthorizeResult, HttpServerLike, ResolvedEngineOptions } from '../api/options.js';
 import type { TypedEmitter } from '../api/typed-emitter.js';
@@ -38,6 +38,11 @@ export type EngineState = 'starting' | 'running' | 'restarting' | 'failed' | 'st
 /** A close reason must fit in 123 bytes of UTF-8 (RFC 6455 §5.5). We only use error-code names. */
 function reasonOf(reason: string): string {
   return Buffer.byteLength(reason) <= 123 ? reason : reason.slice(0, 100);
+}
+
+/** The close code of an error code (LLD §0 R-16); `fallback` when the catalogue has none. */
+function closeCodeOf(code: ErrorCode, fallback: CloseCode): CloseCode {
+  return closeCodeFor(code) ?? fallback;
 }
 
 function toBytes(data: RawData): Uint8Array {
@@ -75,6 +80,9 @@ export class Gateway implements SupervisorGateway {
       maxPayload: opts.ws.maxPayloadBytes,
       perMessageDeflate: false,
       clientTracking: false,
+      // Echo only our subprotocol. ws's default echoes the first one offered, which could be the
+      // client's token when it is listed first (LLD Part 3 §4, L14).
+      handleProtocols: (protocols) => (protocols.has(WS_SUBPROTOCOL) ? WS_SUBPROTOCOL : false),
     });
   }
 
@@ -121,8 +129,8 @@ export class Gateway implements SupervisorGateway {
    * upgrades get HTTP 503 until the Core runs again.
    */
   onCoreDown(reason: 'restarting' | 'failed'): void {
-    const code = reason === 'restarting' ? CloseCode.ENGINE_RESTARTING : CloseCode.ENGINE_UNAVAILABLE;
     const name = reason === 'restarting' ? 'ENGINE_RESTARTING' : 'ENGINE_UNAVAILABLE';
+    const code = closeCodeOf(name, CloseCode.ENGINE_UNAVAILABLE);
     const notice = encodeMessage({ type: 'notice', notice: 'engine-restarting' });
     for (const s of this.#table.all()) {
       if (reason === 'restarting') s.send.push(notice);
@@ -211,7 +219,7 @@ export class Gateway implements SupervisorGateway {
         this.#wss.handleUpgrade(req, socket, head, (ws) => {
           socket.off('error', onSocketError);
           ws.on('error', () => undefined);
-          ws.close(CloseCode.ENGINE_UNAVAILABLE, 'ENGINE_UNAVAILABLE');
+          ws.close(closeCodeOf('ENGINE_UNAVAILABLE', CloseCode.ENGINE_UNAVAILABLE), 'ENGINE_UNAVAILABLE');
         });
         return;
       }
@@ -234,7 +242,7 @@ export class Gateway implements SupervisorGateway {
   #openSession(ws: WebSocket, documentId: DocumentId, r: AuthorizeResult): void {
     const channel = this.#channel;
     if (channel === undefined) {
-      ws.close(CloseCode.ENGINE_UNAVAILABLE, 'ENGINE_UNAVAILABLE');
+      ws.close(closeCodeOf('ENGINE_UNAVAILABLE', CloseCode.ENGINE_UNAVAILABLE), 'ENGINE_UNAVAILABLE');
       return;
     }
     const id = randomUUID();
@@ -255,7 +263,9 @@ export class Gateway implements SupervisorGateway {
     channel.post({ type: 'join', sessionId: id, documentId, userId: r.userId, access: r.access, document: r.document });
     s.helloTimer = this.#clock.setTimeout(() => {
       s.helloTimer = undefined;
-      this.#drop(s, CloseCode.PROTOCOL_ERROR, 'PROTOCOL_INVALID_MESSAGE', 'client-closed');
+      // Close reasons are error-code names; the error frame goes first (LLD §5.5).
+      s.send.push(encodeMessage({ type: 'error', ...toClientError(engineError('PROTOCOL_INVALID_MESSAGE')) }));
+      this.#drop(s, closeCodeOf('PROTOCOL_INVALID_MESSAGE', CloseCode.PROTOCOL_ERROR), 'PROTOCOL_INVALID_MESSAGE', 'client-closed');
     }, this.#opts.ws.helloTimeoutMs);
     ws.on('message', (data: RawData, isBinary: boolean) => this.#onInbound(s, data, isBinary));
     ws.on('pong', () => {

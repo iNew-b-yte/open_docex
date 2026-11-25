@@ -162,9 +162,14 @@ function flushWithShutdown(parts: Parts, scheduler: FlushScheduler): FlushSeam {
     markDirty: (inst) => scheduler.markDirty(inst),
     flushNow: (inst, o) => scheduler.flushNow(inst, o),
     async flushAll(deadline) {
-      await scheduler.flushAll(deadline);
-      parts.recovery?.close();
-      await parts.audit?.flush();
+      try {
+        await scheduler.flushAll(deadline);
+      } finally {
+        // Even when the flush failed: stop the retry timers and let pending `auditEmittedRev`
+        // writes finish, so the next boot does not replay events that were already delivered.
+        parts.recovery?.close();
+        await parts.audit?.flush();
+      }
     },
   };
 }
@@ -369,10 +374,13 @@ const ORPHAN_SHUTDOWN_MS = 2000;
  * Runs the Core as a child process: real services over the IPC channel, with the process
  * handlers of LLD Part 2 §5. The process exits after answering `shutdown`, and with code 1 when
  * boot fails.
+ *
+ * @param o test seams for {@link createCoreWiring}. Production passes none: the Supervisor forks
+ *   this module and it calls `main()` itself.
  */
-export function main(): void {
+export function main(o: CoreWiringOptions = {}): void {
   const ipc = IpcCoreChannelSide.fromProcess();
-  const wiring = createCoreWiring();
+  const wiring = createCoreWiring(o);
   const wrapped = wiring.wrap(ipc);
   let initId: number | undefined;
   let shutdownId: number | undefined;
