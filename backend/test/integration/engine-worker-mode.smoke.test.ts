@@ -40,7 +40,7 @@ describe.skipIf(!haveDist)('createEngine in worker mode (forked compiled Core)',
 
     await t.engine.shutdown({ timeoutMs: 8000 });
     expect(t.engine.state).toBe('stopped');
-    expect((await alice.closed).code).toBe(4005);
+    expect((await alice.closed).code).toBe(1001);
     expect(await readFile(path.join(t.storageRoot, ref as string), 'utf8')).toBe('Hi');
   }, 30_000);
 

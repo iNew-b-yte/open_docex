@@ -235,7 +235,8 @@ export class EngineFacade implements Engine {
     const { gateway, supervisor, channel, inProcess, logger } = this.#d;
     this.#state = 'stopping';
     gateway.stopAccepting();
-    gateway.closeAll(CloseCode.SESSION_CLOSED, 'SESSION_CLOSED');
+    // Part 1 §5.5 wins over Part 2 §4.4 (LLD §0 R-16): shutdown is 1001, so clients reconnect with resume.
+    gateway.closeAll(CloseCode.GOING_AWAY, 'GOING_AWAY');
     try {
       if (supervisor !== undefined) {
         await supervisor.stop(timeoutMs);

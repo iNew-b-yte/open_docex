@@ -389,7 +389,7 @@ describe('EngineFacade shutdown (LLD §2.6, §4.4)', () => {
     expect(m.gw.server.listenerCount('upgrade')).toBe(1);
     release();
     await done;
-    expect(await c.closed).toEqual({ code: 4005, reason: 'SESSION_CLOSED' });
+    expect(await c.closed).toEqual({ code: 1001, reason: 'GOING_AWAY' });
     expect(m.channel.requests).toEqual([{ type: 'shutdown', body: { timeoutMs: 3500 }, timeoutMs: 4000 }]);
     expect(m.inProcess.close).toHaveBeenCalledTimes(1);
     expect(m.gw.server.listenerCount('upgrade')).toBe(0);

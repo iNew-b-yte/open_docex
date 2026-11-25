@@ -150,8 +150,8 @@ describe('createEngine in main mode with LocalFsStorage and real WebSocket clien
 
     await r.engine.shutdown({ timeoutMs: 5000 });
     expect(r.engine.state).toBe('stopped');
-    expect(await alice.closed).toEqual({ code: 4005, reason: 'SESSION_CLOSED' });
-    expect((await bob.closed).code).toBe(4005);
+    expect(await alice.closed).toEqual({ code: 1001, reason: 'GOING_AWAY' });
+    expect((await bob.closed).code).toBe(1001);
     // The flush wrote the edited document back through LocalFsStorage.
     expect(await storedText(e, ref)).toBe('Hello world');
     expect(r.server.listenerCount('upgrade')).toBe(0);
