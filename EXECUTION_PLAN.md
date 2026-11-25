@@ -176,6 +176,7 @@ The orchestrator records questions here and asks the project owner. None are ope
 - V1-30: `frontend/package.json` has `"sideEffects": false`. Because `./style.css` is exported, V1-30 must check that bundlers keep the CSS import, and raise it if not.
 - V1-43: `dist/tsconfig.tsbuildinfo` is included in the npm tarballs. Decide whether to exclude it.
 - V1-36/V1-40: one full-suite run during V1-35 failed 1 frontend test that wasn't captured; later runs were clean. Watch for a timing-sensitive frontend test.
+- V1-20 (S-45): make the Core send `load-start.limits.maxAssetBytes` (its file scope may include `backend/src/core/load-streamer.ts` for this only, with a test), and consider narrowing `ApiArgs`/`ApiResult` in `channel/messages.ts` instead of the facade's local map.
 - V1-40: the restore-notice banner stays hidden if the same notice fires again after the user dismissed it, because `ShellSession` has no way to clear the notice. E2E should cover it, and a small fix may follow.
 - V1-36 fixed the flaky `asset-cache.test.ts` by mocking `computeAssetId` (the cause was a real `crypto.subtle.digest` finishing on another thread under load).
 - V1-20: one run of the core, flush and recovery unit tests failed 18 tests while the machine was busy (twice the normal duration). Later runs passed every time. V1-20 should check these suites for timing sensitivity (real timers or short timeouts) and make them load-tolerant.
