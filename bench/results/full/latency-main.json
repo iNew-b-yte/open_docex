@@ -1,0 +1,332 @@
+{
+  "stage": "latency",
+  "mode": "main",
+  "quick": false,
+  "complete": true,
+  "startedAt": "2026-11-25T15:01:18.109Z",
+  "environment": {
+    "date": "2026-11-25T15:01:18.109Z",
+    "cpuModel": "AMD Ryzen 9 9955HX 16-Core Processor",
+    "logicalCores": 32,
+    "ramGiB": 31.3,
+    "os": "Windows_NT 10.0.26300 (Windows 11 Home Single Language) x64",
+    "node": "v24.18.0",
+    "libreoffice": "LibreOffice 26.8.3.1 861effc5289d539f15c4c18d1ba8579ffd78728b",
+    "chromium": "not measured",
+    "sofficePath": "C:\\Program Files\\LibreOffice\\program\\soffice.exe"
+  },
+  "params": {
+    "rate": 2,
+    "warmMs": 5000,
+    "measureMs": 20000,
+    "oneDocClients": [
+      1,
+      10,
+      50,
+      100
+    ],
+    "manyDocs": [
+      10,
+      100,
+      500
+    ],
+    "stages": [
+      250,
+      500,
+      1000,
+      2000,
+      3000,
+      4000,
+      6000,
+      8000
+    ],
+    "capMeasureMs": 10000,
+    "limitMs": 100,
+    "fanout": [
+      0,
+      10,
+      100,
+      500,
+      1000,
+      2000
+    ],
+    "opsPerSec": 20,
+    "pages": [
+      10,
+      100,
+      300
+    ],
+    "loConcurrency": [
+      1,
+      2
+    ],
+    "loRepeats": 2,
+    "keystrokes": 400,
+    "typingPages": 300
+  },
+  "data": {
+    "oneDoc": [
+      {
+        "mode": "main",
+        "clients": 1,
+        "docs": 1,
+        "typists": 1,
+        "failed": 0,
+        "wallMs": 20013,
+        "sent": 36,
+        "acked": 36,
+        "errors": 0,
+        "closes": 0,
+        "closeCodes": {},
+        "open": 1,
+        "ack": {
+          "n": 36,
+          "p50": 1.43,
+          "p95": 4.83,
+          "p99": 65.93,
+          "max": 65.93,
+          "mean": 3.34
+        },
+        "remote": {
+          "n": 0,
+          "p50": null,
+          "p95": null,
+          "p99": null,
+          "max": null,
+          "mean": null
+        },
+        "genLagP99Ms": 18.89,
+        "mainCpuPct": 0.7,
+        "coreCpuPct": null,
+        "mainCpuUs": 141000,
+        "coreCpuUs": null,
+        "mainRssMiB": 59,
+        "coreRssMiB": null
+      },
+      {
+        "mode": "main",
+        "clients": 10,
+        "docs": 1,
+        "typists": 9,
+        "failed": 0,
+        "wallMs": 20006,
+        "sent": 362,
+        "acked": 360,
+        "errors": 0,
+        "closes": 0,
+        "closeCodes": {},
+        "open": 10,
+        "ack": {
+          "n": 360,
+          "p50": 1.15,
+          "p95": 1.77,
+          "p99": 32.19,
+          "max": 48.21,
+          "mean": 1.91
+        },
+        "remote": {
+          "n": 360,
+          "p50": 1.21,
+          "p95": 1.86,
+          "p99": 32.23,
+          "max": 48.35,
+          "mean": 1.97
+        },
+        "genLagP99Ms": 20.32,
+        "mainCpuPct": 2.7,
+        "coreCpuPct": null,
+        "mainCpuUs": 548000,
+        "coreCpuUs": null,
+        "mainRssMiB": 63,
+        "coreRssMiB": null
+      },
+      {
+        "mode": "main",
+        "clients": 50,
+        "docs": 1,
+        "typists": 49,
+        "failed": 0,
+        "wallMs": 20010,
+        "sent": 1971,
+        "acked": 1972,
+        "errors": 0,
+        "closes": 0,
+        "closeCodes": {},
+        "open": 50,
+        "ack": {
+          "n": 1972,
+          "p50": 1.1,
+          "p95": 7.3,
+          "p99": 31.34,
+          "max": 52.07,
+          "mean": 2.58
+        },
+        "remote": {
+          "n": 1972,
+          "p50": 1.14,
+          "p95": 7.32,
+          "p99": 31.45,
+          "max": 52.12,
+          "mean": 2.61
+        },
+        "genLagP99Ms": 24.05,
+        "mainCpuPct": 17.3,
+        "coreCpuPct": null,
+        "mainCpuUs": 3454000,
+        "coreCpuUs": null,
+        "mainRssMiB": 94,
+        "coreRssMiB": null
+      },
+      {
+        "mode": "main",
+        "clients": 100,
+        "docs": 1,
+        "typists": 99,
+        "failed": 0,
+        "wallMs": 20009,
+        "sent": 3939,
+        "acked": 3933,
+        "errors": 0,
+        "closes": 0,
+        "closeCodes": {},
+        "open": 100,
+        "ack": {
+          "n": 3933,
+          "p50": 5.04,
+          "p95": 26.85,
+          "p99": 39.81,
+          "max": 53.59,
+          "mean": 7.74
+        },
+        "remote": {
+          "n": 3933,
+          "p50": 5.08,
+          "p95": 26.87,
+          "p99": 39.83,
+          "max": 53.6,
+          "mean": 7.78
+        },
+        "genLagP99Ms": 24.51,
+        "mainCpuPct": 59,
+        "coreCpuPct": null,
+        "mainCpuUs": 11797000,
+        "coreCpuUs": null,
+        "mainRssMiB": 123,
+        "coreRssMiB": null
+      }
+    ],
+    "manyDocs": [
+      {
+        "mode": "main",
+        "clients": 20,
+        "docs": 10,
+        "typists": 10,
+        "failed": 0,
+        "wallMs": 20006,
+        "sent": 397,
+        "acked": 397,
+        "errors": 0,
+        "closes": 0,
+        "closeCodes": {},
+        "open": 20,
+        "ack": {
+          "n": 397,
+          "p50": 1.17,
+          "p95": 1.79,
+          "p99": 20.38,
+          "max": 29.76,
+          "mean": 1.54
+        },
+        "remote": {
+          "n": 397,
+          "p50": 1.26,
+          "p95": 1.94,
+          "p99": 20.46,
+          "max": 29.84,
+          "mean": 1.64
+        },
+        "genLagP99Ms": 24.89,
+        "mainCpuPct": 2.5,
+        "coreCpuPct": null,
+        "mainCpuUs": 500000,
+        "coreCpuUs": null,
+        "mainRssMiB": 63,
+        "coreRssMiB": null
+      },
+      {
+        "mode": "main",
+        "clients": 200,
+        "docs": 100,
+        "typists": 100,
+        "failed": 0,
+        "wallMs": 20010,
+        "sent": 3956,
+        "acked": 3954,
+        "errors": 0,
+        "closes": 0,
+        "closeCodes": {},
+        "open": 200,
+        "ack": {
+          "n": 3954,
+          "p50": 1.08,
+          "p95": 9.51,
+          "p99": 55.9,
+          "max": 68.01,
+          "mean": 2.93
+        },
+        "remote": {
+          "n": 3954,
+          "p50": 1.13,
+          "p95": 9.56,
+          "p99": 55.96,
+          "max": 68.06,
+          "mean": 2.98
+        },
+        "genLagP99Ms": 24.02,
+        "mainCpuPct": 11.5,
+        "coreCpuPct": null,
+        "mainCpuUs": 2297000,
+        "coreCpuUs": null,
+        "mainRssMiB": 84,
+        "coreRssMiB": null
+      },
+      {
+        "mode": "main",
+        "clients": 1000,
+        "docs": 500,
+        "typists": 500,
+        "failed": 0,
+        "wallMs": 20006,
+        "sent": 19871,
+        "acked": 19866,
+        "errors": 0,
+        "closes": 0,
+        "closeCodes": {},
+        "open": 1000,
+        "ack": {
+          "n": 19866,
+          "p50": 1.5,
+          "p95": 125.81,
+          "p99": 176.3,
+          "max": 217.55,
+          "mean": 16.3
+        },
+        "remote": {
+          "n": 19867,
+          "p50": 1.55,
+          "p95": 125.83,
+          "p99": 176.33,
+          "max": 217.59,
+          "mean": 16.35
+        },
+        "genLagP99Ms": 24.41,
+        "mainCpuPct": 32.6,
+        "coreCpuPct": null,
+        "mainCpuUs": 6531000,
+        "coreCpuUs": null,
+        "mainRssMiB": 221,
+        "coreRssMiB": null
+      }
+    ]
+  }
+}
