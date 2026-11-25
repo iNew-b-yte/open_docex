@@ -100,10 +100,10 @@ describe('renameReplacing (shared by writeFileAtomic and LocalFsStorage)', () =>
     let calls = 0;
     await renameReplacing('a', 'b', {
       platform: 'win32',
-      delay: async () => undefined,
-      rename: async () => {
+      delay: () => Promise.resolve(),
+      rename: () => {
         const code = codes[calls++];
-        if (code !== undefined) throw err(code);
+        return code !== undefined ? Promise.reject(err(code)) : Promise.resolve();
       },
     });
     expect(calls).toBe(4);
@@ -114,10 +114,10 @@ describe('renameReplacing (shared by writeFileAtomic and LocalFsStorage)', () =>
     await expect(
       renameReplacing('a', 'b', {
         platform: 'win32',
-        delay: async () => undefined,
-        rename: async () => {
+        delay: () => Promise.resolve(),
+        rename: () => {
           calls++;
-          throw err('EPERM');
+          return Promise.reject(err('EPERM'));
         },
       }),
     ).rejects.toMatchObject({ code: 'EPERM' });
@@ -130,10 +130,10 @@ describe('renameReplacing (shared by writeFileAtomic and LocalFsStorage)', () =>
       await expect(
         renameReplacing('a', 'b', {
           platform,
-          delay: async () => undefined,
-          rename: async () => {
+          delay: () => Promise.resolve(),
+          rename: () => {
             calls++;
-            throw err(code);
+            return Promise.reject(err(code));
           },
         }),
       ).rejects.toMatchObject({ code });
