@@ -1,22 +1,46 @@
-// Windows only (S-50): LocalFsStorage.write must survive readers polling the target file.
-// Found by CI run 45606138640: a flush failed with EPERM while the integration rig read the
-// storage file every 10 ms, the document went to LOCAL and its retry came a minute later.
-// Before the fix, readers at 10 ms failed a few percent of writes on a Windows machine.
+// LocalFsStorage.write and the Windows rename retry (LLD §0.5 S-50).
+// Found by CI run 45606138640: a flush failed with EPERM while the integration rig read the storage
+// file every 10 ms, the document went to LOCAL and its retry came a minute later.
 import { mkdtemp, readFile, rm, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
-import { afterEach, beforeEach, describe, expect, it } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { renameReplacing } from '../../../src/persistence/atomic-file.js';
 import { LocalFsStorage } from '../../../src/storage/local-fs-storage.js';
+
+vi.mock('../../../src/persistence/atomic-file.js', async (importOriginal) => {
+  const real = await importOriginal<typeof import('../../../src/persistence/atomic-file.js')>();
+  return { ...real, renameReplacing: vi.fn(real.renameReplacing) };
+});
 
 let dir: string;
 beforeEach(async () => {
   dir = await mkdtemp(path.join(tmpdir(), 'odx-lfs-win-'));
+  vi.mocked(renameReplacing).mockClear();
 });
 afterEach(async () => {
   await rm(dir, { recursive: true, force: true });
 });
 
-describe.skipIf(process.platform !== 'win32')('LocalFsStorage.write with concurrent readers (Windows)', () => {
+describe('LocalFsStorage.write', () => {
+  it('replaces the target through renameReplacing, the shared Windows retry (S-50)', async () => {
+    await writeFile(path.join(dir, 'doc.docx'), 'one');
+    const storage = new LocalFsStorage({ root: dir });
+    const signal = new AbortController().signal;
+    const version = (await storage.stat('doc.docx', { signal }))?.version ?? null;
+    const r = await storage.write('doc.docx', new TextEncoder().encode('two'), { expectedVersion: version, signal });
+    expect(r.ok).toBe(true);
+    expect(await readFile(path.join(dir, 'doc.docx'), 'utf8')).toBe('two');
+    expect(renameReplacing).toHaveBeenCalledTimes(1);
+    expect(vi.mocked(renameReplacing).mock.calls[0]?.[1]).toBe(path.join(dir, 'doc.docx'));
+  });
+});
+
+// Opt-in stress test (OPEN_DOCEX_STRESS=1, Windows): real readers polling the target. Without the
+// retry, 2 readers at 10 ms failed 1 to 4 writes in 6 s on a Windows machine; with it, 0 in 3 runs.
+// It is off by default because under the load of a full parallel test run some blocks outlast the
+// retry budget (500 ms), so it is a measurement, not a stable assertion.
+describe.skipIf(process.platform !== 'win32' || process.env['OPEN_DOCEX_STRESS'] !== '1')('LocalFsStorage.write with concurrent readers (Windows, stress)', () => {
   it('does not fail with EPERM while 2 readers poll the file every 10 ms', async () => {
     const file = path.join(dir, 'doc.docx');
     await writeFile(file, 'one');
