@@ -37,14 +37,29 @@ class Client {
     this.remoteSeen = new Map(); // typist client -> ops seen (observer only)
     this.timer = undefined;
     this.ready = new Promise((resolve) => (this.resolveReady = resolve));
+    // Failure classification (V1-41 follow-up): `phase` is how far the client got, `fail` the first
+    // thing that went wrong, `t0` when `connect()` was called, `failMs` how long after that.
+    this.phase = 'connecting'; // connecting -> open (upgrade done, hello sent) -> loading (load-start seen) -> loaded
+    this.fail = undefined;
+    this.t0 = 0;
+    this.failMs = 0;
+  }
+
+  /** Records the first failure of a client: what, in which phase, and how long after `connect()`. */
+  noteFail(kind) {
+    if (this.fail !== undefined || this.loaded) return;
+    this.fail = kind;
+    this.failMs = Math.round(now() - this.t0);
   }
 
   connect() {
     const { doc, user } = this.spec;
+    this.t0 = now();
     const ws = new WebSocket(`ws://127.0.0.1:${port}/open-docex?doc=${encodeURIComponent(doc)}&token=edit:${user}`, [WS_SUBPROTOCOL]);
     this.ws = ws;
     ws.on('open', () => {
       this.open = true;
+      this.phase = 'open';
       ws.send(JSON.stringify({ type: 'hello', protocol: PROTOCOL_VERSION, clientId: this.id }));
     });
     const parseAll = this.spec.role !== 'idle';
@@ -52,12 +67,19 @@ class Client {
       if (isBinary) return;
       if (!this.loaded) {
         const m = JSON.parse(data.toString());
-        if (m.type === 'load-start') this.epoch = m.epoch;
-        else if (m.type === 'load-done') {
+        if (m.type === 'load-start') {
+          this.epoch = m.epoch;
+          this.phase = 'loading';
+        } else if (m.type === 'load-done') {
           this.rev = m.rev;
           this.loaded = true;
+          this.phase = 'loaded';
+          this.loadMs = Math.round(now() - this.t0);
           this.resolveReady(true);
-        } else if (m.type === 'error') this.resolveReady(false);
+        } else if (m.type === 'error') {
+          this.noteFail(`error-frame:${m.code ?? '?'}@${this.phase}`);
+          this.resolveReady(false);
+        }
         return;
       }
       if (!parseAll) return;
@@ -75,9 +97,10 @@ class Client {
         if (this.spec.role === 'observer') this.onRemote(m);
       } else if (m.type === 'error') win.errors++;
     });
-    ws.on('close', (code) => {
+    ws.on('close', (code, reasonBuf) => {
       this.open = false;
       this.closeCode = code;
+      this.noteFail(`close:${code}${reasonBuf?.length ? ` ${reasonBuf.toString().slice(0, 30)}` : ''}@${this.phase}`);
       if (this.loaded) {
         win.closes++;
         win.closeCodes[code] = (win.closeCodes[code] ?? 0) + 1;
@@ -86,11 +109,11 @@ class Client {
       clearTimeout(this.timer);
     });
     ws.on('error', (e) => {
-      this.failReason = String(e.message ?? e).slice(0, 80);
+      this.noteFail(`socket-error:${e.code ?? String(e.message ?? e).slice(0, 40)}@${this.phase}`);
       this.resolveReady(false);
     });
     ws.on('unexpected-response', (_req, res) => {
-      this.failReason = `HTTP ${res.statusCode}`;
+      this.noteFail(`http:${res.statusCode}@${this.phase}`);
       this.resolveReady(false);
     });
   }
@@ -132,9 +155,15 @@ class Client {
   }
 }
 
-async function add(specs, rate, concurrency = 50) {
+const LOAD_TIMEOUT_MS = Number(process.env.ODX_BENCH_LOAD_TIMEOUT_MS ?? 60_000);
+const DEFAULT_CONCURRENCY = Number(process.env.ODX_BENCH_CONCURRENCY ?? 50);
+
+/** Adds `specs` clients, `concurrency` connecting at a time; each has `LOAD_TIMEOUT_MS` to load. */
+async function add(specs, rate, concurrency = DEFAULT_CONCURRENCY) {
   let failed = 0;
+  /** reason -> { n, minMs, maxMs } where the times are since `connect()` of that client. */
   const reasons = {};
+  let loadMsMax = 0;
   const created = specs.map((s) => new Client(s));
   for (const c of created) {
     clients.push(c);
@@ -145,16 +174,27 @@ async function add(specs, rate, concurrency = 50) {
     while (i < created.length) {
       const c = created[i++];
       c.connect();
-      if (!(await Promise.race([c.ready, new Promise((r) => setTimeout(() => r(false), 60_000))]))) {
-        failed++;
-        const why = c.failReason ?? (c.closeCode !== undefined ? `closed ${c.closeCode} before load` : 'no load-done in 60 s');
-        reasons[why] = (reasons[why] ?? 0) + 1;
+      let timer;
+      const timeout = new Promise((r) => {
+        timer = setTimeout(() => r(false), LOAD_TIMEOUT_MS);
+      });
+      const ok = await Promise.race([c.ready, timeout]);
+      clearTimeout(timer);
+      if (ok) {
+        loadMsMax = Math.max(loadMsMax, c.loadMs ?? 0);
+        continue;
       }
+      failed++;
+      c.noteFail(`timeout:no-${c.phase === 'connecting' ? 'open' : c.phase === 'open' ? 'load-start' : 'load-done'}`);
+      const r = (reasons[c.fail] ??= { n: 0, minMs: Infinity, maxMs: 0 });
+      r.n++;
+      r.minMs = Math.min(r.minMs, c.failMs);
+      r.maxMs = Math.max(r.maxMs, c.failMs);
     }
   };
   await Promise.all(Array.from({ length: concurrency }, worker));
   for (const c of created) if (c.loaded && c.spec.role === 'typist') c.startTyping(c.spec.rate ?? rate);
-  return { failed, reasons };
+  return { failed, reasons, loadMsMax };
 }
 
 process.on('message', async (msg) => {
@@ -162,8 +202,8 @@ process.on('message', async (msg) => {
     port = msg.port;
     process.send({ type: 'done', id: msg.id });
   } else if (msg.cmd === 'add') {
-    const { failed, reasons } = await add(msg.specs, msg.rate);
-    process.send({ type: 'done', id: msg.id, failed, reasons });
+    const { failed, reasons, loadMsMax } = await add(msg.specs, msg.rate, msg.concurrency);
+    process.send({ type: 'done', id: msg.id, failed, reasons, loadMsMax });
   } else if (msg.cmd === 'reset') {
     win = fresh();
     lag.reset();

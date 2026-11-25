@@ -29,6 +29,19 @@ const INITIAL = Array.from({ length: 20 }, (_, i) => `Line ${i}: the quick brown
 const known = new Set();
 const server = createServer();
 
+// What the engine itself reports (V1-41 follow-up): log lines of warn and above, `error` events and
+// faulted documents, counted by message or code. Answered with `{cmd:'stats'}` as `events`.
+const events = {};
+const count = (key) => {
+  events[key] = (events[key] ?? 0) + 1;
+};
+const logger = {
+  debug: () => undefined,
+  info: () => undefined,
+  warn: (m) => count(`log.warn: ${m}`),
+  error: (m) => count(`log.error: ${m}`),
+};
+
 const authorize = (ctx) => {
   const token = ctx.url.searchParams.get('token');
   if (token === null) return { deny: 401 };
@@ -48,12 +61,12 @@ if (mode === 'main') {
   const page = resolveWorkerConfig({}).blankDocument.page;
   const config = { dataDir: settings.dataDir, storage: new LocalFsStorage({ root: storageRoot }), ...settings.config };
   engine = await createEngineWith(
-    { mode: 'main', workerConfigModule: path.join(here, 'worker-config.mjs'), http: { server }, authorize },
+    { mode: 'main', workerConfigModule: path.join(here, 'worker-config.mjs'), http: { server }, authorize, logger, logLevel: 'warn' },
     { core: { codec: () => createFakeCodec({ textSchema, page }), importModule: () => Promise.resolve({ default: config }) } },
   );
 } else {
   engine = await createEngineWith(
-    { mode: 'worker', workerConfigModule: path.join(here, 'worker-config.mjs'), http: { server }, authorize },
+    { mode: 'worker', workerConfigModule: path.join(here, 'worker-config.mjs'), http: { server }, authorize, logger, logLevel: 'warn' },
     {
       supervisor: {
         coreEntryPath: path.join(here, 'core-entry.mjs'),
@@ -68,7 +81,13 @@ if (mode === 'main') {
     },
   );
 }
-await new Promise((resolve) => server.listen(0, '127.0.0.1', resolve));
+engine.on('error', (e) => count(`event.error: ${e.code}`));
+engine.on('document', (d) => {
+  if (d.state !== 'loaded') count(`event.document: ${d.state} ${d.error?.code ?? ''}`);
+});
+// Listen backlog: Node's default (511) unless ODX_BENCH_BACKLOG says otherwise (a diagnosis knob).
+const backlog = process.env.ODX_BENCH_BACKLOG === undefined ? undefined : Number(process.env.ODX_BENCH_BACKLOG);
+await new Promise((resolve) => (backlog === undefined ? server.listen(0, '127.0.0.1', resolve) : server.listen(0, '127.0.0.1', backlog, resolve)));
 process.send({ type: 'ready', port: server.address().port, pid: process.pid });
 
 let lastCore = null;
@@ -93,6 +112,7 @@ async function stats() {
   const m = process.memoryUsage();
   const out = { at: Date.now(), main: { cpuUs: c.user + c.system, rss: m.rss, heapUsed: m.heapUsed } };
   if (mode === 'worker') out.core = lastCore;
+  out.events = { ...events };
   return out;
 }
 
