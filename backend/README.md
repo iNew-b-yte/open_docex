@@ -2,7 +2,9 @@
 
 The open_docex engine for Node.js. It adds collaborative editing of `.docx` and `.odt` files to your own application: a WebSocket gateway on your HTTP server, a document core that merges concurrent edits, local persistence with crash recovery, and a LibreOffice-based codec that converts files to and from the editing model.
 
-Pair it with [`@open-docex/client`](../frontend/README.md) in the browser. Both packages must be the same release.
+Part of [open_docex](https://github.com/iNew-b-yte/open_docex/blob/main/README.md), which explains the purpose, who it is for and the requirements of the whole project.
+
+Pair it with [`@open-docex/client`](https://github.com/iNew-b-yte/open_docex/blob/main/frontend/README.md) in the browser. Both packages must be the same release.
 
 ## Install
 
@@ -23,6 +25,12 @@ open_docex converts documents with LibreOffice, run headless. **Install LibreOff
 - LibreOffice runs with macros disabled, in a temporary profile, with a timeout. Documents never execute.
 
 You also need a writable `dataDir` (default `./open-docex-data` under the current directory) for the journal and local copies.
+
+### Platforms
+
+- **Operating systems:** Linux (Ubuntu) and Windows are tested in CI (Node.js 22, 24 and 26 on Ubuntu, Node.js 24 on Windows). **macOS has not been tested.** The engine looks for LibreOffice at `/Applications/LibreOffice.app/Contents/MacOS/soffice` there, but that path has never been run.
+- **LibreOffice versions:** 26.2.7.3 and 26.8.3.1 were tested. **No minimum version has been established**, so older versions are untested.
+- **Your HTTP server:** you pass an `http` or `https` server to attach to. Use `wss:` (TLS) in production.
 
 ## Quick start
 
@@ -360,9 +368,13 @@ Generated from `ERROR_CATALOGUE` in `@open-docex/shared`. `CLIENT_*` codes are r
 
 - **No undo or redo.**
 - **Text documents only** (`.docx`, `.odt`). Spreadsheets are not part of V1.
-- Files with unsupported content open read-only unless you allow editing (see above).
-- Memory queue only: one engine process per document, no Redis or Kafka.
-- Images in documents are PNG, JPEG and GIF when added by users.
+- **Unsupported content:** a file with tracked changes, comments, footnotes, text boxes, equations, charts and similar parts opens read-only. If you allow editing anyway, **those parts are removed when the document is saved** (see "Unsupported content").
+- **Style names are not kept.** Named paragraph styles are flattened to direct formatting on import, and an indent set inside a list item is not kept on save.
+- **One engine per document.** The queue is in memory: two servers on the same document make the copies diverge, and routing a document to one server is your concern. There are no Redis or Kafka queues yet.
+- **No built-in login, sharing, document list or user management.** You provide those, and tell the engine who may open what through `authorize`. There are no per-user rate limits.
+- **Capacity is limited** per process (see "Capacity").
+- Images added by users are PNG, JPEG and GIF.
+- **Not tested:** macOS, LibreOffice older than 26.2, and right-to-left text.
 
 ## Licence
 

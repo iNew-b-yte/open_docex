@@ -1,6 +1,8 @@
 # @open-docex/client
 
-The open_docex browser client. Call `mount()` to put a collaborative document editor into any page. It talks to an [`@open-docex/server`](../backend/README.md) engine over a WebSocket. Both packages must be the same release.
+The open_docex browser client. Call `mount()` to put a collaborative document editor into any page. It talks to an [`@open-docex/server`](https://github.com/iNew-b-yte/open_docex/blob/main/backend/README.md) engine over a WebSocket. Both packages must be the same release.
+
+Part of [open_docex](https://github.com/iNew-b-yte/open_docex/blob/main/README.md), which explains the purpose, who it is for and the requirements of the whole project.
 
 The editor is built with React and ProseMirror internally. React is a peer dependency, and the package exports `mount` and its types only: no React component or type.
 
@@ -19,6 +21,23 @@ import '@open-docex/client/style.css';
 ## Server requirement
 
 The server needs LibreOffice installed to convert files, and an `authorize` callback that decides who may open which document. See the server README. The client does not need LibreOffice.
+
+## Browsers
+
+- **Tested:** recent desktop **Chromium, Firefox and WebKit**, by automated end-to-end tests (WebKit through Playwright, which is not Safari itself).
+- **Not tested:** Safari itself, mobile browsers and touch input, input methods (IME) for languages such as Chinese or Japanese, right-to-left text, and screen readers or other accessibility tools.
+
+## What the editor can do
+
+- **Edit together in real time.** Your own typing shows at once, and other users' edits appear live while you type.
+- **Characters:** bold, italic, underline, strikethrough, font family and size, text colour, and links (`http`, `https` and `mailto` only).
+- **Paragraphs:** headings, alignment (left, centre, right, justify), indent and outdent, and a Paragraph dialog for spacing before and after, line height and left, right and first-line indents.
+- **Lists:** bulleted and numbered.
+- **Tables:** insert, add and delete rows and columns, merge and split cells, header rows, delete the table, and resize columns.
+- **Images:** PNG, JPEG and GIF by toolbar, paste or drag and drop, with resizing and alt text.
+- **Page layout:** page breaks, headers and footers with page-number and page-count fields, page setup (size presets, orientation and margins), and pages drawn on screen.
+- **Access and failures:** view-only mode, a read-only banner with an optional "edit anyway", reconnect and resume after a dropped connection, a notice when changes could not be restored, and a warning before leaving a page with unconfirmed changes.
+- **Customise:** theme variables, every label (for translation) and the list of toolbar items.
 
 ## Quick start
 
@@ -201,8 +220,10 @@ Generated from `ERROR_CATALOGUE` in `@open-docex/shared`. `ClientError.code` is 
 
 ## Not supported in V1
 
-- **No undo or redo.**
+- **No undo or redo.** Ctrl+Z and Ctrl+Y are disabled on purpose.
 - **Text documents only.** `kind: 'sheet'` is accepted by the option check but spreadsheets are not part of V1.
+- **No other users' cursors or names.** You see their edits live, but there is no presence indicator or list of who is online.
+- **No comments, tracked changes, footnotes, text boxes, equations or charts.** A file with such parts opens read-only, and they are removed on save if you allow editing anyway.
 - A file with content the editor cannot represent opens **read-only** (badge "Read-only: unsupported content") unless `hooks.onEditAnyway` is provided and the user chooses to edit anyway. The unsupported parts are removed when the document is saved.
 - Images can be added as PNG, JPEG or GIF only.
 

@@ -4,6 +4,8 @@ Contracts shared by `@open-docex/server` and `@open-docex/client`: the wire prot
 
 It runs in Node.js and in browsers and has no Node or DOM dependency.
 
+Part of [open_docex](https://github.com/iNew-b-yte/open_docex/blob/main/README.md), which explains the purpose, who it is for and the requirements of the whole project.
+
 **Most adopters do not install this package directly.** `@open-docex/server` and `@open-docex/client` depend on it and install it for you. Install it yourself only if you want to import error types or codes in your own code, for example to handle `OpenDocexError` in a route.
 
 ## Install
