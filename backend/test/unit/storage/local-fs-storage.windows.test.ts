@@ -1,7 +1,7 @@
 // LocalFsStorage.write and the Windows rename retry (LLD §0.5 S-50).
 // Found by CI run 45606138640: a flush failed with EPERM while the integration rig read the storage
 // file every 10 ms, the document went to LOCAL and its retry came a minute later.
-import { mkdtemp, readFile, rm, writeFile } from 'node:fs/promises';
+import { mkdtemp, readFile, realpath, rm, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
@@ -32,7 +32,9 @@ describe('LocalFsStorage.write', () => {
     expect(r.ok).toBe(true);
     expect(await readFile(path.join(dir, 'doc.docx'), 'utf8')).toBe('two');
     expect(renameReplacing).toHaveBeenCalledTimes(1);
-    expect(vi.mocked(renameReplacing).mock.calls[0]?.[1]).toBe(path.join(dir, 'doc.docx'));
+    // LocalFsStorage resolves the real path (on Windows runners tmpdir() is an 8.3 short name such as
+    // C:\Users\RUNNER~1, and the real path is C:\Users\runneradmin), so compare with that.
+    expect(vi.mocked(renameReplacing).mock.calls[0]?.[1]).toBe(path.join(await realpath(dir), 'doc.docx'));
   });
 });
 
