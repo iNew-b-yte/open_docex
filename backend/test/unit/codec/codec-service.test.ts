@@ -7,6 +7,7 @@ import type { CodecJob, CodecPoolLike } from '../../../src/codec/codec-pool.js';
 import { engineError } from '../../../src/errors/engine-error.js';
 import { noopLogger } from '../../../src/log/logger.js';
 import { buildZip } from './zip-builder.js';
+import { waitFor } from '../../wait-for.js';
 
 const root = mkdtempSync(join(tmpdir(), 'docex-svc-'));
 afterAll(() => rmSync(root, { recursive: true, force: true }));
@@ -91,8 +92,9 @@ describe('CodecService', () => {
     pool.handler = () => new Promise((res) => release.push(() => res(okImport)));
     const svc = make(pool, { maxConcurrent: 2 });
     const all = Array.from({ length: 5 }, () => svc.import({ bytes: docx(), format: 'docx', assetDir: '/a' }));
-    await new Promise((r) => setTimeout(r, 100));
-    expect(pool.running).toBe(2);
+    // Wait for the condition, not a fixed 100 ms: on a slow runner the jobs had not started yet (CI run
+    // 45977431369). The cap itself is asserted at the end, through `pool.peak`.
+    await waitFor(() => expect(pool.running).toBe(2));
     expect(new Set(pool.jobs.map((j) => j.profileDir)).size).toBe(2);
     while (release.length > 0 || pool.jobs.length < 5) {
       release.shift()?.();
