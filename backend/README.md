@@ -139,6 +139,16 @@ Browsers cannot read the status of a failed WebSocket upgrade. They see close co
 
 Both modes read the same worker config module. In worker mode the module is loaded in the child process, so everything in it (including your storage adapter) lives there, and values must be created inside the module.
 
+## Capacity
+
+These figures come from one benchmark on one Windows machine, with a fake document codec and plain WebSockets (no TLS and no proxy). They are not guarantees, so measure on your own hardware.
+
+- **Idle connections:** one engine process kept 8,000 connected clients with no failures and under 3% CPU, in both modes. The test stopped at 8,000, so the ceiling is higher.
+- **Active typists:** with 1 client in 5 typing at 2 changes a second, about 1,000 connections kept the 99th-percentile acknowledgement time under 100 ms, and 2,000 did not (about 153 ms in main mode and 159 ms in worker mode). Thousands of *active* connections per process are therefore not supported at that latency.
+- **Connection bursts:** in the same test, opening about 400 connections at the same moment made the operating system refuse some of them (`ECONNREFUSED`, before any WebSocket upgrade). About 230 simultaneous new connections were accepted. The listening socket belongs to your HTTP server, not to the engine, and a bare Node `net` server showed the same limit. The cause of the exact number was not established, and it was seen on Windows only: it was not tested on Linux. Clients that reconnect after a restart do so with random (full-jitter) back-off, which spreads such a burst out.
+
+The full method and tables are in `docs/benchmarks/V1.md` in the repository.
+
 ## Worker config module
 
 The default export of the module you pass as `workerConfigModule`. Use `defineWorkerConfig` for type inference. It returns its argument unchanged.
