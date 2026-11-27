@@ -133,7 +133,7 @@ V1-00 ─┬─ V1-01 ─┬─ V1-02 ──────────────
 
 **Next, in order:**
 1. **Push the S-51 CI fix and the V1-43 commit** (the project owner decides), then check that `test-windows` passes: its real-LibreOffice tests have not passed on CI since the Chocolatey install failure in run 45640202792. Also still unconfirmed on CI: the S-50 storage fix over more than one run.
-2. **V1-43, owner approval:** the gate ran locally (see S-52 and `CHANGELOG.md`). Open before a real publish: the version number (0.1.0 is a placeholder), the secret `NPM_TOKEN`, the push of a `v0.1.0` tag (which runs `release.yml`), the proposal in `docs/benchmarks/V1.md` (about 500/1000 clients per process; new options `limits.maxClientsPerDocument`, `limits.maxConnections`), . Publishing happens only on the project owner's go.
+2. **V1-43, owner approval:** the gate ran locally (see S-52 and `CHANGELOG.md`). Open before a real publish: the version number (0.1.0 is a placeholder), the secret `NPM_TOKEN`, the push of a `v0.1.0` tag (which runs `release.yml`), the proposal in `docs/benchmarks/V1.md` (document up to about 1000 active clients per process, idle well beyond that; new options `limits.maxClientsPerDocument`, `limits.maxConnections`). Publishing happens only on the project owner's go.
 3. Known V1 limits, all in `CHANGELOG.md`: no real server `QUEUE_FULL` end-to-end test (S-49); thousands of ACTIVE connections missed (N3); two unexplained multi-minute LibreOffice stalls on the local machine.
 - V2-S1 (the Univer spike) may run during V1, but ask the project owner before starting it.
 
