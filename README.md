@@ -6,7 +6,7 @@ open_docex lets many people edit the same Word-style document (`.docx` or `.odt`
 
 It is a set of npm packages for developers. It is not a hosted service and not a finished office suite: you add it to your backend and to a web page, and you keep control of everything around it.
 
-> **Status: version 0.1.0, the first release.** It covers collaborative **text documents**. Spreadsheets and other items are planned (see [Roadmap](#roadmap)). Read [What it cannot do](#what-it-cannot-do-yet) before you decide.
+> **Status: an early release (0.1.x).** It covers collaborative **text documents**. Spreadsheets and other items are planned (see [Roadmap](#roadmap)). Read [What it cannot do](#what-it-cannot-do-yet) before you decide.
 
 ## Purpose and who it is for
 
@@ -72,7 +72,7 @@ flowchart LR
 
 ## What it cannot do (yet)
 
-- **Text documents only.** No spreadsheets in 0.1.0.
+- **Text documents only.** No spreadsheets in 0.1.x.
 - **No undo or redo.** The editor disables Ctrl+Z and Ctrl+Y on purpose in this version.
 - **No comments, tracked changes, footnotes, text boxes, equations or charts.** A file that contains such parts opens **read-only**, with a banner. If you allow "edit anyway", those parts are **removed when the document is saved**.
 - **No other users' cursors or names.** You see their edits live, but there is no presence indicator or list of who is online.

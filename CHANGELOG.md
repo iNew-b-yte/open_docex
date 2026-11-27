@@ -2,9 +2,17 @@
 
 All notable changes to `@open-docex/shared`, `@open-docex/server` and `@open-docex/client` are listed here. The three packages share one version number (lockstep).
 
-The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). The version number and date below are placeholders: the project owner chooses the number when publishing (VERSION_PLAN.md), and the date is set then.
+The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Dates are UTC.
 
-## [0.1.0] - not yet published
+## [0.1.1] - not yet published
+
+Package metadata only. There are no code changes.
+
+### Changed
+
+- **Discoverability on npm.** Each package now carries `keywords`, a `repository` link (with the package folder), `homepage`, `bugs` and `author`, and a clearer `description`, so the npm page links back to the source and the project README and shows up in searches. Version 0.1.0 was published without these fields, and npm does not allow changing a published version, so this is a new version.
+
+## [0.1.0] - 2026-11-27
 
 First release: **V1, collaborative text documents.**
 

@@ -1,8 +1,41 @@
 {
   "name": "@open-docex/server",
-  "version": "0.1.0",
-  "description": "open_docex server engine for Node.js: WebSocket gateway, document core, persistence and LibreOffice codec.",
+  "version": "0.1.1",
+  "description": "Self-hosted real-time collaboration engine for .docx and .odt documents on Node.js: WebSocket gateway, change merging, journal, pluggable storage, LibreOffice conversion, recovery and audit events.",
+  "keywords": [
+    "open-docex",
+    "collaborative-editing",
+    "real-time",
+    "realtime-collaboration",
+    "document-collaboration",
+    "document-editor",
+    "word-processor",
+    "docx",
+    "odt",
+    "operational-transformation",
+    "self-hosted",
+    "on-premises",
+    "open-source",
+    "typescript",
+    "nodejs",
+    "websocket",
+    "collaboration-server",
+    "libreoffice",
+    "storage-adapter",
+    "office-documents",
+    "docx-editor"
+  ],
+  "homepage": "https://github.com/iNew-b-yte/open_docex#readme",
+  "bugs": {
+    "url": "https://github.com/iNew-b-yte/open_docex/issues"
+  },
   "license": "MIT",
+  "author": "Naveen Kumar",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/iNew-b-yte/open_docex.git",
+    "directory": "backend"
+  },
   "type": "module",
   "sideEffects": false,
   "exports": {
@@ -27,7 +60,7 @@
     "prepack": "node -e \"require('fs').copyFileSync('../LICENSE', 'LICENSE')\""
   },
   "dependencies": {
-    "@open-docex/shared": "0.1.0",
+    "@open-docex/shared": "0.1.1",
     "htmlparser2": "^12.0.0",
     "ws": "^8.23.0",
     "yauzl": "^3.4.0"

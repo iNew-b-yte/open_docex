@@ -1,8 +1,41 @@
 {
   "name": "@open-docex/client",
-  "version": "0.1.0",
-  "description": "open_docex browser client: mount() a collaborative document editor into any page.",
+  "version": "0.1.1",
+  "description": "Browser editor for open_docex: mount() a real-time collaborative .docx and .odt document editor into any web page, backed by your own @open-docex/server.",
+  "keywords": [
+    "open-docex",
+    "collaborative-editing",
+    "real-time",
+    "realtime-collaboration",
+    "document-collaboration",
+    "document-editor",
+    "word-processor",
+    "docx",
+    "odt",
+    "operational-transformation",
+    "self-hosted",
+    "on-premises",
+    "open-source",
+    "typescript",
+    "browser",
+    "react",
+    "prosemirror",
+    "wysiwyg",
+    "rich-text-editor",
+    "editor",
+    "docx-editor"
+  ],
+  "homepage": "https://github.com/iNew-b-yte/open_docex#readme",
+  "bugs": {
+    "url": "https://github.com/iNew-b-yte/open_docex/issues"
+  },
   "license": "MIT",
+  "author": "Naveen Kumar",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/iNew-b-yte/open_docex.git",
+    "directory": "frontend"
+  },
   "type": "module",
   "sideEffects": [
     "**/*.css"
@@ -31,7 +64,7 @@
     "prepack": "node -e \"require('fs').copyFileSync('../LICENSE', 'LICENSE')\""
   },
   "dependencies": {
-    "@open-docex/shared": "0.1.0",
+    "@open-docex/shared": "0.1.1",
     "prosemirror-commands": "^1.7.2",
     "prosemirror-dropcursor": "^1.8.4",
     "prosemirror-gapcursor": "^1.4.1",

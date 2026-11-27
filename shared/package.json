@@ -1,8 +1,39 @@
 {
   "name": "@open-docex/shared",
-  "version": "0.1.0",
-  "description": "Isomorphic contracts shared by @open-docex/server and @open-docex/client: protocol, errors, ids, OT and text models.",
+  "version": "0.1.1",
+  "description": "Shared contracts for open_docex: the wire protocol, the error catalogue, ids, and the text document model with its operational transform. Used by @open-docex/server and @open-docex/client.",
+  "keywords": [
+    "open-docex",
+    "collaborative-editing",
+    "real-time",
+    "realtime-collaboration",
+    "document-collaboration",
+    "document-editor",
+    "word-processor",
+    "docx",
+    "odt",
+    "operational-transformation",
+    "self-hosted",
+    "on-premises",
+    "open-source",
+    "typescript",
+    "protocol",
+    "error-codes",
+    "prosemirror",
+    "document-model",
+    "ot"
+  ],
+  "homepage": "https://github.com/iNew-b-yte/open_docex#readme",
+  "bugs": {
+    "url": "https://github.com/iNew-b-yte/open_docex/issues"
+  },
   "license": "MIT",
+  "author": "Naveen Kumar",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/iNew-b-yte/open_docex.git",
+    "directory": "shared"
+  },
   "type": "module",
   "sideEffects": false,
   "exports": {

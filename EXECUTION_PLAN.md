@@ -133,7 +133,7 @@ V1-00 ─┬─ V1-01 ─┬─ V1-02 ──────────────
 
 **Next, in order:**
 1. **CI is green** (run 45962452641, above). Two Windows runs in a row now pass the storage-flush scenarios (S-50); `release.yml` has still not been executed on GitHub.
-2. **V1-43, owner approval:** the gate ran locally (see S-52 and `CHANGELOG.md`). Open before a real publish: the secret `NPM_TOKEN` and the push of a `v0.1.0` tag (which runs `release.yml`). DECIDED 2026-11-27 by the project owner: version 0.1.0 is confirmed, and the capacity proposal is docs only (no new options in V1; S-52). Publishing happens only on the project owner's go.
+2. **V1-43, owner approval:** the gate ran locally (see S-52 and `CHANGELOG.md`). Open before a real publish: the secret `NPM_TOKEN` and the push of a `v0.1.0` tag (which runs `release.yml`). UPDATE 2026-11-27: the project owner published `@open-docex/shared`, `server` and `client` 0.1.0 from their own machine (09:45 UTC), so the tag route was not used; 0.1.1 (metadata only, S-52) is prepared and waits for the owner to publish. DECIDED 2026-11-27 by the project owner: version 0.1.0 is confirmed, and the capacity proposal is docs only (no new options in V1; S-52). Publishing happens only on the project owner's go.
 3. Known V1 limits, all in `CHANGELOG.md`: no real server `QUEUE_FULL` end-to-end test (S-49); thousands of ACTIVE connections missed (N3); two unexplained multi-minute LibreOffice stalls on the local machine.
 - V2-S1 (the Univer spike) may run during V1, but ask the project owner before starting it.
 
